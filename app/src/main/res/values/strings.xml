@@ -97,4 +97,26 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+
+    <!-- Navigation Drawer Strings -->
+    <string name="profile">Profile</string>
+    <string name="map">Event Map</string>
+    <string name="discover">Discover Baltimore</string>
+    <string name="eventBoard">My Event Board</string>
+    <string name="manageEvents">Manage My Events</string>
+    <string name="upcoming">Upcoming Events</string>
+    <string name="pastEvents">Past Events</string>
+    <string name="drafts">Drafts</string>
+    
+    <!-- Profile Activity Strings -->
+    <string name="email">Email</string>
+    <string name="facebook">Facebook</string>
+    <string name="website">Website</string>
+    <string name="zip">Zip Code</string>
+    <string name="name">Name</string>
+    <string name="logout">Log out</string>
+
+    <!-- Settings Activity Strings -->
+    <string name="notifications">Enable Notifications</string>
+    
 </resources>
