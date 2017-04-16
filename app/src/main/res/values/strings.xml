@@ -1,6 +1,11 @@
 <resources>
-    <string name="app_name">Locurrances</string>
-    <string name="title_activity_login">Login</string>
+    <string name="app_name">Event_App</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -17,13 +22,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_navigation">NavigationActivity</string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_event_map">Map</string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->
