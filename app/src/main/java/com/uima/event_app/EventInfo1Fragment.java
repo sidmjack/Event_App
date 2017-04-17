@@ -12,12 +12,12 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link EventInfoFragment1.OnFragmentInteractionListener} interface
+ * {@link EventInfo1Fragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link EventInfoFragment1#newInstance} factory method to
+ * Use the {@link EventInfo1Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EventInfoFragment1 extends Fragment {
+public class EventInfo1Fragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,7 +29,7 @@ public class EventInfoFragment1 extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public EventInfoFragment1() {
+    public EventInfo1Fragment() {
         // Required empty public constructor
     }
 
@@ -39,11 +39,11 @@ public class EventInfoFragment1 extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment EventInfoFragment1.
+     * @return A new instance of fragment EventInfo1Fragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EventInfoFragment1 newInstance(String param1, String param2) {
-        EventInfoFragment1 fragment = new EventInfoFragment1();
+    public static EventInfo1Fragment newInstance(String param1, String param2) {
+        EventInfo1Fragment fragment = new EventInfo1Fragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -64,7 +64,7 @@ public class EventInfoFragment1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_event_info_fragment1, container, false);
+        return inflater.inflate(R.layout.fragment_event_info1, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
