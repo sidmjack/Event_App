@@ -2,11 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.uima.event_app.MyEventBoardFragment">
+    android:orientation="vertical"
+    tools:context="com.uima.event_app.EventMapActivity">
 
-    <TextView
+    <com.google.android.gms.maps.MapView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/my_event_board" />
+        android:id="@+id/map"
+        />
 
 </FrameLayout>

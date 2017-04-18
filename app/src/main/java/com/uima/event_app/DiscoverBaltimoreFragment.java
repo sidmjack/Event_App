@@ -1,108 +1,94 @@
 package com.uima.event_app;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
+import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link DiscoverBaltimoreFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link DiscoverBaltimoreFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class DiscoverBaltimoreFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
+    private ListView eventCategoryListView;
+    protected static ArrayList<String> categoryItems;
+    protected static EventCategoryAdapter ecAdapter;
+    protected View rootView;
+    String categoryName = " ";
 
     public DiscoverBaltimoreFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DiscoverBaltimoreFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DiscoverBaltimoreFragment newInstance(String param1, String param2) {
-        DiscoverBaltimoreFragment fragment = new DiscoverBaltimoreFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        categoryItems = populateCategoryList();
+
+        ecAdapter = new EventCategoryAdapter(getActivity(), R.layout.event_category_row, categoryItems);
+        eventCategoryListView.setAdapter(ecAdapter);
+
+        getActivity().setTitle("Discover Baltimore");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_discover_baltimore, container, false);
+
+        rootView = inflater.inflate(R.layout.fragment_discover_baltimore, container, false);
+
+        eventCategoryListView = (ListView) rootView.findViewById(R.id.event_category_list_view);
+
+        eventCategoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Object listItem = eventCategoryListView.getItemAtPosition(position);
+
+                EventListFragment eventListFragment = new EventListFragment();
+
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, eventListFragment)
+                        .addToBackStack(null)
+                        .commit();
+                categoryName = listItem.toString();
+                getActivity().setTitle(categoryName + " Events");
+            }
+        });
+
+        return rootView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    public ArrayList<String> populateCategoryList() {
+        ArrayList<String> category = new ArrayList<String>();
+
+        String[] category_name = new String[7];
+        category_name[0] = getString(R.string.local_culture);
+        category_name[1] = getString(R.string.social_activism);
+        category_name[2] = getString(R.string.popular_culture);
+        category_name[3] = getString(R.string.community_outreach);
+        category_name[4] = getString(R.string.education_and_learning);
+        category_name[5] = getString(R.string.shopping_and_markets);
+        category_name[6] = getString(R.string.miscellaneous);
+
+        for(int i = 0; i < category_name.length; i++) {
+            String temp = category_name[i];
+            category.add(temp);
         }
+
+        return category;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }

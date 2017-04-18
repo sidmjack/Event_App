@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,14 +20,16 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private boolean splashStarted = false;
+
+    private CharSequence mTitle;
+
+    private static EventMapFragment eventMapFragment = new EventMapFragment();
     private static DiscoverBaltimoreFragment discoverBaltimoreFragment = new DiscoverBaltimoreFragment();
     private static MyEventBoardFragment myEventBoardFragment = new MyEventBoardFragment();
-    private static MyLiveEventsFragment myLiveEventsFragment = new MyLiveEventsFragment();
-    private static MyPastEventsFragment myPastEventsFragment = new MyPastEventsFragment();
-    private static MyDraftEventsFragment myDraftEventsFragment = new MyDraftEventsFragment();
-    private static Fragment currentFragment = discoverBaltimoreFragment;
-    private static int currentTitle = R.string.discover_baltimore;
-    protected static DrawerLayout drawer;
+
+    private static int currentTitle = R.string.event_map;
+    private static Fragment currentFragment = eventMapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,15 +37,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -52,6 +46,16 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, currentFragment).commit();
+        setTitle(currentTitle);
+
+
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
     }
 
     @Override
@@ -91,27 +95,45 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        android.app.FragmentManager fragmentManager = getFragmentManager();
-
-        if (id == R.id.nav_DiscoverBaltimore) {
-            currentFragment = discoverBaltimoreFragment;
-            currentTitle = R.string.discover_baltimore;
-        } else if (id == R.id.nav_EventMap) {
-
-        } else if (id == R.id.nav_MyEventBoard) {
-            currentFragment = myEventBoardFragment;
-            currentTitle = R.string.my_event_board;
+        switch (item.getItemId()) {
+            case (R.id.nav_EventMap):
+                currentFragment = eventMapFragment;
+                currentTitle = R.string.event_map;
+                break;
+            case (R.id.nav_DiscoverBaltimore):
+                currentFragment = discoverBaltimoreFragment;
+                currentTitle = R.string.discover_baltimore;
+                break;
+            case (R.id.nav_MyEventBoard):
+                currentFragment = myEventBoardFragment;
+                currentTitle = R.string.my_event_board;
+                break;
+            default:
+                currentFragment = eventMapFragment;
+                currentTitle = R.string.event_map;
+                break;
         }
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, currentFragment)
+                .commit();
+        setTitle(currentTitle);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    @Override
+    public void setTitle(CharSequence title) {
+        mTitle = title;
+        getSupportActionBar().setTitle(mTitle);
+    }
 }
