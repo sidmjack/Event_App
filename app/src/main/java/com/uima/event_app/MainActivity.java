@@ -1,8 +1,11 @@
 package com.uima.event_app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,6 +18,15 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static DiscoverBaltimoreFragment discoverBaltimoreFragment = new DiscoverBaltimoreFragment();
+    private static MyEventBoardFragment myEventBoardFragment = new MyEventBoardFragment();
+    private static MyLiveEventsFragment myLiveEventsFragment = new MyLiveEventsFragment();
+    private static MyPastEventsFragment myPastEventsFragment = new MyPastEventsFragment();
+    private static MyDraftEventsFragment myDraftEventsFragment = new MyDraftEventsFragment();
+    private static Fragment currentFragment = discoverBaltimoreFragment;
+    private static int currentTitle = R.string.discover_baltimore;
+    protected static DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +67,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.activity_main_actions, menu);
         return true;
     }
 
@@ -67,12 +79,18 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
             return true;
+        } else if (id == R.id.profile) {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
     }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -80,22 +98,20 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        android.app.FragmentManager fragmentManager = getFragmentManager();
 
-        } else if (id == R.id.nav_slideshow) {
+        if (id == R.id.nav_DiscoverBaltimore) {
+            currentFragment = discoverBaltimoreFragment;
+            currentTitle = R.string.discover_baltimore;
+        } else if (id == R.id.nav_EventMap) {
 
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_MyEventBoard) {
+            currentFragment = myEventBoardFragment;
+            currentTitle = R.string.my_event_board;
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }
