@@ -132,5 +132,7 @@
 
     <!-- Locations -->
     <string name="baltimore"> Baltimore </string>
+    <string name="menu_duplicate">duplicate</string>
+    <string name="menu_delete">delete</string>
 
 </resources>

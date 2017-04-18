@@ -32,6 +32,7 @@ public class MyPastEventsFragment extends ManageEventsFragment {
         eventListView = (ListView) rootView.findViewById(R.id.event_list_view);
 
         updateArray();
+        registerForContextMenu(eventListView);
         return rootView;
     }
 

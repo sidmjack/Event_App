@@ -13,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import static android.R.attr.type;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -72,6 +74,21 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            setTitle("Settings");
+            startActivity(intent);
+        }
+
+        if (id == R.id.action_new_event) {
+            Intent intent = new Intent(this, CreateEventActivity.class);
+            setTitle("Create New Event");
+            startActivity(intent);
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
