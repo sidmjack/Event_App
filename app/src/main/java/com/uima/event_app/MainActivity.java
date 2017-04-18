@@ -1,5 +1,6 @@
 package com.uima.event_app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,8 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private boolean splashStarted = false;
 
     private CharSequence mTitle;
 
@@ -41,6 +44,8 @@ public class MainActivity extends AppCompatActivity
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, currentFragment).commit();
         setTitle(currentTitle);
+
+
     }
 
     @Override
