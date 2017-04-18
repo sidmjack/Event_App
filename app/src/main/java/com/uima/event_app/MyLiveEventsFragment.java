@@ -1,9 +1,8 @@
 package com.uima.event_app;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
+import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +33,7 @@ public class MyLiveEventsFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_my_live_events, container, false);
         eventListView = (ListView) rootView.findViewById(R.id.event_list_view);
+
         updateArray();
         return rootView;
     }

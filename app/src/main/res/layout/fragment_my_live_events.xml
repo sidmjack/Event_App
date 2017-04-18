@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TabHost
+        <android.support.v4.app.FragmentTabHost
+            android:id="@android:id/tabhost"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -25,35 +26,60 @@
 
                 <FrameLayout
                     android:id="@android:id/tabcontent"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="0"/>
+
+                <FrameLayout
+                    android:id="@+id/realtabcontent"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:id="@+id/live">
+                        android:id="@+id/liveTab">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="@string/liveTab"
+                            android:textAllCaps="true" />
 
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/history"
+                        android:id="@+id/historyTab"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="@string/historyTab"
+                            android:textAllCaps="true" />
 
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/drafts"
+                        android:id="@+id/draftsTab"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="@string/draftsTab"
+                            android:textAllCaps="true" />
 
                     </LinearLayout>
                 </FrameLayout>
             </LinearLayout>
-        </TabHost>
+        </android.support.v4.app.FragmentTabHost>
 
         <ListView
             android:id="@+id/event_list_view"
