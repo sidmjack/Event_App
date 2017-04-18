@@ -10,4 +10,53 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.uima.event_app.CreateEventActivity">
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/create_event_name"
+        android:inputType="text"
+        android:text="@string/event_name"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/create_event_location"
+        android:inputType="text"
+        android:text="@string/event_location"
+        android:layout_below="@+id/create_event_name"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/create_event_details"
+        android:inputType="text"
+        android:text="@string/event_details"
+        android:layout_below="@+id/create_event_location"/>
+
+    <CheckBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/need_volunteers"
+        android:layout_below="@+id/create_event_details"
+        android:text="@string/need_volunteers"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:id="@+id/create_image"
+        android:layout_below="@id/need_volunteers"
+        android:background="@color/colorPrimary"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/create_add_image"
+        android:layout_below="@id/create_image"
+        android:text="@string/add_picture"/>
+
+
+
+
+
 </RelativeLayout>

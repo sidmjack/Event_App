@@ -4,19 +4,17 @@
     <item android:id="@+id/nav_EventMap"
         android:icon="@drawable/event_map"
         android:title="@string/event_map">
-
     </item>
 
     <item android:id="@+id/nav_DiscoverBaltimore"
         android:icon="@drawable/discover_baltimore"
         android:title="@string/discover_baltimore">
-
     </item>
 
     <item android:id="@+id/nav_MyEventBoard"
         android:icon="@drawable/my_event_board"
         android:title="@string/my_event_board">
-
     </item>
+
 
 </menu>
