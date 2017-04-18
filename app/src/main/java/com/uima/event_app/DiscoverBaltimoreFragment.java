@@ -63,6 +63,7 @@ public class DiscoverBaltimoreFragment extends Fragment {
                         .replace(R.id.content_frame, eventListFragment)
                         .addToBackStack(null)
                         .commit();
+                categoryName = listItem.toString();
                 getActivity().setTitle(categoryName + " Events");
             }
         });
