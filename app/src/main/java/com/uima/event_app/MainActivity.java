@@ -14,6 +14,8 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private boolean splashStarted = false;
+
     private CharSequence mTitle;
 
     private static EventMapFragment eventMapFragment = new EventMapFragment();
@@ -41,6 +43,8 @@ public class MainActivity extends AppCompatActivity
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, currentFragment).commit();
         setTitle(currentTitle);
+
+
     }
 
     @Override
