@@ -13,19 +13,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import static android.R.attr.host;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private boolean splashStarted = false;
+
     private CharSequence mTitle;
 
+    private static EventMapFragment eventMapFragment = new EventMapFragment();
     private static DiscoverBaltimoreFragment discoverBaltimoreFragment = new DiscoverBaltimoreFragment();
     private static MyEventBoardFragment myEventBoardFragment = new MyEventBoardFragment();
     private static ManageEventsFragment manageEventsFragment = new ManageEventsFragment();
 
-    private static int currentTitle = R.string.discover_baltimore;
-    private static Fragment currentFragment = discoverBaltimoreFragment;
+    private static int currentTitle = R.string.event_map;
+    private static Fragment currentFragment = eventMapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +84,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case (R.id.nav_EventMap):
-                Intent eventMapIntent = new Intent(MainActivity.this, EventMapActivity.class);
-                MainActivity.this.startActivity(eventMapIntent);
+                currentFragment = eventMapFragment;
                 currentTitle = R.string.event_map;
                 break;
             case (R.id.nav_DiscoverBaltimore):
@@ -100,8 +100,8 @@ public class MainActivity extends AppCompatActivity
                 currentTitle = R.string.manage_events;
                 break;
             default:
-                currentFragment = discoverBaltimoreFragment;
-                currentTitle = R.string.discover_baltimore;
+                currentFragment = eventMapFragment;
+                currentTitle = R.string.event_map;
                 break;
         }
 
