@@ -1,6 +1,5 @@
 package com.uima.event_app;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -12,8 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import static android.R.attr.host;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -50,13 +47,14 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, currentFragment).commit();
         // host keeps turning up null...
         host = (FragmentTabHost) findViewById(android.R.id.tabhost);
-        host.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
 
-        host.addTab(host.newTabSpec("live").setIndicator("live"), MyLiveEventsFragment.class, null);
-        host.addTab(host.newTabSpec("history").setIndicator("history"), MyPastEventsFragment.class, null);
-        host.addTab(host.newTabSpec("drafts").setIndicator("drafts"), MyDraftEventsFragment.class, null);
+        // Momentarily Commented Out. Cant find realtabcontent.
+        //host.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
+        //host.addTab(host.newTabSpec("live").setIndicator("live"), MyLiveEventsFragment.class, null);
+        //host.addTab(host.newTabSpec("history").setIndicator("history"), MyPastEventsFragment.class, null);
+        //host.addTab(host.newTabSpec("drafts").setIndicator("drafts"), MyDraftEventsFragment.class, null);
 
-        getFragmentManager().beginTransaction().replace(R.id.content_frame, currentFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, currentFragment).commit();
         setTitle(currentTitle);
     }
 

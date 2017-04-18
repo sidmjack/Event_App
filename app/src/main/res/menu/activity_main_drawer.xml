@@ -17,6 +17,7 @@
     </item>
 
     <item android:id="@+id/nav_ManageMyEvents"
+        android:icon="@drawable/manage_events"
         android:title="@string/manage_events">
     </item>
 
