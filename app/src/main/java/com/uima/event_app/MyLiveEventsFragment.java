@@ -1,5 +1,6 @@
 package com.uima.event_app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
@@ -11,11 +12,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyLiveEventsFragment extends Fragment {
-    private static List<Event> eventItems;
-    private static EventAdapter adapter;
-
-    private ListView eventListView;
+public class MyLiveEventsFragment extends ManageEventsFragment {
     private View rootView;
 
     public MyLiveEventsFragment() {
@@ -38,7 +35,7 @@ public class MyLiveEventsFragment extends Fragment {
         return rootView;
     }
 
-    public void updateArray() {
+    private void updateArray() {
         // get dummy or actual list of events
         eventItems = new ArrayList<>();
         List<String> dummyTypes = new ArrayList<>();
