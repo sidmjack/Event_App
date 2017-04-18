@@ -1,10 +1,8 @@
 package com.uima.event_app;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,11 +16,12 @@ public class MainActivity extends AppCompatActivity
 
     private CharSequence mTitle;
 
+    private static EventMapFragment eventMapFragment = new EventMapFragment();
     private static DiscoverBaltimoreFragment discoverBaltimoreFragment = new DiscoverBaltimoreFragment();
     private static MyEventBoardFragment myEventBoardFragment = new MyEventBoardFragment();
 
-    private static int currentTitle = R.string.discover_baltimore;
-    private static Fragment currentFragment = discoverBaltimoreFragment;
+    private static int currentTitle = R.string.event_map;
+    private static Fragment currentFragment = eventMapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +39,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        getFragmentManager().beginTransaction().replace(R.id.content_frame, currentFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, currentFragment).commit();
         setTitle(currentTitle);
     }
 
@@ -75,13 +74,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        FragmentManager fragmentManager = getFragmentManager();
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
 
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case (R.id.nav_EventMap):
-                Intent eventMapIntent = new Intent(MainActivity.this, EventMapActivity.class);
-                MainActivity.this.startActivity(eventMapIntent);
+                currentFragment = eventMapFragment;
                 currentTitle = R.string.event_map;
                 break;
             case (R.id.nav_DiscoverBaltimore):
@@ -93,8 +91,8 @@ public class MainActivity extends AppCompatActivity
                 currentTitle = R.string.my_event_board;
                 break;
             default:
-                currentFragment = discoverBaltimoreFragment;
-                currentTitle = R.string.discover_baltimore;
+                currentFragment = eventMapFragment;
+                currentTitle = R.string.event_map;
                 break;
         }
 
