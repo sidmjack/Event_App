@@ -61,6 +61,25 @@
         <item>6 hours</item>
         <item>Never</item>
     </string-array>
+
+    <string-array name="notification_times">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>12 hours</item>
+        <item>24 hours</item>
+    </string-array>
+
+    <string-array name="app_themes">
+        <item>Theme 1</item>
+        <item>Theme 2</item>
+        <item>Theme 3</item>
+        <item>Theme 4</item>
+        <item>Theme 5</item>
+    </string-array>
+
     <string-array name="pref_sync_frequency_values">
         <item>15</item>
         <item>30</item>
@@ -130,5 +149,26 @@
 
     <!-- Locations -->
     <string name="baltimore"> Baltimore </string>
+
+    <string name="event_name">Event Name</string>
+    <string name="event_location">Event Location</string>
+    <string name="event_details">Event Details</string>
+    <string name="need_volunteers">Need Volunteers</string>
+    <string name="add_picture">Add Picture</string>
+
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="facebook">Facebook</string>
+    <string name="website">Website</string>
+    <string name="zip">Zip Code</string>
+
+    <string name="registration_title">Registration</string>
+    <string name="title_activity_registration">Registration Title</string>
+
+    <string name="notifications">Notifications</string>
+    <string name="profile">Profile</string>
+    <string name="upcoming_events">Upcoming Events</string>
+    <string name="past_events">Past Events</string>
+    <string name="draft_events">Drafts</string>
 
 </resources>
