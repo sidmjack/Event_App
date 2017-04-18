@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_map"
+            android:icon="@drawable/compass"
+            android:title="@string/map" />
+        <item
+            android:id="@+id/nav_discover"
+            android:icon="@drawable/bike"
+            android:title="@string/discover" />
+        <item
+            android:id="@+id/nav_eboard"
+            android:icon="@drawable/star"
+            android:title="@string/eventBoard" />
+    </group>
+
+    <item android:title="@string/manageEvents"
+        android:icon="@drawable/ic_menu_manage">
+        <menu>
+            <item
+                android:id="@+id/nav_live"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/upcoming" />
+            <item
+                android:id="@+id/nav_past"
+                android:icon="@drawable/clock"
+                android:title="@string/pastEvents" />
+            <item
+                android:id="@+id/nav_drafts"
+                android:icon="@drawable/draft"
+                android:title="@string/drafts" />
+        </menu>
+    </item>
+
+</menu>

@@ -1,13 +1,6 @@
 <resources>
-    <string name="app_name">Locurrences</string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_settings">Settings</string>
-    <string name="settings">Settings</string>
-    <string name="title_activity_login">Sign in</string>
-    <string name="title_activity_registration">Register</string>
+    <string name="app_name">Locurrances</string>
+    <string name="title_activity_login">Login</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -25,6 +18,13 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_navigation">NavigationActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_event_map">Map</string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->
@@ -99,35 +99,32 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
 
-    <!-- Navigation Drawer Titles-->
-    <string name="discover_baltimore">Discover Baltimore</string>
-    <string name="my_event_board">My Event Board</string>
-    <string name="event_map">Event Map</string>
-    <string name="title_activity_event_map">Map</string>
-    <string name="event_categories">Event Categories</string>
-    <string name="title_activity_maps">Map</string>
-
-    <!-- Event Categories -->
-    <string name="local_culture"> Local Culture </string>
-    <string name="social_activism"> Social Activism </string>
-    <string name="popular_culture"> Popular Culture </string>
-    <string name="community_outreach"> Community Outreach </string>
-    <string name="education_and_learning"> Education &amp; Learning </string>
-    <string name="shopping_and_markets"> Shopping &amp; Market Events </string>
-    <string name="miscellaneous"> Miscellaneous </string>
-
-    <string name="local_culture_desc"> Explore Baltimores unique culture! </string>
-    <string name="social_activism_desc"> Stand up for a cause!</string>
-    <string name="popular_culture_desc"> Find concerts and other entertainment! </string>
-    <string name="community_outreach_desc"> Give back to your community! </string>
-    <string name="education_and_learning_desc"> Explore new interests! </string>
-    <string name="shopping_and_markets_desc"> Support local vendors and businesses! </string>
-    <string name="miscellaneous_desc"> Discover all there is to discover! </string>
-
-    <!-- Locations -->
-    <string name="baltimore"> Baltimore </string>
-
-
-    <string name="action_new_lesson">New Lesson</string>
+    <!-- Navigation Drawer Strings -->
     <string name="profile">Profile</string>
+    <string name="map">Event Map</string>
+    <string name="discover">Discover Baltimore</string>
+    <string name="eventBoard">My Event Board</string>
+    <string name="manageEvents">Manage My Events</string>
+    <string name="upcoming">Upcoming Events</string>
+    <string name="pastEvents">Past Events</string>
+    <string name="drafts">Drafts</string>
+
+    <!-- Profile Activity Strings -->
+    <string name="email">Email</string>
+    <string name="facebook">Facebook</string>
+    <string name="website">Website</string>
+    <string name="zip">Zip Code</string>
+    <string name="name">Name</string>
+    <string name="logout">Log out</string>
+
+    <!-- Settings Activity Strings -->
+    <string name="notifications">Enable Notifications</string>
+
+    <!-- Create Event Strings -->
+    <string name="event_name">Event Name: </string>
+    <string name="event_location">Location </string>
+    <string name="event_details">Details </string>
+    <string name="need_volunteers">Need Volunteers </string>
+    <string name="add_picture">Add Picture</string>
+
 </resources>

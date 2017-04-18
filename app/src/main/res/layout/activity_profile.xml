@@ -12,7 +12,8 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
+        android:src="@drawable/profile"
         android:id="@+id/profile_image"
         />
 
@@ -20,28 +21,56 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/profile_name"
-        android:text="Jane Doe"
-        android:textSize="20dp"
-        android:padding="5dp"
-        android:layout_below="@+id/profile_image"/>
+        android:layout_below="@id/profile_image"
+        android:text="@string/name"
+        android:gravity="center"
+        android:padding="10dp" />
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
         android:id="@+id/profile_email"
-        android:text="jane.doe@gmail.com"
-        android:textSize="20dp"
-        android:layout_below="@+id/profile_name"
-        android:padding="5dp"/>
-    
+        android:layout_below="@id/profile_name"
+        android:text="@string/email"
+        android:gravity="center"
+        android:padding="10dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/profile_fb"
+        android:text="@string/facebook"
+        android:layout_below="@+id/profile_email"
+        android:gravity="center"
+        android:padding="10dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/profile_website"
+        android:layout_below="@+id/profile_fb"
+        android:text="@string/website"
+        android:gravity="center"
+        android:padding="10dp" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/profile_zip"
-        android:text="21218"
-        android:textSize="20dp"
-        android:layout_below="@+id/profile_email"
-        android:padding="5dp"/>
+        android:text="@string/zip"
+        android:layout_below="@+id/profile_website"
+        android:gravity="center"
+        android:padding="10dp" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/profile_logout"
+        android:layout_below="@+id/profile_zip"
+        android:background="@color/colorPrimary"
+        android:text="Log out"
+        android:textColor="@color/white"
+        android:layout_centerInParent="true"
+        android:padding="10dp" />
 
 </RelativeLayout>
