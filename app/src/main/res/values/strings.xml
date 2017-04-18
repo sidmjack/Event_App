@@ -118,5 +118,12 @@
 
     <!-- Settings Activity Strings -->
     <string name="notifications">Enable Notifications</string>
+
+    <!-- Create Event Strings -->
+    <string name="event_name">Event Name: </string>
+    <string name="event_location">Location </string>
+    <string name="event_details">Details </string>
+    <string name="need_volunteers">Need Volunteers </string>
+    <string name="add_picture">Add Picture</string>
     
 </resources>
