@@ -69,7 +69,7 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
         MapsInitializer.initialize(getContext());
         mGoogleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        googleMap.addMarker(new MarkerOptions().position(baltimore).title("Baltimore"));
+        googleMap.addMarker(new MarkerOptions().position(baltimore).title("@string/baltimore"));
         CameraPosition Baltimore = CameraPosition.builder().target(baltimore).zoom(12).bearing(0).tilt(45).build();
         mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(Baltimore));
 
