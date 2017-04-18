@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_login"
     android:layout_width="match_parent"
@@ -8,46 +9,66 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.uima.event_app.LoginActivity">
+    tools:context="com.uima.event_app.LoginActivity"
+    android:background="@color/backgroundColor">
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:ems="10"
         android:layout_marginBottom="181dp"
         android:id="@+id/login_email_field"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:layout_marginTop="50dp"
-        android:id="@+id/login_password_field"
-        android:layout_alignTop="@+id/login_email_field"
-        android:layout_alignLeft="@+id/login_email_field"
-        android:layout_alignStart="@+id/login_email_field" />
+        android:layout_centerHorizontal="true"
+        android:hint="Email"
+        android:textAlignment="center"
+        android:textSize="14sp" />
 
     <Button
         android:text="Register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button3"
-        android:layout_below="@+id/button2"
-        android:layout_alignLeft="@+id/button2"
-        android:layout_alignStart="@+id/button2"
-        android:onClick="registerTapped" />
+        android:id="@+id/register_button"
+        android:onClick="registerTapped"
+        android:textColor="@color/colorPrimaryDark"
+        android:background="@drawable/cast_abc_scrubber_control_off_mtrl_alpha"
+        android:layout_below="@+id/signin_button"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/login_password_field"
+        android:hint="Password"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        android:layout_marginTop="48dp"
+        android:layout_below="@+id/imageView2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:text="Sign In"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="17dp"
-        android:id="@+id/button2"
+        android:id="@+id/signin_button"
+        android:onClick="signInTapped"
+        android:textColor="@color/backgroundColor"
+        android:background="@color/colorPrimaryDark"
         android:layout_below="@+id/login_password_field"
-        android:layout_centerHorizontal="true"
-        android:onClick="signInTapped" />
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/logo"
+        android:id="@+id/imageView2"
+        android:layout_marginBottom="30dp"
+        android:layout_above="@+id/login_email_field"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>
