@@ -2,14 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/add_lesson"
-        android:title="@string/action_new_lesson"
-        android:icon="@mipmap/ic_add"
-        app:showAsAction="ifRoom">
-    </item>
-
     <item android:id="@+id/settings"
-        android:title="@string/settings"
+        android:title="@string/action_settings"
         android:icon="@drawable/settings"
         app:showAsAction="never">
     </item>
