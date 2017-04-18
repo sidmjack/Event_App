@@ -78,7 +78,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
         } else  {
             SharedPreferences.Editor editor = myPrefs.edit();
-            editor.putBoolean("isLoggedIn", true);
+            editor.putBoolean("logged_in", true);
             editor.apply();
 
             Intent intent = new Intent(this, MainActivity.class);
