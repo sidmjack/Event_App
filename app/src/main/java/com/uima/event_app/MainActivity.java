@@ -2,9 +2,9 @@ package com.uima.event_app;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTabHost;
+import android.support.v4.app.FragmentManager;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,11 +23,10 @@ public class MainActivity extends AppCompatActivity
     private static EventMapFragment eventMapFragment = new EventMapFragment();
     private static DiscoverBaltimoreFragment discoverBaltimoreFragment = new DiscoverBaltimoreFragment();
     private static MyEventBoardFragment myEventBoardFragment = new MyEventBoardFragment();
-    private static MyLiveEventsFragment myLiveEventsFragment = new MyLiveEventsFragment();
+    private static ManageEventsFragment manageEventsFragment = new ManageEventsFragment();
 
     private static int currentTitle = R.string.event_map;
     private static Fragment currentFragment = eventMapFragment;
-    private FragmentTabHost host;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,16 +43,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, currentFragment).commit();
-        // host keeps turning up null...
-        host = (FragmentTabHost) findViewById(android.R.id.tabhost);
-
-        // Momentarily Commented Out. Cant find realtabcontent.
-        //host.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
-        //host.addTab(host.newTabSpec("live").setIndicator("live"), MyLiveEventsFragment.class, null);
-        //host.addTab(host.newTabSpec("history").setIndicator("history"), MyPastEventsFragment.class, null);
-        //host.addTab(host.newTabSpec("drafts").setIndicator("drafts"), MyDraftEventsFragment.class, null);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, currentFragment).commit();
         setTitle(currentTitle);
@@ -96,6 +85,10 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.profile) {
             Intent intent = new Intent(this, ProfileActivity.class);
             startActivity(intent);
+        } else if (id == R.id.action_new_event) {
+            Intent intent = new Intent(this, CreateEventActivity.class);
+            setTitle("Create New Event");
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -105,7 +98,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
@@ -122,7 +115,7 @@ public class MainActivity extends AppCompatActivity
                 currentTitle = R.string.my_event_board;
                 break;
             case (R.id.nav_ManageMyEvents):
-                currentFragment = myLiveEventsFragment;
+                currentFragment = manageEventsFragment;
                 currentTitle = R.string.manage_events;
                 break;
             default:
