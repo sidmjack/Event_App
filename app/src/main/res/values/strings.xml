@@ -173,4 +173,7 @@
     <string name="past_events">Past Events</string>
     <string name="draft_events">Drafts</string>
 
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+
 </resources>
