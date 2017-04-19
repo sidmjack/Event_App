@@ -4,10 +4,90 @@
     android:layout_height="match_parent"
     tools:context="com.uima.event_app.MyLiveEventsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+        <android.support.v4.app.FragmentTabHost
+            android:id="@android:id/tabhost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TabWidget
+                    android:id="@android:id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp" />
+
+                <FrameLayout
+                    android:id="@android:id/tabcontent"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="0"/>
+
+                <FrameLayout
+                    android:id="@+id/realtabcontent"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:id="@+id/liveTab">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="@string/liveTab"
+                            android:textAllCaps="true" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/historyTab"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="@string/historyTab"
+                            android:textAllCaps="true" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/draftsTab"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="@string/draftsTab"
+                            android:textAllCaps="true" />
+
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+        </android.support.v4.app.FragmentTabHost>
+
+        <ListView
+            android:id="@+id/event_list_view"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:divider="#999999"
+            android:dividerHeight="1dp">
+        </ListView>
+    </LinearLayout>
 
 </FrameLayout>

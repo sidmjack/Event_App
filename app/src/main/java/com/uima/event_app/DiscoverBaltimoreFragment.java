@@ -57,10 +57,12 @@ public class DiscoverBaltimoreFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Object listItem = eventCategoryListView.getItemAtPosition(position);
 
-                EventListFragment eventListFragment = new EventListFragment();
+                //EventListFragment eventListFragment = new EventListFragment();
+                EventSelectFragment eventSelectFragment = new EventSelectFragment();
 
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.content_frame, eventListFragment)
+                        //.replace(R.id.content_frame, eventListFragment)
+                        .replace(R.id.content_frame, eventSelectFragment)
                         .addToBackStack(null)
                         .commit();
                 categoryName = listItem.toString();
