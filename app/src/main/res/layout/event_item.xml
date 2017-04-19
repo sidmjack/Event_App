@@ -39,7 +39,7 @@
                 android:id="@+id/edit_event_btn"
                 android:layout_weight="1"
                 android:layout_marginRight="10dp"
-                android:layout_width="120dp" />
+                android:layout_width="120dp"/>
 
         </LinearLayout>
 
