@@ -1,9 +1,9 @@
 package com.uima.event_app;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,8 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import static android.R.attr.type;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -46,6 +44,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, currentFragment).commit();
         setTitle(currentTitle);
     }
@@ -74,16 +73,20 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
-            setTitle("Settings");
             startActivity(intent);
-        }
-
-        if (id == R.id.action_new_event) {
+            return true;
+        } else if (id == R.id.profile) {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.action_new_event) {
             Intent intent = new Intent(this, CreateEventActivity.class);
             setTitle("Create New Event");
             startActivity(intent);

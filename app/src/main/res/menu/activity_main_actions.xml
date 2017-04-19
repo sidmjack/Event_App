@@ -9,9 +9,14 @@
         app:showAsAction="ifRoom" />
 
     <item android:id="@+id/settings"
-        android:title="@string/settings"
-        android:icon="@drawable/ic_settings_white_24dp"
+        android:title="@string/action_settings"
+        android:icon="@drawable/settings"
         app:showAsAction="never">
+    </item>
+
+    <item android:id="@+id/profile"
+        android:title="@string/profile"
+        android:icon="@drawable/default_profile_picture">
     </item>
 
 </menu>

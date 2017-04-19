@@ -9,6 +9,7 @@
     <item android:id="@+id/nav_DiscoverBaltimore"
         android:icon="@drawable/discover_baltimore"
         android:title="@string/discover_baltimore">
+
     </item>
 
     <item android:id="@+id/nav_MyEventBoard"
@@ -17,6 +18,7 @@
     </item>
 
     <item android:id="@+id/nav_ManageMyEvents"
+        android:icon="@drawable/manage_events"
         android:title="@string/manage_events">
     </item>
 

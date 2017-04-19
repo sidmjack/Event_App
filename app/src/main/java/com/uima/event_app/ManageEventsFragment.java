@@ -63,7 +63,7 @@ public class ManageEventsFragment extends Fragment {
         host = null;
     }
 
-    public void onEditClick() {
+    public void onEditClick(View view) {
         Intent intent = new Intent(getActivity(), CreateEventActivity.class);
         startActivity(intent);
     }
