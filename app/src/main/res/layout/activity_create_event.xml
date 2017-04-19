@@ -42,10 +42,10 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="100dp"
         android:id="@+id/create_image"
         android:layout_below="@id/need_volunteers"
-        android:background="@color/colorPrimary"
+        android:src="@drawable/camera"
         />
 
     <Button
@@ -55,6 +55,30 @@
         android:layout_below="@id/create_image"
         android:text="@string/add_picture"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/create_event"
+        android:background="@color/colorAccent"
+        android:text="@string/create"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_below="@id/create_add_image"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="60dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cancel_event"
+        android:background="@color/colorPrimary"
+        android:text="@string/cancel"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_below="@id/create_add_image"
+        android:layout_toRightOf="@+id/create_event"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="60dp"/>
 
 
 
