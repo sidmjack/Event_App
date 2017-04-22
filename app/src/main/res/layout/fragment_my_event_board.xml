@@ -4,9 +4,10 @@
     android:layout_height="match_parent"
     tools:context="com.uima.event_app.MyEventBoardFragment">
 
-    <TextView
-        android:layout_width="match_parent"
+    <ListView
+        android:id="@+id/event_board_list_view"
         android:layout_height="match_parent"
-        android:text="@string/my_event_board" />
+        android:layout_width="match_parent">
+    </ListView>
 
 </FrameLayout>

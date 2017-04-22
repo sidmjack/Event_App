@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent_white">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:src="@drawable/event_board2"
+            android:id="@+id/top_event_board_header"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="275dp"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent_white"
+            android:padding="7.5dp"
+            android:layout_margin="7.5dp"
+            android:layout_alignBottom="@id/top_event_board_header">
+
+            <TextView
+                android:text="Date: April 20, 2017"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:gravity="left"
+                android:layout_marginLeft="15dp"
+                android:id="@+id/top_event_date"
+                android:layout_weight="1" />
+
+            <TextView
+                android:text="Time: 6:00 PM - 9:00 PM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:gravity="left"
+                android:layout_marginLeft="15dp"
+                android:id="@+id/top_event_time"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent_white"
+            android:padding="7.5dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="12dp">
+
+            <TextView
+                android:text="BALTIMORE DINNER PARTY"
+                android:shadowColor="@color/white"
+                android:shadowDx="1.5"
+                android:shadowDy="1.3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center"
+                android:id="@+id/top_event_title"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

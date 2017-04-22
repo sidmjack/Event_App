@@ -176,4 +176,7 @@
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
 
+    <!-- Event Board Stuff -->
+    <string name="eg_event_board_desc"> Eat our food. Listen to their music. Meet your future friends. </string>
+
 </resources>

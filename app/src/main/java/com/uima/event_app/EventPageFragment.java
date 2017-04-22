@@ -1,10 +1,58 @@
 package com.uima.event_app;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * Created by sidneyjackson on 4/18/17.
  */
 
 public class EventPageFragment extends Fragment {
+
+    protected View rootView;
+
+    TopEventPageFragment upperPageFragment = new TopEventPageFragment();
+    BottomEventPageFragment lowerPagerFragment = new BottomEventPageFragment();
+
+    public EventPageFragment() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        //rootView = inflater.inflate(R.layout.event_board_row, container, false);
+        rootView = inflater.inflate(R.layout.fragment_event_page, container, false);
+
+        FragmentTransaction transaction =
+               getActivity().getSupportFragmentManager().beginTransaction();
+
+        transaction.add(R.id.event_page_top_half, upperPageFragment);
+        transaction.add(R.id.event_page_bottom_half, lowerPagerFragment);
+
+        transaction.commit();
+
+
+        return rootView;
+    }
 }
