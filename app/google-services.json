@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1096884407141",
+    "firebase_url": "https://loccurences.firebaseio.com",
+    "project_id": "loccurences",
+    "storage_bucket": "loccurences.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1096884407141:android:8289bf317c47d766",
+        "android_client_info": {
+          "package_name": "com.uima.event_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1096884407141-566r74e3529pft3bn4pctc614aoh08sm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uima.event_app",
+            "certificate_hash": "32d6dcc230221299c68f6b78b145b7dd925006f1"
+          }
+        },
+        {
+          "client_id": "1096884407141-0mnvf7oa2rv4g5nsv4vf9ke7cj1q08r0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCILi5xeHa4Z37qpRbfrIpunh3beoznog8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1096884407141-0mnvf7oa2rv4g5nsv4vf9ke7cj1q08r0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
