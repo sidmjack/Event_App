@@ -7,17 +7,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class EventInfo1Fragment extends Fragment {
-    protected View rootView;
+    View rootView;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.fragment_event_info1, container, false);
+        return rootView;
+    }
 
     public EventInfo1Fragment() {
         // Required empty public constructor
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        rootView = inflater.inflate(R.layout.fragment_event_info1, container, false);
-
-        return rootView;
+    public static EventInfo1Fragment newInstance() {
+        EventInfo1Fragment f = new EventInfo1Fragment();
+        return f;
     }
 }

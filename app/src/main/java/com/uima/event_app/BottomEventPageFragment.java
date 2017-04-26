@@ -1,27 +1,37 @@
 package com.uima.event_app;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sidneyjackson on 4/21/17.
  */
 
-public class BottomEventPageFragment extends Fragment {
+public class BottomEventPageFragment extends Fragment implements ViewPager.OnPageChangeListener {
 
     protected View rootView;
-    TabLayout tabLayout;
+    ViewPager pager;
+    RadioGroup mRadioGroup;
+    RadioButton rbOne;
+    RadioButton rbTwo;
 
     public BottomEventPageFragment() {
         // Required empty public constructor
+    }
+
+    public static BottomEventPageFragment newInstance() {
+        return new BottomEventPageFragment();
     }
 
     @Override
@@ -45,58 +55,77 @@ public class BottomEventPageFragment extends Fragment {
 
         rootView = inflater.inflate(R.layout.fragment_bottom_event_page, container, false);
 
-        ViewPager mViewPager = (ViewPager) rootView.findViewById(R.id.event_page_view_pager);
-        mViewPager.setAdapter(new EventPageAdapter(getChildFragmentManager()));
+        // Handles setting up page viewer.
+        pager = (ViewPager) rootView.findViewById(R.id.event_page_view_pager);
+        pager.setAdapter(new EventPageAdapter(getChildFragmentManager()));
+        pager.addOnPageChangeListener(this);
 
-        tabLayout = (TabLayout) rootView.findViewById(R.id.event_page_tab_view);
-        tabLayout.setupWithViewPager(mViewPager);
+        mRadioGroup = (RadioGroup) rootView.findViewById(R.id.mRadioGroup);
+        rbOne = (RadioButton) rootView.findViewById(R.id.rb_frag_1);
+        rbTwo = (RadioButton) rootView.findViewById(R.id.rb_frag_2);
+
+        // On Click Listeners to handle radio button switches.
+
+        rbOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pager.setCurrentItem(0);
+            }
+        });
+
+        rbTwo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pager.setCurrentItem(1);
+            }
+        });
 
         return rootView;
     }
 
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        mRadioGroup.check(mRadioGroup.getChildAt(position).getId());
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        //Do Nothing ...
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        // Do Nothing...
+    }
+
+    // Event Page Adapter Here...
+
     private class EventPageAdapter extends FragmentPagerAdapter {
-        private String fragments[] = {"Event Attributes", "General Information"};
+
+        List<Fragment> fragments = new ArrayList<>();
+
 
         public EventPageAdapter(FragmentManager supportFragmentManager) {
             super(supportFragmentManager);
+            EventInfo1Fragment e1 = new EventInfo1Fragment();
+            EventInfo2Fragment e2 = new EventInfo2Fragment();
+            fragments.add(e1);
+            fragments.add(e2);
         }
 
         @Override
         public int getCount() {
-            return fragments.length;
+            return 2;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return fragments[position];
+            return " ";
         }
 
         @Override
         public Fragment getItem(int position) {
-            switch(position) {
-                case 0:
-                    return new EventInfo1Fragment();
-                case 1:
-                    return new EventInfo2Fragment();
-                default:
-                    return new EventInfo1Fragment();
-            }
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return false;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-
-            FragmentManager manager = ((Fragment) object).getFragmentManager();
-            FragmentTransaction trans = manager.beginTransaction();
-            trans.remove((Fragment) object);
-            trans.commit();
-
-            super.destroyItem(container, position, object);
+            return fragments.get(position);
         }
 
     }

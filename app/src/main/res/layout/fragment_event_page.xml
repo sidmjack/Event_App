@@ -8,7 +8,8 @@
     <FrameLayout
         android:id="@+id/event_page_top_half"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
 
     <FrameLayout
         android:id="@+id/event_page_bottom_half"
@@ -16,6 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="center"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:layout_weight="1"/>
 
 </LinearLayout>

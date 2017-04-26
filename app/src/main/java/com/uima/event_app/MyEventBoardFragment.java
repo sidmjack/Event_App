@@ -1,13 +1,21 @@
 package com.uima.event_app;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MyEventBoardFragment extends Fragment {
 
@@ -15,6 +23,7 @@ public class MyEventBoardFragment extends Fragment {
     protected static ArrayList<Event> eventBoardItems;
     protected static EventBoardAdapter ebAdapter;
     protected View rootView;
+    private static LruCache<String, Bitmap> mMemoryCache;
 
     public MyEventBoardFragment() {
         // Required empty public constructor
@@ -23,6 +32,17 @@ public class MyEventBoardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        final int maxMemorySize = (int) Runtime.getRuntime().maxMemory() / 1024;
+        final int cacheSize = maxMemorySize / 10;
+
+        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
+          @Override
+            protected int sizeOf(String key, Bitmap value) {
+              return value.getByteCount() / 1024;
+          }
+        };
+
     }
 
     @Override
@@ -51,6 +71,16 @@ public class MyEventBoardFragment extends Fragment {
         eventBoardListView = (ListView) rootView.findViewById(R.id.event_board_list_view);
 
         return rootView;
+    }
+
+    public static Bitmap getBitmapFromMemoryCache(String key) {
+        return mMemoryCache.get(key);
+    }
+
+    public static void setBitMapToMemoryCache(String key, Bitmap bitmap) {
+        if (getBitmapFromMemoryCache(key) == null) {
+            mMemoryCache.put(key, bitmap);
+        }
     }
 
     public ArrayList<Event> populateEventBoardList() {
@@ -125,24 +155,7 @@ public class MyEventBoardFragment extends Fragment {
         //Event fakeEvent5 = new Event(fakeEventInfo5, fakeOrg1, true, fakeTypes2, fakeTags, fakeEventBk5);
         Event fakeEvent6 = new Event(fakeEventInfo6, fakeOrg1, false, fakeTypes3, fakeTags, fakeEventBk6);
 
-        /*Event fakeEvent0 = new Event("Event_Example_0", "Example_0.org", "Baltimore", "Fun Event", true, imgId, fakeTypes, fakeTags);
-        Event fakeEvent1 = new Event("Event_Example_1", "Example_1.org", "Charles Village", "Educational Event", false, imgId, fakeTypes, fakeTags);
-        Event fakeEvent2 = new Event("Event_Example_2", "Example_2.org", "Hampden", "Interesting Event", true, imgId, fakeTypes, fakeTags);
-        Event fakeEvent3 = new Event("Event_Example_3", "Example_3.org", "Downtown Baltimore", "Enlightening Event", false, imgId, fakeTypes, fakeTags);
-        Event fakeEvent4 = new Event("Event_Example_4", "Example_4.org", "Johns Hopkins", "Kick-Off Event", true, imgId, fakeTypes, fakeTags);
-        Event fakeEvent5 = new Event("Event_Example_5", "Example_5.org", "Felles Point", "Food Event", false, imgId, fakeTypes, fakeTags);
-        Event fakeEvent6 = new Event("Event_Example_6", "Example_6.org", "Inner Harbor", "Dance Event", true, imgId, fakeTypes, fakeTags);*/
-
         Event[] fakeEvents= {fakeEvent0, fakeEvent1, fakeEvent3, fakeEvent4, fakeEvent6};
-
-        //Event[] fakeEvents= new Event[4];
-        //fakeEvents[0] = fakeEvent0;
-        //fakeEvents[1] = fakeEvent1;
-        //fakeEvents[X] = fakeEvent2;
-        //fakeEvents[2] = fakeEvent3;
-        //fakeEvents[3] = fakeEvent4;
-        //fakeEvents[X] = fakeEvent5;
-        //fakeEvents[4] = fakeEvent6;
 
         for(int i = 0; i < fakeEvents.length; i++) {
             Event temp = fakeEvents[i];
@@ -150,6 +163,50 @@ public class MyEventBoardFragment extends Fragment {
         }
 
         return fakeEventList;
+    }
+
+    public class EventBoardAdapter extends ArrayAdapter<Event> {
+        int res;
+
+        public EventBoardAdapter(Context ctx, int res, List<Event> items)  {
+            super(ctx, res, items);
+            this.res = res;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LinearLayout eventBoardView;
+            Event ebEvent = getItem(position);
+
+            if (convertView == null) {
+                eventBoardView = new LinearLayout(getContext());
+                String inflater = Context.LAYOUT_INFLATER_SERVICE;
+                LayoutInflater vi = (LayoutInflater) getContext().getSystemService(inflater);
+                vi.inflate(res, eventBoardView, true);
+            } else {
+                eventBoardView = (LinearLayout) convertView;
+            }
+
+            String eventName = ebEvent.getName();
+            int eventImage = Integer.parseInt(ebEvent.getImgId());
+            String date = ("Date: " + ebEvent.getDate());
+            String time = ("Time: " + ebEvent.getStart_time() + " - "+ ebEvent.getEnd_time());
+            String desc = ebEvent.getDetails();
+
+            TextView eventBoardName = (TextView) eventBoardView.findViewById(R.id.event_board_event_name);
+            ImageView eventBoardPicture = (ImageView) eventBoardView.findViewById(R.id.event_board_header);
+            TextView eventDate = (TextView) eventBoardView.findViewById(R.id.event_board_event_date);
+            TextView eventTime = (TextView) eventBoardView.findViewById(R.id.event_board_event_time);
+            TextView eventDesc = (TextView) eventBoardView.findViewById(R.id.selected_event_desc);
+
+            eventBoardName.setText(eventName);
+            eventBoardPicture.setImageResource(eventImage);
+            eventDate.setText(date);
+            eventTime.setText(time);
+            eventDesc.setText(desc);
+
+            return eventBoardView;
+        }
     }
 
 }

@@ -2,27 +2,36 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center"
-    android:layout_gravity="center"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:id="@+id/relative_layout">
 
-    <android.support.design.widget.TabLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/event_page_tab_view"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@color/colorPrimary"
-        app:tabMode="fixed"
-        app:tabGravity="fill"/>
-
     <android.support.v4.view.ViewPager
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/event_page_view_pager"
+        android:layout_centerHorizontal="true"/>
+
+    <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/event_page_view_pager"
-        android:layout_above="@+id/event_page_tab_view"
-        android:layout_centerHorizontal="true"/>
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:id="@+id/mRadioGroup"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="25dp"
+        android:padding="10dp">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rb_frag_1"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rb_frag_2"/>
+
+    </RadioGroup>
 
 </RelativeLayout>
