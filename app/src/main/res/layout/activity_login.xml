@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -12,29 +13,22 @@
     tools:context="com.uima.event_app.LoginActivity"
     android:background="@color/backgroundColor">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="244dp"
+        app:srcCompat="@drawable/logo"
+        android:id="@+id/imageView2"/>
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:ems="10"
-        android:layout_marginBottom="181dp"
         android:id="@+id/login_email_field"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:hint="Email"
         android:textAlignment="center"
         android:textSize="14sp" />
-
-    <Button
-        android:text="Register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/register_button"
-        android:onClick="registerTapped"
-        android:textColor="@color/colorPrimaryDark"
-        android:background="@drawable/cast_abc_scrubber_control_off_mtrl_alpha"
-        android:layout_below="@+id/signin_button"
-        android:layout_centerHorizontal="true" />
 
     <EditText
         android:layout_width="match_parent"
@@ -44,31 +38,32 @@
         android:id="@+id/login_password_field"
         android:hint="Password"
         android:textAlignment="center"
-        android:textSize="14sp"
-        android:layout_marginTop="48dp"
-        android:layout_below="@+id/imageView2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:textSize="14sp" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/google_sign_in_button"
+        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_gravity="center"/>
 
     <Button
         android:text="Sign In"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
         android:id="@+id/signin_button"
         android:onClick="signInTapped"
         android:textColor="@color/backgroundColor"
         android:background="@color/colorPrimaryDark"
-        android:layout_below="@+id/login_password_field"
-        android:layout_centerHorizontal="true" />
+        android:layout_gravity="center"/>
 
-    <ImageView
+    <Button
+        android:text="Register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/logo"
-        android:id="@+id/imageView2"
-        android:layout_marginBottom="30dp"
-        android:layout_above="@+id/login_email_field"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-</RelativeLayout>
+        android:id="@+id/register_button"
+        android:onClick="registerTapped"
+        android:textColor="@color/colorPrimaryDark"
+        android:background="@drawable/cast_abc_scrubber_control_off_mtrl_alpha"
+        android:layout_gravity="center"/>
+
+</LinearLayout>
