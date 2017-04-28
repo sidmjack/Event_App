@@ -42,6 +42,7 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onResume() {
         super.onResume();
+
     }
 
     @Override

@@ -31,6 +31,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        boolean finish = getIntent().getBooleanExtra("finish", false);
+        if (finish) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -50,8 +58,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onResume(){
-        super.onResume();
-    }
+        super.onResume();}
+
+
 
     @Override
     public void onBackPressed() {
