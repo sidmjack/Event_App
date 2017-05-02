@@ -6,20 +6,31 @@ import java.util.List;
  * Created by Channing on 4/15/2017.
  */
 public class Event {
-    String id;
-    String hostOrg;
-    String name;
-    String location;
-    String details;
-    boolean needVolunteers;
-    String imgId;
-    List<String> types;
-    List<String> tags;
-    String start_time;
-    String end_time;
-    Organization organization;
-    String address;
-    String date;
+    private String id;
+    private String hostOrg;
+    private String name;
+    private String location;
+    private String details;
+    private boolean needVolunteers;
+    private String imgId;
+    private List<String> types;
+    private List<String> tags;
+    private String start_time;
+    private String end_time;
+    private Organization organization;
+    private String address;
+    private String date;
+
+    public Event(String name, String location, String details) {
+        this.name = name;
+        this.hostOrg = "";
+        this.location = location;
+        this.details = details;
+        this.needVolunteers = false;
+        this.imgId = "";
+        this.types = null;
+        this.tags = null;
+    }
 
     public Event(String name, String hostOrg, String location, String details, boolean needVolunteers, String imgId, List<String> types, List<String> tags) {
         this.id = "0";
