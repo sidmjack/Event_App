@@ -19,6 +19,8 @@ public class EventSelectFragment extends Fragment {
     protected static ArrayList<Event> eventItems;
     protected static EventSelectAdapter esAdapter;
     protected View rootView;
+    protected FirebaseAdapter fb;
+    protected String type;
 
     public EventSelectFragment() {
         // Required empty public constructor
@@ -27,6 +29,10 @@ public class EventSelectFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        fb = new FirebaseAdapter(getContext());
+        type = getActivity().getTitle().toString();
+        eventItems = new ArrayList<Event>();
+        getEventItems();
     }
 
     @Override
@@ -38,7 +44,7 @@ public class EventSelectFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        eventItems = populateEventList();
+        getEventItems();
 
         esAdapter = new EventSelectAdapter(getActivity(), R.layout.event_select_row, eventItems);
         eventSelectListView.setAdapter(esAdapter);
@@ -74,49 +80,23 @@ public class EventSelectFragment extends Fragment {
         return rootView;
     }
 
-    public ArrayList<Event> populateEventList() {
-
-        // Fake Events
-        ArrayList<Event> fakeEventList = new ArrayList<Event>();
-
-        // Types of Fake Events
-        ArrayList<String> fakeTypes = new ArrayList<String>();
-        fakeTypes.add("Popular Culture");
-
-        // Image Id for fake events.
-        String imgId = Integer.toString(R.drawable.question);
-
-        // Types of Fake Events
-        ArrayList<String> fakeTags = new ArrayList<String>();
-        fakeTypes.add("Free Food");
-        fakeTypes.add("Music");
-        fakeTypes.add("Parking");
-
-        // Create ArrayList of fake events here!
-
-        Event fakeEvent0 = new Event("Event_Example_0", "Example_0.org", "Baltimore", "Fun Event", true, imgId, fakeTypes, fakeTags);
-        Event fakeEvent1 = new Event("Event_Example_1", "Example_1.org", "Charles Village", "Educational Event", false, imgId, fakeTypes, fakeTags);
-        Event fakeEvent2 = new Event("Event_Example_2", "Example_2.org", "Hampden", "Interesting Event", true, imgId, fakeTypes, fakeTags);
-        Event fakeEvent3 = new Event("Event_Example_3", "Example_3.org", "Downtown Baltimore", "Enlightening Event", false, imgId, fakeTypes, fakeTags);
-        Event fakeEvent4 = new Event("Event_Example_4", "Example_4.org", "Johns Hopkins", "Kick-Off Event", true, imgId, fakeTypes, fakeTags);
-        Event fakeEvent5 = new Event("Event_Example_5", "Example_5.org", "Felles Point", "Food Event", false, imgId, fakeTypes, fakeTags);
-        Event fakeEvent6 = new Event("Event_Example_6", "Example_6.org", "Inner Harbor", "Dance Event", true, imgId, fakeTypes, fakeTags);
-
-        Event[] fakeEvents= new Event[7];
-        fakeEvents[0] = fakeEvent0;
-        fakeEvents[1] = fakeEvent1;
-        fakeEvents[2] = fakeEvent2;
-        fakeEvents[3] = fakeEvent3;
-        fakeEvents[4] = fakeEvent4;
-        fakeEvents[5] = fakeEvent5;
-        fakeEvents[6] = fakeEvent6;
-
-        for(int i = 0; i < fakeEvents.length; i++) {
-            Event temp = fakeEvents[i];
-            fakeEventList.add(temp);
+    public void getEventItems() {
+        if (type.contains("Local Culture")) {
+            eventItems = fb.getLocalCulture();
+        } else if (type.contains("Social Activism")) {
+            eventItems = fb.getSocailActivism();
+        } else if (type.contains("Popular")) {
+            eventItems = fb.getPopularCulture();
+        } else if (type.contains("Community")) {
+            eventItems = fb.getCommunityOutreach();
+        } else if (type.contains("Education")) {
+            eventItems = fb.getEducationLearning();
+        } else if (type.contains("Shopping")) {
+            eventItems = fb.getShoppingMarket();
+        } else {
+            eventItems = fb.getMiscellaneous();
         }
-
-        return fakeEventList;
     }
+
 
 }

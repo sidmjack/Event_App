@@ -26,11 +26,27 @@ public class FirebaseAdapter {
     private DatabaseReference myRef;
     private String orgID;
     private ArrayList<Event> localEvents;
+    private ArrayList<Event> localCulture;
+    private ArrayList<Event> socailActivism;
+    private ArrayList<Event> popularCulture;
+    private ArrayList<Event> communityOutreach;
+    private ArrayList<Event> educationLearning;
+    private ArrayList<Event> shoppingMarket;
+    private ArrayList<Event> Miscellaneous;
 
     public FirebaseAdapter(Context ctx) {
         context = ctx;
         database = FirebaseDatabase.getInstance();
         localEvents = new ArrayList<Event>();
+        localCulture = new ArrayList<Event>();
+        socailActivism = new ArrayList<Event>();
+        popularCulture = new ArrayList<Event>();
+        communityOutreach = new ArrayList<Event>();
+        educationLearning = new ArrayList<Event>();
+        shoppingMarket = new ArrayList<Event>();
+        Miscellaneous = new ArrayList<Event>();
+        getAllEvents();
+        divideEvents();
     }
 
     public void addEventToDB(Event event) {
@@ -93,4 +109,34 @@ public class FirebaseAdapter {
             }
         });
     }
+
+    public void divideEvents() {
+        for (int i = 0; i < localEvents.size(); i++) {
+            String eventType = localEvents.get(i).getType();
+            if (eventType.contains("Local Culture")) {
+                localCulture.add(localEvents.get(i));
+            } else if (eventType.contains("Social Activism")) {
+                socailActivism.add(localEvents.get(i));
+            } else if (eventType.contains("Popular")) {
+                popularCulture.add(localEvents.get(i));
+            } else if (eventType.contains("Community")) {
+                communityOutreach.add(localEvents.get(i));
+            } else if (eventType.contains("Education")) {
+                educationLearning.add(localEvents.get(i));
+            } else if (eventType.contains("Shopping")) {
+                shoppingMarket.add(localEvents.get(i));
+            } else {
+                Miscellaneous.add(localEvents.get(i));
+            }
+        }
+    }
+
+    public ArrayList<Event> getLocalCulture() { return localCulture; }
+    public ArrayList<Event> getPopularCulture() { return popularCulture; }
+    public ArrayList<Event> getSocailActivism() { return socailActivism; }
+    public ArrayList<Event> getCommunityOutreach() { return communityOutreach; }
+    public ArrayList<Event> getEducationLearning() { return educationLearning; }
+    public ArrayList<Event> getShoppingMarket() { return shoppingMarket; }
+    public ArrayList<Event> getMiscellaneous() { return Miscellaneous; }
+
 }
