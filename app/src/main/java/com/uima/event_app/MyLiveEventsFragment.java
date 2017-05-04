@@ -28,10 +28,6 @@ public class MyLiveEventsFragment extends ManageEventsFragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_my_live_events, container, false);
         eventListView = (ListView) rootView.findViewById(R.id.event_list_view);
-        editButton = (ImageButton) rootView.findViewById(R.id.edit_event_btn);
-
-        updateArray();
-        registerForContextMenu(eventListView);
 
         eventListView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -45,13 +41,9 @@ public class MyLiveEventsFragment extends ManageEventsFragment {
             }
         });
 
-        /*editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), EditEventActivity.class);
-                startActivity(intent);
-            }
-        });*/
+        updateArray();
+        registerForContextMenu(eventListView);
+
         return rootView;
     }
 }

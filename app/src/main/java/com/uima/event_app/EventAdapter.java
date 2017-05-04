@@ -1,6 +1,7 @@
 package com.uima.event_app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,7 @@ public class EventAdapter extends ArrayAdapter<Event> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LinearLayout eventSelectListView;
-        Event eventSelectedItem = getItem(position);
+        final Event eventSelectedItem = getItem(position);
 
         if (convertView == null) {
             eventSelectListView = new LinearLayout(getContext());

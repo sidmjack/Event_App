@@ -31,17 +31,18 @@ public class CreateEventActivity extends AppCompatActivity {
         eventLocation = (EditText) findViewById(R.id.create_event_location);
         eventDetails = (EditText) findViewById(R.id.create_event_details);
 
-        setButtons();
-    }
+        Bundle extras = getIntent().getExtras();
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+        if (extras.getBoolean("duplicate", false)) {
+            String eventNameStr = extras.getString("event name");
+            String eventLocationStr = extras.getString("event location");
+            String eventDetailsStr = extras.getString("event details");
 
-        setTitle("Create Activity");
-    }
+            eventName.setText(eventNameStr);
+            eventLocation.setText(eventLocationStr);
+            eventDetails.setText(eventDetailsStr);
+        }
 
-    protected void setButtons() {
         orangeButton.setText("create");
         purpleButton.setText("cancel");
 
@@ -60,6 +61,13 @@ public class CreateEventActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        setTitle("Create Activity");
     }
 
 

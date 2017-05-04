@@ -2,6 +2,7 @@ package com.uima.event_app;
 
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
@@ -35,6 +36,7 @@ public class ManageEventsFragment extends Fragment {
 
     public static final int MENU_ITEM_DUPLICATE = Menu.FIRST;
     public static final int MENU_ITEM_DELETE = Menu.FIRST + 1;
+    public static final int MENU_ITEM_EDIT = Menu.FIRST + 2;
 
     public ManageEventsFragment() {
         // Required empty public constructor
@@ -81,6 +83,7 @@ public class ManageEventsFragment extends Fragment {
         // Add menu items
         menu.add(0, MENU_ITEM_DUPLICATE, 0, R.string.menu_duplicate);
         menu.add(0, MENU_ITEM_DELETE, 0, R.string.menu_delete);
+        menu.add(0, MENU_ITEM_EDIT, 0, R.string.menu_edit);
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.context_menu, menu);
@@ -98,6 +101,25 @@ public class ManageEventsFragment extends Fragment {
             case MENU_ITEM_DUPLICATE: {
                 Event event = eventItems.get(index);
 
+                Intent intent = new Intent(getActivity(), CreateEventActivity.class);
+
+                intent.putExtra("event name", event.getName());
+                intent.putExtra("event location", event.getLocation());
+                intent.putExtra("event details", event.getDetails());
+                intent.putExtra("duplicate", true);
+
+                startActivity(intent);
+
+                return true;
+            }
+            case MENU_ITEM_DELETE: {
+                Toast.makeText(getContext(), "event " + index + " deleted",
+                        Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            case MENU_ITEM_EDIT: {
+                Event event = eventItems.get(index);
+
                 Intent intent = new Intent(getActivity(), EditEventActivity.class);
 
                 intent.putExtra("event name", event.getName());
@@ -106,11 +128,6 @@ public class ManageEventsFragment extends Fragment {
 
                 startActivity(intent);
 
-                return false;
-            }
-            case MENU_ITEM_DELETE: {
-                Toast.makeText(getContext(), "event " + index + " deleted",
-                        Toast.LENGTH_SHORT).show();
                 return true;
             }
         }

@@ -1,7 +1,10 @@
 package com.uima.event_app;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class EditEventActivity extends CreateEventActivity {
@@ -22,18 +25,6 @@ public class EditEventActivity extends CreateEventActivity {
         eventLocation.setText(eventLocationStr);
         eventDetails.setText(eventDetailsStr);
 
-        setButtons();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        setTitle("Edit Activity");
-    }
-
-    @Override
-    protected void setButtons() {
         orangeButton.setText("update");
         purpleButton.setText("cancel");
 
@@ -52,5 +43,12 @@ public class EditEventActivity extends CreateEventActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        setTitle("Edit Activity");
     }
 }

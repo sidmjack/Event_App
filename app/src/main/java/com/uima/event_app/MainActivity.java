@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.action_new_event) {
             Intent intent = new Intent(this, CreateEventActivity.class);
+            intent.putExtra("duplicate", false);
             setTitle("Create New Event");
             startActivity(intent);
         }
