@@ -189,4 +189,8 @@
     <!-- Event Board Stuff -->
     <string name="eg_event_board_desc"> Eat our food. Listen to their music. Meet your future friends. </string>
 
+    <!-- Other Stuff -->
+    <string name="select_type">Select Event Type</string>
+
+
 </resources>

@@ -61,8 +61,10 @@ public class CreateEventActivity extends AppCompatActivity {
         Event e = new Event(eventName.getText().toString(), eventLocation.getText().toString(), eventDetails.getText().toString());
 
         // Write a message to the database
-        myRef = database.getReference("events");
+        myRef = database.getReference().child("events").push();
+
         myRef.setValue(e);
+        String myKey = myRef.getKey();
     }
 
     private void readFromDB(String message) {

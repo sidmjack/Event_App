@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1096884407141-opgak73dv3v5tsldholfb5llutcpblco.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uima.event_app",
+            "certificate_hash": "0b341cc9a5b322cc4b1ad93104387a3d0030d9cd"
+          }
+        },
+        {
           "client_id": "1096884407141-2ildmfb306s2vrp5m3nsmcubudi6p6cn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

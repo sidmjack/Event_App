@@ -20,6 +20,7 @@ public class Event {
     private Organization organization;
     private String address;
     private String date;
+    private String key;
 
     public Event(String name, String location, String details) {
         this.name = name;
@@ -30,6 +31,7 @@ public class Event {
         this.imgId = "";
         this.types = null;
         this.tags = null;
+        this.key = null;
     }
 
     public Event(String name, String hostOrg, String location, String details, boolean needVolunteers, String imgId, List<String> types, List<String> tags) {
@@ -42,6 +44,7 @@ public class Event {
         this.imgId = imgId;
         this.types = types;
         this.tags = tags;
+        this.key = null;
     }
 
     public Event(String id, String name, String hostOrg, String location, String details, boolean needVolunteers, String imgId, List<String> types, List<String> tags) {
@@ -54,6 +57,7 @@ public class Event {
         this.imgId = imgId;
         this.types = types;
         this.tags = tags;
+        this.key = null;
     }
 
     /*eventInfo: id, name, location, address, details, start_time, end_time, date */
@@ -82,6 +86,7 @@ public class Event {
         // Pass event types and tags.
         this.types = types;
         this.tags = tags;
+        this.key = null;
     }
 
     public String getId() { return id; }
