@@ -5,33 +5,64 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import static android.support.v7.appcompat.R.styleable.View;
 
 public class CreateEventActivity extends AppCompatActivity {
 
+    Button orangeButton;
+    Button purpleButton;
+
+    EditText eventName;
+    EditText eventLocation;
+    EditText eventDetails;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
+        setTitle("Create Activity");
 
-        Button createButton = (Button) findViewById(R.id.create_event);
-        Button cancelButton = (Button) findViewById(R.id.cancel_event);
+        orangeButton = (Button) findViewById(R.id.create_event);
+        purpleButton = (Button) findViewById(R.id.cancel_event);
+        eventName = (EditText) findViewById(R.id.create_event_name);
+        eventLocation = (EditText) findViewById(R.id.create_event_location);
+        eventDetails = (EditText) findViewById(R.id.create_event_details);
 
-        createButton.setOnClickListener(new android.view.View.OnClickListener() {
+        setButtons();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        setTitle("Create Activity");
+    }
+
+    protected void setButtons() {
+        orangeButton.setText("create");
+        purpleButton.setText("cancel");
+
+        orangeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 Toast.makeText(getBaseContext(), "Event Created", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        purpleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getBaseContext(), "Event Canceled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Create Canceled", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }
+
+
 
 
 }

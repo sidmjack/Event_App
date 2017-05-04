@@ -15,14 +15,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/create_event_name"
         android:inputType="text"
-        android:text="@string/event_name"/>
+        android:hint="@string/event_name"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/create_event_location"
         android:inputType="text"
-        android:text="@string/event_location"
+        android:hint="@string/event_location"
         android:layout_below="@+id/create_event_name"/>
 
     <EditText
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/create_event_details"
         android:inputType="text"
-        android:text="@string/event_details"
+        android:hint="@string/event_details"
         android:layout_below="@+id/create_event_location"/>
 
     <CheckBox

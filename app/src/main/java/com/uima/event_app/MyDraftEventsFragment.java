@@ -38,28 +38,28 @@ public class MyDraftEventsFragment extends ManageEventsFragment {
         return rootView;
     }
 
-    private void updateArray() {
-        // get dummy or actual list of events
-        eventItems = new ArrayList<>();
-        List<String> dummyTypes = new ArrayList<>();
-        dummyTypes.add("Local Culture");
-        dummyTypes.add("Social Activism");
-        List<String> dummyTags = new ArrayList<>();
-        dummyTags.add("free");
-        dummyTags.add("parking");
-        Event temp = new Event("An Event!", "An Org", "JHU", "oh look drafted details", false, "", dummyTypes, dummyTags);
-        eventItems.add(temp);
-        eventItems.add(temp);
-        eventItems.add(temp);
-        eventItems.add(temp);
-        eventItems.add(temp);
-        eventItems.add(temp);
-        eventItems.add(temp);
-        eventItems.add(temp);
-        eventItems.add(temp);
-
-        adapter = new EventAdapter(getActivity(), R.layout.event_item, eventItems);
-        eventListView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-    }
+//    private void updateArray() {
+//        // get dummy or actual list of events
+//        eventItems = new ArrayList<>();
+//        List<String> dummyTypes = new ArrayList<>();
+//        dummyTypes.add("Local Culture");
+//        dummyTypes.add("Social Activism");
+//        List<String> dummyTags = new ArrayList<>();
+//        dummyTags.add("free");
+//        dummyTags.add("parking");
+//        Event temp = new Event("An Event!", "An Org", "JHU", "oh look drafted details", false, "", dummyTypes, dummyTags);
+//        eventItems.add(temp);
+//        eventItems.add(temp);
+//        eventItems.add(temp);
+//        eventItems.add(temp);
+//        eventItems.add(temp);
+//        eventItems.add(temp);
+//        eventItems.add(temp);
+//        eventItems.add(temp);
+//        eventItems.add(temp);
+//
+//        adapter = new EventSelectAdapter(getActivity(), R.layout.event_select_row, eventItems);
+//        eventListView.setAdapter(adapter);
+//        adapter.notifyDataSetChanged();
+//    }
 }

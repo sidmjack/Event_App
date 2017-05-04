@@ -7,12 +7,20 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Space;
 import android.widget.Toast;
+
+import static android.view.View.VISIBLE;
 
 public class RegistrationActivity extends AppCompatActivity {
 
     SharedPreferences myPrefs;
+
+    CheckBox orgCheck;
+    EditText orgName;
+    Space space;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +29,30 @@ public class RegistrationActivity extends AppCompatActivity {
 
         Context context = getApplicationContext();
         myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        orgName = (EditText) findViewById(R.id.org_name);
+        space = (Space) findViewById(R.id.space);
+
+        orgCheck = (CheckBox) findViewById(R.id.registration_organizer_box);
+        orgCheck.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                if(orgCheck.isChecked()){
+                    System.out.println("Checked");
+                    orgName.setVisibility(View.VISIBLE);
+                    orgName.setEnabled(true);
+                    space.setVisibility(View.GONE);
+                }else{
+                    System.out.println("Un-Checked");
+                    orgName.setVisibility(View.GONE);
+                    orgName.setEnabled(false);
+                    space.setVisibility(View.VISIBLE);
+
+                }
+            }
+        });
 
     }
 

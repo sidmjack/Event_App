@@ -1,48 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_weight="3"
+        android:longClickable="true"
+        android:clickable="true">
 
-        <ImageView
+        <TextView
+            android:text="TextView"
             android:layout_width="match_parent"
-            android:src="@drawable/default_header"
-            android:id="@+id/event_header"
-            android:layout_height="100dp"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="18sp"
+            android:textColor="@color/grey"
+            android:textStyle="bold"
+            android:layout_marginLeft="7dp"
+            android:gravity="left"
+            android:id="@+id/selected_event_name"
+            android:layout_weight="1" />
 
-        <LinearLayout
-            android:orientation="horizontal"
+        <TextView
+            android:text="TextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="14sp"
+            android:textColor="@color/grey"
+            android:layout_marginLeft="7dp"
+            android:gravity="left"
+            android:id="@+id/selected_event_description"
+            android:layout_weight="1" />
+    </LinearLayout>
 
-            <TextView
-                android:text="TextView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/event_description"
-                android:layout_weight="1"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                android:padding="10dp" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="2.5dp"
+        android:layout_weight="1.5">
 
-            <ImageButton
-                android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_edit"
-                android:id="@+id/edit_event_btn"
-                android:layout_weight="1"
-                android:layout_marginRight="10dp"
-                android:layout_width="120dp"/>
-
-        </LinearLayout>
-
+        <ImageButton
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_menu_edit"
+            android:id="@+id/edit_event_btn"
+            android:layout_weight="1"
+            android:layout_marginRight="10dp"
+            android:layout_width="100dp"/>
     </LinearLayout>
 
 </LinearLayout>

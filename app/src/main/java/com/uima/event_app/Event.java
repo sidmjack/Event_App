@@ -88,4 +88,9 @@ public class Event {
     public String getStart_time() {return start_time;}
     public String getEnd_time() {return end_time;}
 
+    @Override
+    public String toString() {
+        return String.format("Name: %s, Location: %s, Details: %s", name, location, details);
+    }
+
 }
