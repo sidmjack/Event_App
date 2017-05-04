@@ -32,6 +32,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     GoogleApiClient mGoogleApi;
     private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 9001;
+    public static final String userID = "com.uima.event_app.userID";
 
     private FirebaseAuth mAuth;
 
@@ -47,6 +48,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         Context context = getApplicationContext();
         myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        //TODO ASSIGN userID FROM FIREBASE
 
         // Google Stuff
 

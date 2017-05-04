@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sidneyjackson on 4/18/17.
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 
 public class EventSelectFragment extends Fragment {
     private ListView eventSelectListView;
-    protected static ArrayList<Event> eventItems;
+    protected static List<Event> eventItems;
     protected static EventSelectAdapter esAdapter;
     protected View rootView;
     protected FirebaseAdapter fb;
@@ -32,7 +33,7 @@ public class EventSelectFragment extends Fragment {
         fb = new FirebaseAdapter(getContext());
         type = getActivity().getTitle().toString();
         eventItems = new ArrayList<Event>();
-        getEventItems();
+
     }
 
     @Override
@@ -81,6 +82,9 @@ public class EventSelectFragment extends Fragment {
     }
 
     public void getEventItems() {
+        fb.getAllEvents();
+        System.out.print("HERE");
+        fb.divideEvents();
         if (type.contains("Local Culture")) {
             eventItems = fb.getLocalCulture();
         } else if (type.contains("Social Activism")) {

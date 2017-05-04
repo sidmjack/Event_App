@@ -2,9 +2,11 @@ package com.uima.event_app;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +14,20 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,12 +49,28 @@ public class CreateEventActivity extends AppCompatActivity {
     private EditText eventLocation;
     private EditText eventDetails;
     private CheckBox needVolunteers;
+    private DatePicker eventDate;
+    private TimePicker eventStartTime;
+    private TimePicker eventEndTime;
+    private Spinner eventType;
+    private ImageView eventImage;
+
 
     private ListView attributeListView;
     protected static ArrayList<String> attributeItems;
     protected static ListAttributeAdapter laAdapter;
 
     private Spinner categorySpinner;
+    private UserProfile user;
+
+    protected String key = "fake key";
+    protected String hostOrg = "Need to do";
+    protected String clickType;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,17 +78,43 @@ public class CreateEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_event);
 
         database = FirebaseDatabase.getInstance();
+        user = new UserProfile();
 
         eventName = (EditText) findViewById(R.id.create_event_name);
         eventLocation = (EditText) findViewById(R.id.create_event_location);
         eventDetails = (EditText) findViewById(R.id.create_event_details);
+        needVolunteers = (CheckBox) findViewById(R.id.need_volunteers);
+        eventImage = (ImageView) findViewById(R.id.create_image);
+        eventDate = (DatePicker) findViewById(R.id.event_date);
+        eventStartTime = (TimePicker) findViewById(R.id.event_start_time);
+        eventEndTime = (TimePicker) findViewById(R.id.event_end_time);
+        eventType = (Spinner) findViewById(R.id.create_event_type);
+        eventType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // On selecting a spinner item
+                clickType = parent.getItemAtPosition(position).toString();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        List<String> types = new ArrayList<String>();
+        types.add("Local Culture");
+        types.add("Social Activism");
+        types.add("Popular Culture");
+        types.add("Community Outreach");
+        types.add("Education & Learning");
+        types.add("Shopping & Market Events");
+        types.add("Miscellaneous");
+        ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, types);
+        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        eventType.setAdapter(typeAdapter);
+
 
         Button createButton = (Button) findViewById(R.id.create_event);
         Button cancelButton = (Button) findViewById(R.id.cancel_event);
-
-        // Spinner
-
-        Spinner spinner = (Spinner) findViewById(R.id.create_event_type);
 
         // Attribute Selection List
         attributeListView = (ListView) findViewById(R.id.event_attribute_list_view);
@@ -107,7 +157,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
         // Create and Cancel Buttons
 
-        createButton.setOnClickListener(new android.view.View.OnClickListener() {
+        createButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 writeToEventDB();
                 Toast.makeText(getBaseContext(), "Event Created", Toast.LENGTH_SHORT).show();
@@ -123,10 +173,21 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     private void writeToEventDB() {
-        Event e = new Event(eventName.getText().toString(), eventLocation.getText().toString(), eventDetails.getText().toString());
+        List<String> myTags = new ArrayList<String>();
+        myTags.add("Arts");
+        myTags.add("Music");
+        myTags.add("Cultural");
+        String start_time = eventStartTime.getCurrentHour() + ":" + eventStartTime.getCurrentMinute();
+        String end_time = eventEndTime.getCurrentHour() + ":" + eventEndTime.getCurrentMinute();
+        String imgId = "22"; //eventImage.getId() + "";
+        String event_date = eventDate.getMinDate() + "";
+        Event e = new Event("1", eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, myTags, start_time, end_time, event_date, key);
 
 
         // Write a message to the database
@@ -134,7 +195,9 @@ public class CreateEventActivity extends AppCompatActivity {
 
         myRef.setValue(e);
         String myKey = myRef.getKey();
+
     }
+
 
     private void readFromDB(String message) {
         // Read from the database
@@ -168,10 +231,46 @@ public class CreateEventActivity extends AppCompatActivity {
         return attributes;
     }
 
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("CreateEvent Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
+
     public class ListAttributeAdapter extends ArrayAdapter<String> {
         int res;
 
-        public ListAttributeAdapter(Context ctx, int res, List<String> attributes)  {
+        public ListAttributeAdapter(Context ctx, int res, List<String> attributes) {
             super(ctx, res, attributes);
             this.res = res;
         }

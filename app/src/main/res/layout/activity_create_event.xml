@@ -21,14 +21,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/create_event_name"
         android:inputType="text"
-        android:text="@string/event_name"/>
+        android:hint="@string/event_name"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/create_event_location"
         android:inputType="text"
-        android:text="@string/event_location"/>
+        android:hint="@string/event_location"/>
 
     <DatePicker
         android:layout_width="match_parent"
@@ -40,12 +40,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/create_event_details"
-        android:text="@string/event_details"/>
+        android:hint="@string/event_details"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Time"
+        android:textSize="20dp"/>
 
     <TimePicker
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/event_start_time">
+        android:id="@+id/event_start_time"
+        android:scaleX="0.5"
+        android:scaleY="0.5">
+    </TimePicker>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End Time"
+        android:textSize="20dp"/>
+
+
+    <TimePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/event_end_time"
+        android:scaleX="0.5"
+        android:scaleY="0.5">
     </TimePicker>
 
     <CheckBox

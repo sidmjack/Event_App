@@ -16,11 +16,14 @@ public class UserProfile {
     String facebook;
     String instagram;
     String twitter;
+    String userOrganization;
+
     HashMap<String, Integer> userTrends; // <Event_Attributes, Number of Events Attended with this attribute>
     HashMap<String, Boolean> userEventPreferences; //<Event_Attributes, Event Preferences from Settings>
 
     /* NOTE: For registration, be sure to return an empty string for fields where ethe user does not
     * input their information. */
+    public UserProfile() {}
 
     /* Note: The String array must be size 8! */
     public UserProfile(String[] userInformation) {
@@ -44,6 +47,7 @@ public class UserProfile {
     public String getInstagram() { return instagram; }
     public String getTwitter() { return twitter; }
 
+
     /*The validate method can be made more extensive by returning adjusted arrays that
     * can easily be handled by the app. Here, we can convert blank input into empty strings.*/
     public void validate(String[] organizationInformation) {
@@ -54,4 +58,10 @@ public class UserProfile {
                     ("Array Size of UserInformation is incorrect.");
         }
     }
+
+    public void setUserOrgainization(String org) {
+        this.userOrganization = org;
+    }
+
+    public String getUserOrganization() { return userOrganization; }
 }

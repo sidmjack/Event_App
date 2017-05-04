@@ -11,6 +11,7 @@ import android.view.View;
 public class ProfileActivity extends AppCompatActivity {
 
     SharedPreferences myPrefs;
+    UserProfile userProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

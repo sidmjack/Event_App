@@ -12,6 +12,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
 import static android.support.design.R.id.snap;
@@ -25,14 +26,15 @@ public class FirebaseAdapter {
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private String orgID;
-    private ArrayList<Event> localEvents;
-    private ArrayList<Event> localCulture;
-    private ArrayList<Event> socailActivism;
-    private ArrayList<Event> popularCulture;
-    private ArrayList<Event> communityOutreach;
-    private ArrayList<Event> educationLearning;
-    private ArrayList<Event> shoppingMarket;
-    private ArrayList<Event> Miscellaneous;
+    final private List<Event> localEvents;
+    private List<Event> localCulture;
+    private List<Event> socailActivism;
+    private List<Event> popularCulture;
+    private List<Event> communityOutreach;
+    private List<Event> educationLearning;
+    private List<Event> shoppingMarket;
+    private List<Event> Miscellaneous;
+    private UserProfile user;
 
     public FirebaseAdapter(Context ctx) {
         context = ctx;
@@ -45,13 +47,15 @@ public class FirebaseAdapter {
         educationLearning = new ArrayList<Event>();
         shoppingMarket = new ArrayList<Event>();
         Miscellaneous = new ArrayList<Event>();
-        getAllEvents();
-        divideEvents();
+
+    }
+
+    public void getUserProfile() {
+        
     }
 
     public void addEventToDB(Event event) {
         String name = event.getName();
-        String addr = event.getAddress();
         String date = event.getDate();
         String start_time = event.getStart_time();
         String end_time = event.getEnd_time();
@@ -86,33 +90,35 @@ public class FirebaseAdapter {
     }
 
     public void getAllEvents() {
-        myRef = database.getReference("events");
-        myRef.addChildEventListener(new ChildEventListener() {
+        myRef = database.getReference();
+        myRef.child("events").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Event event = dataSnapshot.getValue(Event.class);
-                localEvents.add(event);
-                Log.i(TAG,"add event name = " + event.getName());
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children =  dataSnapshot.getChildren();
+
+                for (DataSnapshot child:children) {
+                    Event value = child.getValue(Event.class);
+                    Event temp = new Event();
+                    System.out.println(value.getName());
+                    localEvents.add(temp);
+
+                }
             }
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {}
+            public void onCancelled(DatabaseError databaseError) {
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
-
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
-
-            @Override
-            public void onCancelled(DatabaseError firebaseError) {
-                Log.e("FirebaseListAdapter", "Listen was cancelled, no more updates will occur");
             }
         });
+        System.out.println(localEvents.size());
     }
 
     public void divideEvents() {
+        getAllEvents();
+        System.out.println("**** " + localEvents.size());
         for (int i = 0; i < localEvents.size(); i++) {
             String eventType = localEvents.get(i).getType();
+            System.out.println(localEvents.get(i).getName());
             if (eventType.contains("Local Culture")) {
                 localCulture.add(localEvents.get(i));
             } else if (eventType.contains("Social Activism")) {
@@ -128,15 +134,16 @@ public class FirebaseAdapter {
             } else {
                 Miscellaneous.add(localEvents.get(i));
             }
+            System.out.println(localEvents.get(i).getName());
         }
     }
 
-    public ArrayList<Event> getLocalCulture() { return localCulture; }
-    public ArrayList<Event> getPopularCulture() { return popularCulture; }
-    public ArrayList<Event> getSocailActivism() { return socailActivism; }
-    public ArrayList<Event> getCommunityOutreach() { return communityOutreach; }
-    public ArrayList<Event> getEducationLearning() { return educationLearning; }
-    public ArrayList<Event> getShoppingMarket() { return shoppingMarket; }
-    public ArrayList<Event> getMiscellaneous() { return Miscellaneous; }
+    public List<Event> getLocalCulture() { return localCulture; }
+    public List<Event> getPopularCulture() { return popularCulture; }
+    public List<Event> getSocailActivism() { return socailActivism; }
+    public List<Event> getCommunityOutreach() { return communityOutreach; }
+    public List<Event> getEducationLearning() { return educationLearning; }
+    public List<Event> getShoppingMarket() { return shoppingMarket; }
+    public List<Event> getMiscellaneous() { return Miscellaneous; }
 
 }

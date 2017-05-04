@@ -47,7 +47,7 @@ public class MyDraftEventsFragment extends ManageEventsFragment {
         List<String> dummyTags = new ArrayList<>();
         dummyTags.add("free");
         dummyTags.add("parking");
-        Event temp = new Event("An Event!", "An Org", "JHU", "oh look drafted details", false, "", "FAKE", dummyTags);
+        /*Event temp = new Event("An Event!", "An Org", "JHU", "oh look drafted details", false, "", "FAKE", dummyTags);
         eventItems.add(temp);
         eventItems.add(temp);
         eventItems.add(temp);
@@ -57,6 +57,7 @@ public class MyDraftEventsFragment extends ManageEventsFragment {
         eventItems.add(temp);
         eventItems.add(temp);
         eventItems.add(temp);
+        */
 
         adapter = new EventAdapter(getActivity(), R.layout.event_item, eventItems);
         eventListView.setAdapter(adapter);

@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sidneyjackson on 4/18/17.
@@ -21,7 +22,7 @@ public class EventSelectAdapter  extends ArrayAdapter<Event> {
     String event_name;
     String event_date_time;
 
-    public EventSelectAdapter(Context ctx, int res, ArrayList<Event> items)  {
+    public EventSelectAdapter(Context ctx, int res, List<Event> items)  {
         super(ctx, res, items);
         this.res = res;
     }
