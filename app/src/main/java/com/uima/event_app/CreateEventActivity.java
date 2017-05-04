@@ -128,6 +128,7 @@ public class CreateEventActivity extends AppCompatActivity {
     private void writeToEventDB() {
         Event e = new Event(eventName.getText().toString(), eventLocation.getText().toString(), eventDetails.getText().toString());
 
+
         // Write a message to the database
         myRef = database.getReference().child("events").push();
 

@@ -22,7 +22,7 @@ public class DiscoverBaltimoreFragment extends Fragment {
     protected static ArrayList<String> categoryItems;
     protected static EventCategoryAdapter ecAdapter;
     protected View rootView;
-    String categoryName = " ";
+    String categoryName = "";
 
     public DiscoverBaltimoreFragment() {
         // Required empty public constructor

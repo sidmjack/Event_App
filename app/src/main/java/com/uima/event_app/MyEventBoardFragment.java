@@ -147,13 +147,13 @@ public class MyEventBoardFragment extends Fragment {
         Organization fakeOrg1 = new Organization(fakeOrgInfo1); // Party
         Organization fakeOrg2 = new Organization(fakeOrgInfo2); // Baltimore
 
-        Event fakeEvent0 = new Event(fakeEventInfo0, fakeOrg0, false, fakeTypes, fakeTags, fakeEventBk0);
-        Event fakeEvent1 = new Event(fakeEventInfo1, fakeOrg2, true, fakeTypes2, fakeTags, fakeEventBk1);
-        //Event fakeEvent2 = new Event(fakeEventInfo2, fakeOrg0, true, fakeTypes1, fakeTags, fakeEventBk2);
-        Event fakeEvent3 = new Event(fakeEventInfo3, fakeOrg2, false, fakeTypes1, fakeTags, fakeEventBk3);
-        Event fakeEvent4 = new Event(fakeEventInfo4, fakeOrg2, false, fakeTypes1, fakeTags, fakeEventBk4);
+        Event fakeEvent0 = new Event(fakeEventInfo0, fakeOrg0, false, "FAKE", fakeTags, fakeEventBk0);
+        Event fakeEvent1 = new Event(fakeEventInfo1, fakeOrg2, true, "FAKE", fakeTags, fakeEventBk1);
+        //Event fakeEvent2 = new Event(fakeEventInfo2, fakeOrg0, true, "FAKE", fakeTags, fakeEventBk2);
+        Event fakeEvent3 = new Event(fakeEventInfo3, fakeOrg2, false, "FAKE", fakeTags, fakeEventBk3);
+        Event fakeEvent4 = new Event(fakeEventInfo4, fakeOrg2, false, "FAKE", fakeTags, fakeEventBk4);
         //Event fakeEvent5 = new Event(fakeEventInfo5, fakeOrg1, true, fakeTypes2, fakeTags, fakeEventBk5);
-        Event fakeEvent6 = new Event(fakeEventInfo6, fakeOrg1, false, fakeTypes3, fakeTags, fakeEventBk6);
+        Event fakeEvent6 = new Event(fakeEventInfo6, fakeOrg1, false, "FAKE", fakeTags, fakeEventBk6);
 
         Event[] fakeEvents= {fakeEvent0, fakeEvent1, fakeEvent3, fakeEvent4, fakeEvent6};
 
