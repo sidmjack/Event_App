@@ -17,7 +17,6 @@ public class Event {
     private String start_time;
     private String end_time;
     private String date;
-    private String key;
     private String type;
 
     public Event() {
@@ -29,7 +28,6 @@ public class Event {
         this.imgId = "";
         this.type = null;
         this.tags = null;
-        this.key = null;
     }
 
     public Event(String id, String name, String hostOrg, String location, String details, boolean needVolunteers, String imgId, String type, List<String> tags, String start_time, String end_time, String date) {
@@ -42,7 +40,6 @@ public class Event {
         this.imgId = imgId;
         this.type = type;
         this.tags = tags;
-        this.key = key;
         this.end_time = end_time;
         this.start_time = start_time;
         this.imgId = imgId;
@@ -60,7 +57,6 @@ public class Event {
     public String getImgId() { return imgId; }
     public String getType() { return type; }
     public List<String> getTags() { return tags; }
-
     public String getDate() {return date; }
     public String getStart_time() {return start_time;}
     public String getEnd_time() {return end_time;}

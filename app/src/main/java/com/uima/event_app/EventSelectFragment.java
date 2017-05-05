@@ -2,10 +2,12 @@ package com.uima.event_app;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -21,7 +23,7 @@ import java.util.List;
  * Created by sidneyjackson on 4/18/17.
  */
 
-public class EventSelectFragment extends Fragment {
+public class EventSelectFragment extends ListFragment {
     private ListView eventSelectListView;
     protected static List<Event> eventItems;
     protected static EventSelectAdapter esAdapter;
@@ -29,7 +31,7 @@ public class EventSelectFragment extends Fragment {
     protected String type;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
-    protected List<Event> localEvents;
+
 
     public EventSelectFragment() {
         // Required empty public constructor
@@ -39,9 +41,29 @@ public class EventSelectFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database = FirebaseDatabase.getInstance();
+        myRef = database.getReference();
         type = getActivity().getTitle().toString();
-        localEvents = new ArrayList<Event>();
-        getAllEvents();
+        final List<Event> localEvents = new ArrayList<Event>();
+
+        myRef.child("events").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot child : children) {
+                    Event value = child.getValue(Event.class);
+                    localEvents.add(value);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        ArrayAdapter<Event> eventAdapter = new ArrayAdapter<Event>(getActivity(), android.R.layout.simple_list_item_1, localEvents);
+        //esAdapter = new EventSelectAdapter(getActivity(), R.layout.event_select_row, localEvents);
+        setListAdapter(eventAdapter);
     }
 
     @Override
@@ -52,10 +74,10 @@ public class EventSelectFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        
-        esAdapter = new EventSelectAdapter(getActivity(), R.layout.event_select_row, localEvents);
+/*
+        esAdapter = new EventSelectAdapter(getActivity(), R.layout.event_select_row, eventItems);
         eventSelectListView.setAdapter(esAdapter);
-
+*/
     }
 
     @Override
@@ -64,7 +86,7 @@ public class EventSelectFragment extends Fragment {
 
         rootView = inflater.inflate(R.layout.fragment_event_select, container, false);
 
-        eventSelectListView = (ListView) rootView.findViewById(R.id.event_select_list_view);
+        eventSelectListView = (ListView) rootView.findViewById(R.id.list);
 
         eventSelectListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -86,34 +108,5 @@ public class EventSelectFragment extends Fragment {
 
         return rootView;
     }
-
-    public void getAllEvents() {
-        myRef = database.getReference("events");
-
-
-        myRef.child("events").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Iterable<DataSnapshot> children =  dataSnapshot.getChildren();
-
-                for (DataSnapshot child:children) {
-                    Event value = child.getValue(Event.class);
-                    if (value.getType().equalsIgnoreCase(type)) {
-                        Event temp = new Event(value.getId(), value.getName(), value.getHostOrg(), value.getLocation(), value.getDetails(), value.getNeedVolunteers(), value.getImgId(), value.getType(), value.getTags(), value.getStart_time(), value.getEnd_time(), value.getDate());
-                        localEvents.add(temp);
-                    }
-                    //System.out.println(value.getName());
-                    System.out.println("Size " + localEvents.size());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        System.out.println(localEvents.size());
-    }
-
 
 }
