@@ -112,6 +112,7 @@ public class CreateEventActivity extends AppCompatActivity {
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         eventType.setAdapter(typeAdapter);
 
+        attributeItems = new ArrayList<String>();
 
         Button createButton = (Button) findViewById(R.id.create_event);
         Button cancelButton = (Button) findViewById(R.id.cancel_event);
@@ -119,8 +120,6 @@ public class CreateEventActivity extends AppCompatActivity {
 
         // Attribute Selection List
         attributeListView = (ListView) findViewById(R.id.event_attribute_list_view);
-
-        attributeItems = populateAttributeList();
 
         laAdapter = new ListAttributeAdapter(this, R.layout.check_list_item, attributeItems);
         attributeListView.setAdapter(laAdapter); // Layout File
@@ -135,6 +134,13 @@ public class CreateEventActivity extends AppCompatActivity {
         String[] event_attributes = getResources().getStringArray(R.array.event_attributes);
         //boolean[] checkedItems = {true, false, false, true, false};
         boolean[] checkedItems = initializeCheck(event_attributes.length);
+
+        for(int i = 0; i < event_attributes.length; i++) {
+            if(checkedItems[i]) {
+                attributeItems.add(event_attributes[i]);
+            }
+        }
+
         builder.setMultiChoiceItems(event_attributes, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -185,23 +191,17 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     private void writeToEventDB() {
-        List<String> myTags = new ArrayList<String>();
-        myTags.add("Arts");
-        myTags.add("Music");
-        myTags.add("Cultural");
         String start_time = eventStartTime.getCurrentHour() + ":" + eventStartTime.getCurrentMinute();
         String end_time = eventEndTime.getCurrentHour() + ":" + eventEndTime.getCurrentMinute();
         String imgId = "22"; //eventImage.getId() + "";
         String event_date = eventDate.getMonth() + "/" + eventDate.getDayOfMonth() + "/" + eventDate.getYear();
-        Event e = new Event("1", eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, myTags, start_time, end_time, event_date);
-
+        Event e = new Event("1", eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, attributeItems, start_time, end_time, event_date);
 
         // Write a message to the database
         myRef = database.getReference().child("events").push();
 
         myRef.setValue(e);
         String myKey = myRef.getKey();
-
     }
 
 
@@ -225,6 +225,7 @@ public class CreateEventActivity extends AppCompatActivity {
         });
     }
 
+    /*
     public ArrayList<String> populateAttributeList() {
 
         String[] attribute_name = getResources().getStringArray(R.array.event_attributes);
@@ -235,7 +236,7 @@ public class CreateEventActivity extends AppCompatActivity {
         }
 
         return attributes;
-    }
+    } */
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
