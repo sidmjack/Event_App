@@ -28,11 +28,12 @@ public class MyPastEventsFragment extends ManageEventsFragment {
         rootView = inflater.inflate(R.layout.fragment_my_live_events, container, false);
         eventListView = (ListView) rootView.findViewById(R.id.event_list_view);
 
-        updateArray();
+        //updateArray();
         registerForContextMenu(eventListView);
         return rootView;
     }
 
+    /*
     private void updateArray() {
         // get dummy or actual list of events
         eventItems = new ArrayList<>();
@@ -52,10 +53,10 @@ public class MyPastEventsFragment extends ManageEventsFragment {
         eventItems.add(temp);
         eventItems.add(temp);
         eventItems.add(temp);
-        */
+
 
         adapter = new EventAdapter(getActivity(), R.layout.event_item, eventItems);
         eventListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-    }
+    } */
 }
