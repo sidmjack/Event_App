@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         finish();
     }
 
-    public void registerTapped(View view) {
+    public void registerTapped() {
         Intent intent = new Intent(this, RegistrationActivity.class);
         startActivity(intent);
     }
@@ -141,6 +141,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             startActivityForResult(signInIntent, RC_SIGN_IN);
         } else if (v.getId() == R.id.signin_button) {
             signInTapped();
+        } else if (v.getId() == R.id.register_button) {
+            registerTapped();
         }
     }
 

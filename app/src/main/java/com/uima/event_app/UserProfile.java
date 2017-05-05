@@ -1,51 +1,88 @@
 package com.uima.event_app;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Created by sidneyjackson on 4/29/17.
+ * UserProfile Class
+ * Defines a user and serves a model when retrieving input from Firebase.
  */
 
 public class UserProfile {
 
-    String id;
-    String userName;
-    String userZipcode;
-    String email;
-    String phoneNumber;
-    String facebook;
-    String instagram;
-    String twitter;
-    HashMap<String, Integer> userTrends; // <Event_Attributes, Number of Events Attended with this attribute>
-    HashMap<String, Boolean> userEventPreferences; //<Event_Attributes, Event Preferences from Settings>
+    /** Variables */
+    private String uid;
+    private String firstname;
+    private String username;
+    private String zipcode;
+    private String email;
+    private String website;
+    private String phoneNumber;
+    private String facebook;
+    private String instagram;
+    private String twitter;
+    private Boolean isOrganizer;
+    private String organizer;
+    //HashMap<String, Boolean> userEventPreferences; //<Event_Attributes, Event Preferences from Settings>
 
-    /* NOTE: For registration, be sure to return an empty string for fields where ethe user does not
-    * input their information. */
+    /** Empty constructor for Firebase snapshot initialization */
+    public UserProfile() {}
 
-    /* Note: The String array must be size 8! */
-    public UserProfile(String[] userInformation) {
-        validate(userInformation);
-        this.id = userInformation[0];
-        this.userName = userInformation[1];
-        this.userZipcode = userInformation[2];
-        this.email = userInformation[3];
-        this.phoneNumber = userInformation[4];
-        this.facebook = userInformation[5];
-        this.instagram = userInformation[6];
-        this.twitter = userInformation[7];
+    /** Constructor with manual fields */
+    public UserProfile(String id, String firstname, String email, String username, String zipcode,
+                       Boolean isOrganizer, String organizer) {
+        this.uid = id;
+        this.firstname = firstname;
+        this.username = username;
+        this.zipcode = zipcode;
+        this.email = email;
+        this.website = "";
+        this.phoneNumber = "";
+        this.facebook = "";
+        this.instagram = "";
+        this.twitter = "";
+        this.isOrganizer = isOrganizer;
+        this.organizer = organizer;
     }
 
-    public String getUserId() { return id; }
-    public String getUserName() { return userName; }
-    public String getZipcode() { return userZipcode; }
+    /** Get methods */
+    public String getUid() { return uid; }
+    public String getFirstname() { return firstname; }
+    public String getUsername() { return username; }
+    public String getZipcode() { return zipcode; }
     public String getEmail() { return email; }
+    public String getWebsite() { return website; }
     public String getPhoneNumber() { return phoneNumber; }
     public String getFacebook() { return facebook; }
     public String getInstagram() { return instagram; }
     public String getTwitter() { return twitter; }
+    public Boolean getIsOrganizer() { return isOrganizer; }
+    public String getOrganizer() { return organizer; }
 
-    /*The validate method can be made more extensive by returning adjusted arrays that
-    * can easily be handled by the app. Here, we can convert blank input into empty strings.*/
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("uid", uid);
+        result.put("firstname", firstname);
+        result.put("username", username);
+        result.put("zipcode", zipcode);
+        result.put("email", email);
+        result.put("website", website);
+        result.put("facebook", facebook);
+        result.put("instagram", instagram);
+        result.put("twitter", twitter);
+        result.put("isOrganizer", isOrganizer);
+        result.put("organizer", organizer);
+
+        return result;
+    }
+
+    /*
     public void validate(String[] organizationInformation) {
         if (organizationInformation.length == 8) {
             return;
@@ -53,5 +90,5 @@ public class UserProfile {
             throw new IllegalArgumentException
                     ("Array Size of UserInformation is incorrect.");
         }
-    }
+    } */
 }
