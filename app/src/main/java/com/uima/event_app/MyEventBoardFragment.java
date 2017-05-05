@@ -17,6 +17,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +33,8 @@ public class MyEventBoardFragment extends Fragment {
     protected static EventBoardAdapter ebAdapter;
     protected View rootView;
     private static LruCache<String, Bitmap> mMemoryCache;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
 
     public MyEventBoardFragment() {
         // Required empty public constructor
@@ -35,6 +43,24 @@ public class MyEventBoardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference();
+
+        myRef.child("events").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot child : children) {
+                    Event value = child.getValue(Event.class);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         final int maxMemorySize = (int) Runtime.getRuntime().maxMemory() / 1024;
         final int cacheSize = maxMemorySize / 10;
