@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -188,22 +190,56 @@ public class MyEventBoardFragment extends Fragment {
             }
 
             String eventName = ebEvent.getName();
-            int eventImage = Integer.parseInt(ebEvent.getImgId());
-            String date = ("Date: " + ebEvent.getDate());
-            String time = ("Time: " + ebEvent.getStart_time() + " - "+ ebEvent.getEnd_time());
-            String desc = ebEvent.getDetails();
+            //int eventImage = Integer.parseInt(ebEvent.getImgId());
+            //String date = ("Date: " + ebEvent.getDate());
+            //String time = ("Time: " + ebEvent.getStart_time() + " - "+ ebEvent.getEnd_time());
+            //String desc = ebEvent.getDetails();
 
-            TextView eventBoardName = (TextView) eventBoardView.findViewById(R.id.event_board_event_name);
-            ImageView eventBoardPicture = (ImageView) eventBoardView.findViewById(R.id.event_board_header);
-            TextView eventDate = (TextView) eventBoardView.findViewById(R.id.event_board_event_date);
-            TextView eventTime = (TextView) eventBoardView.findViewById(R.id.event_board_event_time);
-            TextView eventDesc = (TextView) eventBoardView.findViewById(R.id.selected_event_desc);
+            // Simplified Event Board Row Filling:
+            String event_time = ebEvent.getDate() + " @ " + ebEvent.getStart_time();
+            String event_time_notification = "Event: " + "Upcoming!";
+
+
+            TextView eventBoardName = (TextView) eventBoardView.findViewById(R.id.event_title);
+            //ImageView eventBoardPicture = (ImageView) eventBoardView.findViewById(R.id.event_board_header);
+            //TextView eventDate = (TextView) eventBoardView.findViewById(R.id.event_board_event_date);
+            //TextView eventTime = (TextView) eventBoardView.findViewById(R.id.event_board_event_time);
+            //TextView eventDesc = (TextView) eventBoardView.findViewById(R.id.selected_event_desc);
+            final Button attendButton = (Button) eventBoardView.findViewById(R.id.attend_button);
+
+            /*attendButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    if (attendButton.isPressed()) {
+                        attendButton.setPressed(false);
+                    } else {
+                        attendButton.setPressed(true);
+                    }
+                }
+            });*/
+
+            attendButton.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    if (attendButton.isPressed()) {
+                        attendButton.setPressed(false);
+                        return true;
+                    } else {
+                        attendButton.setPressed(true);
+                        return true;
+                    }
+                }
+            });
+            TextView eventTime = (TextView) eventBoardView.findViewById(R.id.event_time);
+            TextView eventNotification = (TextView) eventBoardView.findViewById(R.id.event_time_notification);
 
             eventBoardName.setText(eventName);
-            eventBoardPicture.setImageResource(eventImage);
-            eventDate.setText(date);
-            eventTime.setText(time);
-            eventDesc.setText(desc);
+            eventTime.setText(event_time);
+            eventNotification.setText(event_time_notification);
+            //eventBoardPicture.setImageResource(eventImage);
+            //eventDate.setText(date);
+            //eventTime.setText(time);
+            //eventDesc.setText(desc);
 
             return eventBoardView;
         }

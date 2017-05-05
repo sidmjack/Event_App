@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +26,7 @@ public class CreateEventActivity extends AppCompatActivity {
     private EditText eventLocation;
     private EditText eventDetails;
     private CheckBox needVolunteers;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
