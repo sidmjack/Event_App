@@ -115,6 +115,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
         Button createButton = (Button) findViewById(R.id.create_event);
         Button cancelButton = (Button) findViewById(R.id.cancel_event);
+        Button addTagsButton = (Button) findViewById(R.id.add_tags);
 
         // Attribute Selection List
         attributeListView = (ListView) findViewById(R.id.event_attribute_list_view);
@@ -127,7 +128,7 @@ public class CreateEventActivity extends AppCompatActivity {
         // Dialog for Attribute Selection List
 
         // setup the alert builder
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Select Event Attributes");
 
         // Add a Checkbox List
@@ -150,9 +151,14 @@ public class CreateEventActivity extends AppCompatActivity {
         });
         builder.setNegativeButton("Cancel", null);
 
-// create and show the alert dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
+
+        addTagsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
 
 
         // Create and Cancel Buttons
@@ -186,7 +192,7 @@ public class CreateEventActivity extends AppCompatActivity {
         String start_time = eventStartTime.getCurrentHour() + ":" + eventStartTime.getCurrentMinute();
         String end_time = eventEndTime.getCurrentHour() + ":" + eventEndTime.getCurrentMinute();
         String imgId = "22"; //eventImage.getId() + "";
-        String event_date = eventDate.getMinDate() + "";
+        String event_date = eventDate.getMonth() + "/" + eventDate.getDayOfMonth() + "/" + eventDate.getYear();
         Event e = new Event("1", eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, myTags, start_time, end_time, event_date);
 
 
