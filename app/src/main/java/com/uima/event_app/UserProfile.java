@@ -61,7 +61,7 @@ public class UserProfile {
     public Boolean getIsOrganizer() { return isOrganizer; }
     public String getOrganizer() { return organizer; }
 
-    @Exclude
+
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("uid", uid);
