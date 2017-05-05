@@ -96,10 +96,6 @@ public class ProfileActivity extends AppCompatActivity {
                 websiteTextView.setText(user.getWebsite());
                 zipcodeTextView.setText(user.getZipcode());
 
-                SharedPreferences.Editor peditor = myPrefs.edit();
-                peditor.putString("organization", user.getOrganizer());
-                peditor.commit();
-
                 populateProfileData();
             }
 

@@ -2,7 +2,9 @@ package com.uima.event_app;
 
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
@@ -49,6 +51,8 @@ public class MainActivity extends AppCompatActivity
     TextView navEmailTextView;
     MenuItem manageEventsItem;
 
+    private SharedPreferences myPrefs;
+
     private UserProfile user;
 
     @Override
@@ -66,6 +70,7 @@ public class MainActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         currentUserRef = database.getReference().child("users").child(currentUser.getUid());
+        myPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -97,6 +102,10 @@ public class MainActivity extends AppCompatActivity
                 if (!user.getIsOrganizer()) {
                     manageEventsItem.setVisible(false);
                 } else {
+                    SharedPreferences.Editor peditor = myPrefs.edit();
+                    peditor.putString("organization", user.getOrganizer());
+                    peditor.commit();
+
                     manageEventsItem.setVisible(true);
                 }
             }
