@@ -45,11 +45,11 @@ public class EventSelectAdapter  extends ArrayAdapter<Event> {
         event_name = eventSelectedItem.getName();
         event_date_time = (eventSelectedItem.getLocation()+ " @ " + "3:00 PM");
 
-        ImageView eventSelectOrganizationLogo = (ImageView) eventSelectListView.findViewById(R.id.selected_event_organization_logo);
+        //ImageView eventSelectOrganizationLogo = (ImageView) eventSelectListView.findViewById(R.id.selected_event_organization_logo);
         TextView eventSelect_name = (TextView) eventSelectListView.findViewById(R.id.selected_event_name);
         TextView eventSelect_desc = (TextView) eventSelectListView.findViewById(R.id.selected_event_description);
 
-        eventSelectOrganizationLogo.setImageResource(imgID);
+        //eventSelectOrganizationLogo.setImageResource(imgID);
         eventSelect_name.setText(event_name);
         eventSelect_desc.setText(event_date_time);
 

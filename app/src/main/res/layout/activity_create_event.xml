@@ -28,29 +28,47 @@
         android:layout_height="wrap_content"
         android:id="@+id/create_event_location"
         android:inputType="text"
-        android:text="@string/event_location"/>
+        android:hint="@string/event_location"/>
 
     <DatePicker
         android:layout_width="match_parent"
         android:layout_height="94dp"
         android:id="@+id/event_date">
     </DatePicker>
-        android:hint="@string/event_location"
-        android:layout_below="@+id/create_event_name"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/create_event_details"
-        android:inputType="text"
-        android:hint="@string/event_details"
-        android:layout_below="@+id/create_event_location"/>
-        android:text="@string/event_details"/>
+        android:hint="@string/event_details"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Time"
+        android:textSize="20dp"/>
 
     <TimePicker
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/event_start_time">
+        android:id="@+id/event_start_time"
+        android:scaleX="0.5"
+        android:scaleY="0.5">
+    </TimePicker>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End Time"
+        android:textSize="20dp"/>
+
+
+    <TimePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/event_end_time"
+        android:scaleX="0.5"
+        android:scaleY="0.5">
     </TimePicker>
 
     <CheckBox
@@ -64,7 +82,8 @@
         android:layout_height="45dp"
         android:id="@+id/create_event_type"
         android:background="@color/colorPrimary"
-        android:prompt="@string/select_type">
+        android:prompt="@string/select_type"
+        android:padding="10dp">
     </Spinner>
 
 
@@ -92,6 +111,18 @@
 
     <!-- Tentative List View Here! -->
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_tags"
+        android:text="Add Tags"
+        android:background="@color/colorPrimaryDark"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:padding="5dp"/>
+
     <ListView
         android:id="@+id/event_attribute_list_view"
         android:layout_height="fill_parent"
@@ -109,7 +140,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/create_event"
-            android:background="@color/colorAccent"
+            android:background="@color/colorPrimaryDark"
             android:text="@string/create"
             android:textColor="@color/white"
             android:textStyle="bold"
@@ -119,7 +150,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/cancel_event"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorAccent"
             android:text="@string/cancel"
             android:textColor="@color/white"
             android:textStyle="bold"

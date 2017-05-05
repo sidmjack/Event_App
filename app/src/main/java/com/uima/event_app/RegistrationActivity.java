@@ -3,61 +3,64 @@ package com.uima.event_app;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.nfc.Tag;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Space;
 import android.widget.Toast;
 
-import static android.view.View.VISIBLE;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegistrationActivity extends AppCompatActivity {
 
     SharedPreferences myPrefs;
 
-    CheckBox orgCheck;
-    EditText orgName;
-    Space space;
+    private FirebaseAuth mAuth;
+    private FirebaseDatabase database;
+    private DatabaseReference usersReference;
+
+    EditText nameField;
+    EditText emailField;
+    EditText usernameField;
+    EditText passwordField;
+    EditText zipcodeField;
+    CheckBox organizerCheckbox;
+    EditText organizerField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
+        mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        usersReference = database.getReference().child("users");
+
+        nameField = (EditText) findViewById(R.id.registration_name_field);
+        emailField = (EditText) findViewById(R.id.registration_email_field);
+        usernameField = (EditText) findViewById(R.id.registration_username_field);
+        passwordField = (EditText) findViewById(R.id.registration_password_field);
+        zipcodeField = (EditText) findViewById(R.id.registration_zipcode_field);
+        organizerCheckbox = (CheckBox) findViewById(R.id.registration_organizer_box);
+        organizerField = (EditText) findViewById(R.id.registration_organization_field);
+
         Context context = getApplicationContext();
         myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        orgName = (EditText) findViewById(R.id.org_name);
-        space = (Space) findViewById(R.id.space);
-
-        orgCheck = (CheckBox) findViewById(R.id.registration_organizer_box);
-        orgCheck.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                if(orgCheck.isChecked()){
-                    System.out.println("Checked");
-                    orgName.setVisibility(View.VISIBLE);
-                    orgName.setEnabled(true);
-                    space.setVisibility(View.GONE);
-                }else{
-                    System.out.println("Un-Checked");
-                    orgName.setVisibility(View.GONE);
-                    orgName.setEnabled(false);
-                    space.setVisibility(View.VISIBLE);
-
-                }
-            }
-        });
 
     }
 
     private boolean isNameEntered() {
-        EditText nameField = (EditText) findViewById(R.id.registration_name_field);
 
         if (!nameField.getText().toString().equals("")) {
             return true;
@@ -67,7 +70,6 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private boolean isEmailEntered() {
-        EditText emailField = (EditText) findViewById(R.id.registration_email_field);
 
         if (!emailField.getText().toString().equals("")) {
             return true;
@@ -77,7 +79,6 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private boolean isUsernameEntered() {
-        EditText usernameField = (EditText) findViewById(R.id.registration_username_field);
 
         if (!usernameField.getText().toString().equals("")) {
             return true;
@@ -87,7 +88,6 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     private boolean isPasswordEntered() {
-        EditText passwordField = (EditText) findViewById(R.id.registration_password_field);
 
         if (!passwordField.getText().toString().equals("")) {
             return true;
@@ -96,6 +96,27 @@ public class RegistrationActivity extends AppCompatActivity {
         return false;
     }
 
+    private boolean isZipcodeEntered() {
+
+        if (!zipcodeField.getText().toString().equals("")) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean isOrganizationEntered() {
+
+        if (organizerCheckbox.isChecked()) {
+            if (!organizerField.getText().toString().equals("")) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     public void createAccountTapped(View view) {
 
@@ -107,15 +128,73 @@ public class RegistrationActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Please enter username!", Toast.LENGTH_SHORT).show();
         } else if (!isPasswordEntered()) {
             Toast.makeText(getApplicationContext(),"Please enter password!", Toast.LENGTH_SHORT).show();
+        } else if (!isZipcodeEntered()) {
+            Toast.makeText(getApplicationContext(),"Please enter zipcode!", Toast.LENGTH_SHORT).show();
+        } else if (!isOrganizationEntered()) {
+            Toast.makeText(getApplicationContext(),"Please enter organization!", Toast.LENGTH_SHORT).show();
+        } else {
 
-        } else  {
-            SharedPreferences.Editor editor = myPrefs.edit();
-            editor.putBoolean("logged_in", true);
-            editor.apply();
+            this.signUp(emailField.getText().toString(), passwordField.getText().toString());
 
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
         }
     }
+
+
+    private void signUp(String email, String password) {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("RegistrationActivity", "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+
+                            createUser(user.getUid(), nameField.getText().toString(), emailField.getText().toString(), usernameField.getText().toString(),
+                                    passwordField.getText().toString(), zipcodeField.getText().toString(), organizerCheckbox.isChecked(),
+                                    organizerField.getText().toString());
+                        } else {
+                            Log.w("RegistrationActivity", "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(getApplicationContext(), "Signup failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    private void createUser(String uid, String firstname, String email, String username, String password,
+                            String zipcode, Boolean isOrganization, String organization) {
+        UserProfile user = new UserProfile(uid, firstname, email, username, zipcode, isOrganization, organization);
+
+        usersReference.child(uid).setValue(user.toMap());
+        signIn(email, password);
+
+    }
+
+    private void signIn(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            SharedPreferences.Editor editor = myPrefs.edit();
+                            editor.putBoolean("logged_in", true);
+                            editor.apply();
+
+                            Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+
+                            Toast.makeText(getApplicationContext(), "Login failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+    }
+
+
+
+
+
 }

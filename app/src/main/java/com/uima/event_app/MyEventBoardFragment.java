@@ -6,13 +6,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +40,10 @@ public class MyEventBoardFragment extends Fragment {
         final int cacheSize = maxMemorySize / 10;
 
         mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
-          @Override
+            @Override
             protected int sizeOf(String key, Bitmap value) {
-              return value.getByteCount() / 1024;
-          }
+                return value.getByteCount() / 1024;
+            }
         };
 
     }
@@ -147,15 +150,11 @@ public class MyEventBoardFragment extends Fragment {
         Organization fakeOrg1 = new Organization(fakeOrgInfo1); // Party
         Organization fakeOrg2 = new Organization(fakeOrgInfo2); // Baltimore
 
-        Event fakeEvent0 = new Event(fakeEventInfo0, fakeOrg0, false, "FAKE", fakeTags, fakeEventBk0);
-        Event fakeEvent1 = new Event(fakeEventInfo1, fakeOrg2, true, "FAKE", fakeTags, fakeEventBk1);
-        //Event fakeEvent2 = new Event(fakeEventInfo2, fakeOrg0, true, "FAKE", fakeTags, fakeEventBk2);
-        Event fakeEvent3 = new Event(fakeEventInfo3, fakeOrg2, false, "FAKE", fakeTags, fakeEventBk3);
-        Event fakeEvent4 = new Event(fakeEventInfo4, fakeOrg2, false, "FAKE", fakeTags, fakeEventBk4);
-        //Event fakeEvent5 = new Event(fakeEventInfo5, fakeOrg1, true, fakeTypes2, fakeTags, fakeEventBk5);
-        Event fakeEvent6 = new Event(fakeEventInfo6, fakeOrg1, false, "FAKE", fakeTags, fakeEventBk6);
+        Event fake_event_1 = new Event();
+        Event fake_event_2 = new Event();
+        Event fake_event_3 = new Event();
 
-        Event[] fakeEvents= {fakeEvent0, fakeEvent1, fakeEvent3, fakeEvent4, fakeEvent6};
+        Event[] fakeEvents= {fake_event_1, fake_event_2, fake_event_3};
 
         for(int i = 0; i < fakeEvents.length; i++) {
             Event temp = fakeEvents[i];
@@ -188,22 +187,56 @@ public class MyEventBoardFragment extends Fragment {
             }
 
             String eventName = ebEvent.getName();
-            int eventImage = Integer.parseInt(ebEvent.getImgId());
-            String date = ("Date: " + ebEvent.getDate());
-            String time = ("Time: " + ebEvent.getStart_time() + " - "+ ebEvent.getEnd_time());
-            String desc = ebEvent.getDetails();
+            //int eventImage = Integer.parseInt(ebEvent.getImgId());
+            //String date = ("Date: " + ebEvent.getDate());
+            //String time = ("Time: " + ebEvent.getStart_time() + " - "+ ebEvent.getEnd_time());
+            //String desc = ebEvent.getDetails();
 
-            TextView eventBoardName = (TextView) eventBoardView.findViewById(R.id.event_board_event_name);
-            ImageView eventBoardPicture = (ImageView) eventBoardView.findViewById(R.id.event_board_header);
-            TextView eventDate = (TextView) eventBoardView.findViewById(R.id.event_board_event_date);
-            TextView eventTime = (TextView) eventBoardView.findViewById(R.id.event_board_event_time);
-            TextView eventDesc = (TextView) eventBoardView.findViewById(R.id.selected_event_desc);
+            // Simplified Event Board Row Filling:
+            String event_time = ebEvent.getDate() + " @ " + ebEvent.getStart_time();
+            String event_time_notification = "Event: " + "Upcoming!";
+
+
+            TextView eventBoardName = (TextView) eventBoardView.findViewById(R.id.event_title);
+            //ImageView eventBoardPicture = (ImageView) eventBoardView.findViewById(R.id.event_board_header);
+            //TextView eventDate = (TextView) eventBoardView.findViewById(R.id.event_board_event_date);
+            //TextView eventTime = (TextView) eventBoardView.findViewById(R.id.event_board_event_time);
+            //TextView eventDesc = (TextView) eventBoardView.findViewById(R.id.selected_event_desc);
+            final Button attendButton = (Button) eventBoardView.findViewById(R.id.attend_button);
+
+            /*attendButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    if (attendButton.isPressed()) {
+                        attendButton.setPressed(false);
+                    } else {
+                        attendButton.setPressed(true);
+                    }
+                }
+            });*/
+
+            attendButton.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    if (attendButton.isPressed()) {
+                        attendButton.setPressed(false);
+                        return true;
+                    } else {
+                        attendButton.setPressed(true);
+                        return true;
+                    }
+                }
+            });
+            TextView eventTime = (TextView) eventBoardView.findViewById(R.id.event_time);
+            TextView eventNotification = (TextView) eventBoardView.findViewById(R.id.event_time_notification);
 
             eventBoardName.setText(eventName);
-            eventBoardPicture.setImageResource(eventImage);
-            eventDate.setText(date);
-            eventTime.setText(time);
-            eventDesc.setText(desc);
+            eventTime.setText(event_time);
+            eventNotification.setText(event_time_notification);
+            //eventBoardPicture.setImageResource(eventImage);
+            //eventDate.setText(date);
+            //eventTime.setText(time);
+            //eventDesc.setText(desc);
 
             return eventBoardView;
         }
