@@ -28,6 +28,8 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -55,6 +57,7 @@ public class CreateEventActivity extends AppCompatActivity {
     private Spinner eventType;
     private ImageView eventImage;
 
+    private String hostOrg;
 
     private ListView attributeListView;
     protected static ArrayList<String> attributeItems;
@@ -64,7 +67,6 @@ public class CreateEventActivity extends AppCompatActivity {
     private UserProfile user;
 
     protected String key = "fake key";
-    protected String hostOrg = "Need to do";
     protected String clickType;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -79,6 +81,8 @@ public class CreateEventActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         user = new UserProfile();
+
+        initializeUser();
 
         eventName = (EditText) findViewById(R.id.create_event_name);
         eventLocation = (EditText) findViewById(R.id.create_event_location);
@@ -320,6 +324,25 @@ public class CreateEventActivity extends AppCompatActivity {
         }
 
         return boolArray;
+    }
+
+    private void initializeUser() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference currentUserRef = database.getReference().child("users").child(currentUser.getUid());
+        ValueEventListener userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(UserProfile.class);
+                hostOrg = user.getOrganizer();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        currentUserRef.addValueEventListener(userListener);
+
     }
 
 }
