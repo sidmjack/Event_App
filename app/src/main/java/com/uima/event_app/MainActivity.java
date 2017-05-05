@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity
     private static MyEventBoardFragment myEventBoardFragment = new MyEventBoardFragment();
     private static ManageEventsFragment manageEventsFragment = new ManageEventsFragment();
 
+
     private static int currentTitle = R.string.event_map;
     private static Fragment currentFragment = eventMapFragment;
 

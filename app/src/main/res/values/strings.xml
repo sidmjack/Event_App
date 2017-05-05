@@ -85,8 +85,8 @@
         <item>Social Activism</item>
         <item>Popular Culture</item>
         <item>Community Outreach</item>
-        <item>Education &amp; Learning</item>
-        <item>Shopping &amp; Market Events</item>
+        <item>Education and Learning</item>
+        <item>Shopping and Market</item>
         <item>Miscellaneous</item>
     </string-array>
 
@@ -191,6 +191,24 @@
 
     <!-- Other Stuff -->
     <string name="select_type">Select Event Type</string>
+
+    <!-- Event Attributes -->
+    <string-array name="event_attributes">
+        <item>Free Admission</item>
+        <item>Live Entertainment</item>
+        <item>Parking</item>
+        <item>Family Friendly</item>
+        <item>Networking Opportunities</item>
+        <item>Food Available</item>
+        <item>Indoor Activities</item>
+        <item>Outdoor Activities</item>
+        <item>Pet Friendly</item>
+        <item>Seating Available</item>
+        <item>Public Transit</item>
+        <item>Admission Required</item>
+        <item>Handicap Accessible</item>
+        <item>Key Note Speaker</item>
+    </string-array>
 
 
 </resources>

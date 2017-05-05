@@ -1,26 +1,39 @@
 package com.uima.event_app;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sidneyjackson on 4/18/17.
  */
 
-public class EventSelectFragment extends Fragment {
+public class EventSelectFragment extends ListFragment {
     private ListView eventSelectListView;
-    protected static ArrayList<Event> eventItems;
+    protected static List<Event> eventItems;
     protected static EventSelectAdapter esAdapter;
     protected View rootView;
-    protected FirebaseAdapter fb;
     protected String type;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
+
 
     public EventSelectFragment() {
         // Required empty public constructor
@@ -29,10 +42,35 @@ public class EventSelectFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fb = new FirebaseAdapter(getContext());
-        type = getActivity().getTitle().toString();
-        eventItems = new ArrayList<Event>();
-        getEventItems();
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference();
+        SharedPreferences myPrefs = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+        type = myPrefs.getString("TYPE", "Miscellaneous");
+        final List<Event> localEvents = new ArrayList<Event>();
+
+        myRef.child("events").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot child : children) {
+                    Event value = child.getValue(Event.class);
+                    System.out.println(value.getType() + " " + type);
+                    if (value.getType().equalsIgnoreCase(type)) {
+
+                        localEvents.add(value);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        //ArrayAdapter<Event> eventAdapter = new ArrayAdapter<Event>(getActivity(), android.R.layout.simple_list_item_1, localEvents);
+        esAdapter = new EventSelectAdapter(getActivity(), R.layout.event_select_row, localEvents);
+        setListAdapter(esAdapter);
     }
 
     @Override
@@ -43,12 +81,10 @@ public class EventSelectFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        getEventItems();
-
+/*
         esAdapter = new EventSelectAdapter(getActivity(), R.layout.event_select_row, eventItems);
         eventSelectListView.setAdapter(esAdapter);
-
+*/
     }
 
     @Override
@@ -57,7 +93,7 @@ public class EventSelectFragment extends Fragment {
 
         rootView = inflater.inflate(R.layout.fragment_event_select, container, false);
 
-        eventSelectListView = (ListView) rootView.findViewById(R.id.event_select_list_view);
+        eventSelectListView = (ListView) rootView.findViewById(R.id.list);
 
         eventSelectListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -79,24 +115,5 @@ public class EventSelectFragment extends Fragment {
 
         return rootView;
     }
-
-    public void getEventItems() {
-        if (type.contains("Local Culture")) {
-            eventItems = fb.getLocalCulture();
-        } else if (type.contains("Social Activism")) {
-            eventItems = fb.getSocailActivism();
-        } else if (type.contains("Popular")) {
-            eventItems = fb.getPopularCulture();
-        } else if (type.contains("Community")) {
-            eventItems = fb.getCommunityOutreach();
-        } else if (type.contains("Education")) {
-            eventItems = fb.getEducationLearning();
-        } else if (type.contains("Shopping")) {
-            eventItems = fb.getShoppingMarket();
-        } else {
-            eventItems = fb.getMiscellaneous();
-        }
-    }
-
 
 }

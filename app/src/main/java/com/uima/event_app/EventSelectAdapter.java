@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sidneyjackson on 4/18/17.
@@ -21,7 +22,7 @@ public class EventSelectAdapter  extends ArrayAdapter<Event> {
     String event_name;
     String event_date_time;
 
-    public EventSelectAdapter(Context ctx, int res, ArrayList<Event> items)  {
+    public EventSelectAdapter(Context ctx, int res, List<Event> items)  {
         super(ctx, res, items);
         this.res = res;
     }
@@ -44,11 +45,11 @@ public class EventSelectAdapter  extends ArrayAdapter<Event> {
         event_name = eventSelectedItem.getName();
         event_date_time = (eventSelectedItem.getLocation()+ " @ " + "3:00 PM");
 
-        ImageView eventSelectOrganizationLogo = (ImageView) eventSelectListView.findViewById(R.id.selected_event_organization_logo);
+        //ImageView eventSelectOrganizationLogo = (ImageView) eventSelectListView.findViewById(R.id.selected_event_organization_logo);
         TextView eventSelect_name = (TextView) eventSelectListView.findViewById(R.id.selected_event_name);
         TextView eventSelect_desc = (TextView) eventSelectListView.findViewById(R.id.selected_event_description);
 
-        eventSelectOrganizationLogo.setImageResource(imgID);
+        //eventSelectOrganizationLogo.setImageResource(imgID);
         eventSelect_name.setText(event_name);
         eventSelect_desc.setText(event_date_time);
 

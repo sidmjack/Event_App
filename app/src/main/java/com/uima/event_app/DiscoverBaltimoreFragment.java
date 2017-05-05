@@ -1,6 +1,7 @@
 package com.uima.event_app;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -45,7 +46,7 @@ public class DiscoverBaltimoreFragment extends Fragment {
         categoryItems = populateCategoryList();
 
         ecAdapter = new EventCategoryAdapter(getActivity(), R.layout.event_category_row, categoryItems);
-        eventCategoryListView.setAdapter(ecAdapter);
+        eventCategoryListView.setAdapter(ecAdapter); // Layout File
 
         getActivity().setTitle("@string/discover_baltimore");
     }
@@ -65,13 +66,20 @@ public class DiscoverBaltimoreFragment extends Fragment {
                 Object listItem = eventCategoryListView.getItemAtPosition(position);
 
                 EventSelectFragment eventSelectFragment = new EventSelectFragment();
+                categoryName = listItem.toString();
+
+                SharedPreferences myPrefs = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = myPrefs.edit();
+                editor.putString("TYPE", categoryName);
+                editor.commit();
 
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.content_frame, eventSelectFragment)
                         .addToBackStack(null)
                         .commit();
-                categoryName = listItem.toString();
-                getActivity().setTitle(categoryName + " Events");
+
+
+                getActivity().setTitle(categoryName);
             }
         });
 
