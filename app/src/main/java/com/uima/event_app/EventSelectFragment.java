@@ -1,5 +1,7 @@
 package com.uima.event_app;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -42,7 +44,8 @@ public class EventSelectFragment extends ListFragment {
         super.onCreate(savedInstanceState);
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
-        type = getActivity().getTitle().toString();
+        SharedPreferences myPrefs = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
+        type = myPrefs.getString("TYPE", "Miscellaneous");
         final List<Event> localEvents = new ArrayList<Event>();
 
         myRef.child("events").addValueEventListener(new ValueEventListener() {
@@ -51,7 +54,11 @@ public class EventSelectFragment extends ListFragment {
                 Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                 for (DataSnapshot child : children) {
                     Event value = child.getValue(Event.class);
-                    localEvents.add(value);
+                    System.out.println(value.getType() + " " + type);
+                    if (value.getType().equalsIgnoreCase(type)) {
+
+                        localEvents.add(value);
+                    }
                 }
             }
 
@@ -61,9 +68,9 @@ public class EventSelectFragment extends ListFragment {
             }
         });
 
-        ArrayAdapter<Event> eventAdapter = new ArrayAdapter<Event>(getActivity(), android.R.layout.simple_list_item_1, localEvents);
-        //esAdapter = new EventSelectAdapter(getActivity(), R.layout.event_select_row, localEvents);
-        setListAdapter(eventAdapter);
+        //ArrayAdapter<Event> eventAdapter = new ArrayAdapter<Event>(getActivity(), android.R.layout.simple_list_item_1, localEvents);
+        esAdapter = new EventSelectAdapter(getActivity(), R.layout.event_select_row, localEvents);
+        setListAdapter(esAdapter);
     }
 
     @Override
