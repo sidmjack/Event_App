@@ -97,7 +97,6 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.action_new_event) {
             Intent intent = new Intent(this, CreateEventActivity.class);
-            setTitle("Create New Event");
             startActivity(intent);
         }
 
