@@ -32,7 +32,7 @@ public class Event {
         this.key = null;
     }
 
-    public Event(String id, String name, String hostOrg, String location, String details, boolean needVolunteers, String imgId, String type, List<String> tags, String start_time, String end_time, String date, String key) {
+    public Event(String id, String name, String hostOrg, String location, String details, boolean needVolunteers, String imgId, String type, List<String> tags, String start_time, String end_time, String date) {
         this.id = id;
         this.name = name;
         this.hostOrg = hostOrg;

@@ -8,6 +8,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +26,10 @@ public class EventSelectFragment extends Fragment {
     protected static List<Event> eventItems;
     protected static EventSelectAdapter esAdapter;
     protected View rootView;
-    protected FirebaseAdapter fb;
     protected String type;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
+    protected List<Event> localEvents;
 
     public EventSelectFragment() {
         // Required empty public constructor
@@ -30,10 +38,10 @@ public class EventSelectFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fb = new FirebaseAdapter(getContext());
+        database = FirebaseDatabase.getInstance();
         type = getActivity().getTitle().toString();
-        eventItems = new ArrayList<Event>();
-
+        localEvents = new ArrayList<Event>();
+        getAllEvents();
     }
 
     @Override
@@ -44,10 +52,8 @@ public class EventSelectFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        getEventItems();
-
-        esAdapter = new EventSelectAdapter(getActivity(), R.layout.event_select_row, eventItems);
+        
+        esAdapter = new EventSelectAdapter(getActivity(), R.layout.event_select_row, localEvents);
         eventSelectListView.setAdapter(esAdapter);
 
     }
@@ -81,25 +87,32 @@ public class EventSelectFragment extends Fragment {
         return rootView;
     }
 
-    public void getEventItems() {
-        fb.getAllEvents();
-        System.out.print("HERE");
-        fb.divideEvents();
-        if (type.contains("Local Culture")) {
-            eventItems = fb.getLocalCulture();
-        } else if (type.contains("Social Activism")) {
-            eventItems = fb.getSocailActivism();
-        } else if (type.contains("Popular")) {
-            eventItems = fb.getPopularCulture();
-        } else if (type.contains("Community")) {
-            eventItems = fb.getCommunityOutreach();
-        } else if (type.contains("Education")) {
-            eventItems = fb.getEducationLearning();
-        } else if (type.contains("Shopping")) {
-            eventItems = fb.getShoppingMarket();
-        } else {
-            eventItems = fb.getMiscellaneous();
-        }
+    public void getAllEvents() {
+        myRef = database.getReference("events");
+
+
+        myRef.child("events").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children =  dataSnapshot.getChildren();
+
+                for (DataSnapshot child:children) {
+                    Event value = child.getValue(Event.class);
+                    if (value.getType().equalsIgnoreCase(type)) {
+                        Event temp = new Event(value.getId(), value.getName(), value.getHostOrg(), value.getLocation(), value.getDetails(), value.getNeedVolunteers(), value.getImgId(), value.getType(), value.getTags(), value.getStart_time(), value.getEnd_time(), value.getDate());
+                        localEvents.add(temp);
+                    }
+                    //System.out.println(value.getName());
+                    System.out.println("Size " + localEvents.size());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        System.out.println(localEvents.size());
     }
 
 

@@ -82,7 +82,8 @@
         android:layout_height="45dp"
         android:id="@+id/create_event_type"
         android:background="@color/colorPrimary"
-        android:prompt="@string/select_type">
+        android:prompt="@string/select_type"
+        android:padding="10dp">
     </Spinner>
 
 
@@ -127,7 +128,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/create_event"
-            android:background="@color/colorAccent"
+            android:background="@color/colorPrimaryDark"
             android:text="@string/create"
             android:textColor="@color/white"
             android:textStyle="bold"
@@ -137,7 +138,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/cancel_event"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorAccent"
             android:text="@string/cancel"
             android:textColor="@color/white"
             android:textStyle="bold"

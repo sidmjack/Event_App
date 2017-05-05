@@ -26,7 +26,7 @@ public class FirebaseAdapter {
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private String orgID;
-    final private List<Event> localEvents;
+    protected List<Event> localEvents;
     private List<Event> localCulture;
     private List<Event> socailActivism;
     private List<Event> popularCulture;
@@ -90,7 +90,9 @@ public class FirebaseAdapter {
     }
 
     public void getAllEvents() {
-        myRef = database.getReference();
+        myRef = database.getReference("events");
+
+
         myRef.child("events").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -98,10 +100,11 @@ public class FirebaseAdapter {
 
                 for (DataSnapshot child:children) {
                     Event value = child.getValue(Event.class);
-                    Event temp = new Event();
-                    System.out.println(value.getName());
-                    localEvents.add(temp);
+                    Event temp = new Event(value.getId(), value.getName(), value.getHostOrg(), value.getLocation(), value.getDetails(), value.getNeedVolunteers(), value.getImgId(), value.getType(), value.getTags(), value.getStart_time(), value.getEnd_time(), value.getDate());
 
+                    //System.out.println(value.getName());
+                    localEvents.add(temp);
+                    System.out.println("Size " + localEvents.size());
                 }
             }
 

@@ -187,7 +187,7 @@ public class CreateEventActivity extends AppCompatActivity {
         String end_time = eventEndTime.getCurrentHour() + ":" + eventEndTime.getCurrentMinute();
         String imgId = "22"; //eventImage.getId() + "";
         String event_date = eventDate.getMinDate() + "";
-        Event e = new Event("1", eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, myTags, start_time, end_time, event_date, key);
+        Event e = new Event("1", eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, myTags, start_time, end_time, event_date);
 
 
         // Write a message to the database
