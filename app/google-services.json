@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "1096884407141-opgak73dv3v5tsldholfb5llutcpblco.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uima.event_app",
+            "certificate_hash": "0b341cc9a5b322cc4b1ad93104387a3d0030d9cd"
+          }
+        },
+        {
+          "client_id": "1096884407141-2ildmfb306s2vrp5m3nsmcubudi6p6cn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uima.event_app",
+            "certificate_hash": "2ebc4744194732a5fda3e76aa103df1200ba6399"
+          }
+        },
+        {
           "client_id": "1096884407141-566r74e3529pft3bn4pctc614aoh08sm.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -30,6 +46,9 @@
       "api_key": [
         {
           "current_key": "AIzaSyCILi5xeHa4Z37qpRbfrIpunh3beoznog8"
+        },
+        {
+          "current_key": "AIzaSyAZtK_RBmaBjEp78B-OUCd7Bmx16Gx13fg"
         }
       ],
       "services": {

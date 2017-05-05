@@ -190,4 +190,26 @@
     <string name="eg_event_board_desc"> Eat our food. Listen to their music. Meet your future friends. </string>
     <string name="menu_edit">edit</string>
 
+    <!-- Other Stuff -->
+    <string name="select_type">Select Event Type</string>
+
+    <!-- Event Attributes -->
+    <string-array name="event_attributes">
+        <item>Free Admission</item>
+        <item>Live Entertainment</item>
+        <item>Parking</item>
+        <item>Family Friendly</item>
+        <item>Networking Opportunities</item>
+        <item>Food Available</item>
+        <item>Indoor Activities</item>
+        <item>Outdoor Activities</item>
+        <item>Pet Friendly</item>
+        <item>Seating Available</item>
+        <item>Public Transit</item>
+        <item>Admission Required</item>
+        <item>Handicap Accessible</item>
+        <item>Key Note Speaker</item>
+    </string-array>
+
+
 </resources>
