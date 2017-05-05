@@ -1,5 +1,6 @@
 package com.uima.event_app;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,9 +13,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private FirebaseDatabase database;
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
+    private DatabaseReference currentUserRef;
 
     private boolean splashStarted = false;
 
@@ -29,6 +45,12 @@ public class MainActivity extends AppCompatActivity
     private static int currentTitle = R.string.event_map;
     private static Fragment currentFragment = eventMapFragment;
 
+    TextView navNameTextView;
+    TextView navEmailTextView;
+    MenuItem manageEventsItem;
+
+    private UserProfile user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +61,11 @@ public class MainActivity extends AppCompatActivity
             finish();
             return;
         }
+
+        database = FirebaseDatabase.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        currentUserRef = database.getReference().child("users").child(currentUser.getUid());
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -53,6 +80,34 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        View headerView = navigationView.getHeaderView(0);
+        navNameTextView = (TextView) headerView.findViewById(R.id.nav_head_name);
+        navEmailTextView = (TextView) headerView.findViewById(R.id.nav_head_email);
+
+        Menu drawerMenuView = navigationView.getMenu();
+        manageEventsItem = drawerMenuView.findItem(R.id.nav_ManageMyEvents);
+
+        ValueEventListener userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(UserProfile.class);
+                navNameTextView.setText(user.getFirstname());
+                navEmailTextView.setText(user.getEmail());
+
+                if (!user.getIsOrganizer()) {
+                    manageEventsItem.setVisible(false);
+                } else {
+                    manageEventsItem.setVisible(true);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        currentUserRef.addValueEventListener(userListener);
+
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, currentFragment).commit();
         setTitle(currentTitle);
     }
@@ -60,8 +115,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume(){
         super.onResume();}
-
-
 
     @Override
     public void onBackPressed() {
@@ -110,7 +163,6 @@ public class MainActivity extends AppCompatActivity
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case (R.id.nav_EventMap):
                 currentFragment = eventMapFragment;
