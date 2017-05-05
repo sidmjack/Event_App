@@ -2,7 +2,9 @@ package com.uima.event_app;
 
 import com.google.firebase.database.Exclude;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,6 +27,7 @@ public class UserProfile {
     private String twitter;
     private Boolean isOrganizer;
     private String organizer;
+    private List<String> favorites;
     //HashMap<String, Boolean> userEventPreferences; //<Event_Attributes, Event Preferences from Settings>
 
     /** Empty constructor for Firebase snapshot initialization */
@@ -45,6 +48,8 @@ public class UserProfile {
         this.twitter = "";
         this.isOrganizer = isOrganizer;
         this.organizer = organizer;
+        this.favorites = new ArrayList<String>();
+        this.favorites.add("");
     }
 
     /** Get methods */
@@ -60,6 +65,7 @@ public class UserProfile {
     public String getTwitter() { return twitter; }
     public Boolean getIsOrganizer() { return isOrganizer; }
     public String getOrganizer() { return organizer; }
+    public List<String> getFavorites() {return favorites; }
 
 
     public Map<String, Object> toMap() {
@@ -75,7 +81,7 @@ public class UserProfile {
         result.put("twitter", twitter);
         result.put("isOrganizer", isOrganizer);
         result.put("organizer", organizer);
-
+        result.put("favorites", favorites);
         return result;
     }
 

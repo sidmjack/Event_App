@@ -1,17 +1,23 @@
 package com.uima.event_app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +39,7 @@ public class EventSelectFragment extends ListFragment {
     protected String type;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
+    private ArrayList<String> keys = new ArrayList<String>();
 
 
     public EventSelectFragment() {
@@ -56,7 +63,7 @@ public class EventSelectFragment extends ListFragment {
                     Event value = child.getValue(Event.class);
                     System.out.println(value.getType() + " " + type);
                     if (value.getType().equalsIgnoreCase(type)) {
-
+                        keys.add(child.getKey());
                         localEvents.add(value);
                     }
                 }
@@ -98,18 +105,12 @@ public class EventSelectFragment extends ListFragment {
         eventSelectListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Event selectedEvent = (Event) eventSelectListView.getItemAtPosition(position);
-
-                //EventPageFragment eventPageFragment = new EventPageFragment();
-                EventPageFragment eventPageFragment = new EventPageFragment();
-
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        //.replace(R.id.content_frame, eventPageFragment)
-                        .replace(R.id.content_frame, eventPageFragment)
-                        .addToBackStack(null)
-                        .commit();
-                String eventName = selectedEvent.getName();
-                getActivity().setTitle(eventName);
+                Intent intent = new Intent(getActivity(), EventPageActivity.class);
+                Event selectEvent = (Event) eventSelectListView.getItemAtPosition(position);
+                String currKey = keys.get(position);
+                intent.putExtra("key", currKey);
+                Toast.makeText(getActivity(), "I'm Clickable!", Toast.LENGTH_SHORT).show();
+                startActivity(intent);
             }
         });
 

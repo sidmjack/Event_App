@@ -48,7 +48,7 @@ public class DiscoverBaltimoreFragment extends Fragment {
         ecAdapter = new EventCategoryAdapter(getActivity(), R.layout.event_category_row, categoryItems);
         eventCategoryListView.setAdapter(ecAdapter); // Layout File
 
-        getActivity().setTitle("@string/discover_baltimore");
+        getActivity().setTitle("Discover Baltimore");
     }
 
     @Override
