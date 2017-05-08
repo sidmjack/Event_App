@@ -53,31 +53,9 @@ public class EventSelectFragment extends ListFragment {
         myRef = database.getReference();
         SharedPreferences myPrefs = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
         type = myPrefs.getString("TYPE", "Miscellaneous");
-        final List<Event> localEvents = new ArrayList<Event>();
 
-        myRef.child("events").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                for (DataSnapshot child : children) {
-                    Event value = child.getValue(Event.class);
-                    System.out.println(value.getType() + " " + type);
-                    if (value.getType().equalsIgnoreCase(type)) {
-                        keys.add(child.getKey());
-                        localEvents.add(value);
-                    }
-                }
-            }
+        this.populateList();
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        //ArrayAdapter<Event> eventAdapter = new ArrayAdapter<Event>(getActivity(), android.R.layout.simple_list_item_1, localEvents);
-        esAdapter = new EventSelectAdapter(getActivity(), R.layout.event_select_row, localEvents);
-        setListAdapter(esAdapter);
     }
 
     @Override
@@ -88,10 +66,7 @@ public class EventSelectFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-/*
-        esAdapter = new EventSelectAdapter(getActivity(), R.layout.event_select_row, eventItems);
-        eventSelectListView.setAdapter(esAdapter);
-*/
+        this.populateList();
     }
 
     @Override
@@ -116,5 +91,31 @@ public class EventSelectFragment extends ListFragment {
 
         return rootView;
     }
+
+    private void populateList() {
+        myRef.child("events").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Event> localEvents = new ArrayList<Event>();
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot child : children) {
+                    Event value = child.getValue(Event.class);
+                    System.out.println(value.getType() + " " + type);
+                    if (value.getType().equalsIgnoreCase(type)) {
+                        keys.add(child.getKey());
+                        localEvents.add(value);
+                    }
+                }
+                esAdapter = new EventSelectAdapter(getActivity(), R.layout.event_select_row, localEvents);
+                setListAdapter(esAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
 }
