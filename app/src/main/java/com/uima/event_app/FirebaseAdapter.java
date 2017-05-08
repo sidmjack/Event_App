@@ -100,7 +100,15 @@ public class FirebaseAdapter {
 
                 for (DataSnapshot child:children) {
                     Event value = child.getValue(Event.class);
-                    Event temp = new Event(value.getId(), value.getName(), value.getHostOrg(), value.getLocation(), value.getDetails(), value.getNeedVolunteers(), value.getImgId(), value.getType(), value.getTags(), value.getStart_time(), value.getEnd_time(), value.getDate());
+                    String lat = "39";
+                    String log = "-76";
+                    if (value.getLatutude() != null) {
+                        lat = value.getLatutude();
+                    }
+                    if (value.getLongitude() != null) {
+                        lat = value.getLongitude();
+                    }
+                    Event temp = new Event(value.getId(), value.getName(), value.getHostOrg(), value.getLocation(), value.getDetails(), value.getNeedVolunteers(), value.getImgId(), value.getType(), value.getTags(), value.getStart_time(), value.getEnd_time(), value.getDate(), lat, log);
 
                     //System.out.println(value.getName());
                     localEvents.add(temp);
@@ -113,7 +121,10 @@ public class FirebaseAdapter {
 
             }
         });
-        System.out.println(localEvents.size());
+    }
+
+    public List<Event> getLocalEvents() {
+        return localEvents;
     }
 
     public void divideEvents() {

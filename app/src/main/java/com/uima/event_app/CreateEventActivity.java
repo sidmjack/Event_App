@@ -56,6 +56,8 @@ public class CreateEventActivity extends AppCompatActivity {
     private TimePicker eventEndTime;
     private Spinner eventType;
     private ImageView eventImage;
+    private EditText eventLat;
+    private EditText eventLog;
 
     private String hostOrg;
 
@@ -88,10 +90,12 @@ public class CreateEventActivity extends AppCompatActivity {
         eventLocation = (EditText) findViewById(R.id.create_event_location);
         eventDetails = (EditText) findViewById(R.id.create_event_details);
         needVolunteers = (CheckBox) findViewById(R.id.need_volunteers);
-        eventImage = (ImageView) findViewById(R.id.create_image);
+        //eventImage = (ImageView) findViewById(R.id.create_image);
         eventDate = (DatePicker) findViewById(R.id.event_date);
         eventStartTime = (TimePicker) findViewById(R.id.event_start_time);
         eventEndTime = (TimePicker) findViewById(R.id.event_end_time);
+        eventLat = (EditText) findViewById(R.id.event_latitude);
+        eventLog = (EditText) findViewById(R.id.event_longitude);
         eventType = (Spinner) findViewById(R.id.create_event_type);
         eventType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -115,6 +119,7 @@ public class CreateEventActivity extends AppCompatActivity {
         ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, types);
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         eventType.setAdapter(typeAdapter);
+        setTitle("Create New Event");
 
         attributeItems = new ArrayList<String>();
 
@@ -199,7 +204,7 @@ public class CreateEventActivity extends AppCompatActivity {
         String end_time = eventEndTime.getCurrentHour() + ":" + eventEndTime.getCurrentMinute();
         String imgId = "22"; //eventImage.getId() + "";
         String event_date = eventDate.getMonth() + "/" + eventDate.getDayOfMonth() + "/" + eventDate.getYear();
-        Event e = new Event("1", eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, attributeItems, start_time, end_time, event_date);
+        Event e = new Event("1", eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, attributeItems, start_time, end_time, event_date, eventLat.getText().toString(), eventLog.getText().toString());
 
         // Write a message to the database
         myRef = database.getReference().child("events").push();

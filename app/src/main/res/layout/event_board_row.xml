@@ -76,165 +76,165 @@
 
 </LinearLayout>
 
-    <!--LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<!--LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
+
+        <TextView
+            android:text="BALTIMORE DINNER PARTY"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:textSize="22sp"
+            android:textColor="@color/darkGrey"
+            android:gravity="left"
+            android:id="@+id/event_board_event_name"
+            android:layout_weight="2" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:gravity="right"
+            android:layout_marginRight="20dp"
+            android:id="@+id/notification_icon"
+            android:src="@drawable/bell"
+            android:layout_weight=".35"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="210dp">
+
+        <RelativeLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@color/transparent_white">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:src="@drawable/event_board2"
+                android:id="@+id/event_board_header"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"/>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="275dp"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent_white"
+                android:padding="7.5dp"
+                android:layout_margin="7.5dp"
+                android:layout_alignBottom="@id/event_board_header">
+
+                <TextView
+                    android:text="Date: April 20, 2017"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/darkGrey"
+                    android:gravity="left"
+                    android:layout_marginLeft="15dp"
+                    android:id="@+id/event_board_event_date"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:text="Time: 6:00 PM - 9:00 PM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/darkGrey"
+                    android:layout_marginLeft="15dp"
+                    android:id="@+id/event_board_event_time"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white">
+        android:layout_weight="2">
+
+        <TextView
+            android:text="@string/eg_event_board_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:textSize="20sp"
+            android:textColor="@color/grey"
+            android:gravity="left"
+            android:id="@+id/selected_event_desc" />
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="45dp">
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_weight="1">
 
-            <TextView
-                android:text="BALTIMORE DINNER PARTY"
-                android:layout_width="match_parent"
+            <Button
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                android:textStyle="bold"
                 android:layout_marginLeft="20dp"
-                android:textSize="22sp"
-                android:textColor="@color/darkGrey"
-                android:gravity="left"
-                android:id="@+id/event_board_event_name"
-                android:layout_weight="2" />
+                android:layout_marginRight="10dp"
+                android:text="ATTENDING"
+                android:layout_weight="4"
+                android:id="@+id/attending_button"/>
 
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:gravity="right"
-                android:layout_marginRight="20dp"
-                android:id="@+id/notification_icon"
-                android:src="@drawable/bell"
+                android:paddingRight="3.5dp"
+                android:paddingLeft="1.5dp"
+                android:id="@+id/fb_icon"
+                android:src="@drawable/facebook_logo"
+                android:layout_weight=".35"/>
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:gravity="right"
+                android:paddingRight="3.5dp"
+                android:paddingLeft="1.5dp"
+                android:id="@+id/instagram_icon"
+                android:src="@drawable/instagram_logo"
+                android:layout_weight=".35"/>
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:gravity="right"
+                android:paddingRight="3.5dp"
+                android:paddingLeft="1.5dp"
+                android:id="@+id/twitter_icon"
+                android:src="@drawable/twitter_logo"
                 android:layout_weight=".35"/>
 
         </LinearLayout>
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="210dp">
 
-            <RelativeLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@color/transparent_white">
+    </LinearLayout>
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:src="@drawable/event_board2"
-                    android:id="@+id/event_board_header"
-                    android:layout_height="200dp"
-                    android:scaleType="centerCrop"
-                    android:adjustViewBounds="true"/>
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="275dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/transparent_white"
-                    android:padding="7.5dp"
-                    android:layout_margin="7.5dp"
-                    android:layout_alignBottom="@id/event_board_header">
-
-                    <TextView
-                        android:text="Date: April 20, 2017"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textColor="@color/darkGrey"
-                        android:gravity="left"
-                        android:layout_marginLeft="15dp"
-                        android:id="@+id/event_board_event_date"
-                        android:layout_weight="1" />
-
-                    <TextView
-                        android:text="Time: 6:00 PM - 9:00 PM"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textColor="@color/darkGrey"
-                        android:layout_marginLeft="15dp"
-                        android:id="@+id/event_board_event_time"
-                        android:layout_weight="1" />
-
-                </LinearLayout>
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2">
-
-            <TextView
-                android:text="@string/eg_event_board_desc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:textSize="20sp"
-                android:textColor="@color/grey"
-                android:gravity="left"
-                android:id="@+id/selected_event_desc" />
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:layout_weight="1">
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/colorPrimary"
-                    android:textColor="@color/white"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="10dp"
-                    android:text="ATTENDING"
-                    android:layout_weight="4"
-                    android:id="@+id/attending_button"/>
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:gravity="right"
-                    android:paddingRight="3.5dp"
-                    android:paddingLeft="1.5dp"
-                    android:id="@+id/fb_icon"
-                    android:src="@drawable/facebook_logo"
-                    android:layout_weight=".35"/>
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:gravity="right"
-                    android:paddingRight="3.5dp"
-                    android:paddingLeft="1.5dp"
-                    android:id="@+id/instagram_icon"
-                    android:src="@drawable/instagram_logo"
-                    android:layout_weight=".35"/>
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:gravity="right"
-                    android:paddingRight="3.5dp"
-                    android:paddingLeft="1.5dp"
-                    android:id="@+id/twitter_icon"
-                    android:src="@drawable/twitter_logo"
-                    android:layout_weight=".35"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout-->
+</LinearLayout-->

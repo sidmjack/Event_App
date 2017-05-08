@@ -18,6 +18,8 @@ public class Event {
     private String end_time;
     private String date;
     private String type;
+    private String latutude;
+    private String longitude;
 
     public Event() {
         this.name = "EJ";
@@ -28,9 +30,11 @@ public class Event {
         this.imgId = "";
         this.type = null;
         this.tags = null;
+        this.latutude = "0";
+        this.longitude = "0";
     }
 
-    public Event(String id, String name, String hostOrg, String location, String details, boolean needVolunteers, String imgId, String type, List<String> tags, String start_time, String end_time, String date) {
+    public Event(String id, String name, String hostOrg, String location, String details, boolean needVolunteers, String imgId, String type, List<String> tags, String start_time, String end_time, String date, String lat, String log) {
         this.id = id;
         this.name = name;
         this.hostOrg = hostOrg;
@@ -44,6 +48,8 @@ public class Event {
         this.start_time = start_time;
         this.imgId = imgId;
         this.date = date;
+        this.latutude = lat;
+        this.longitude = log;
 
     }
 
@@ -60,5 +66,8 @@ public class Event {
     public String getDate() {return date; }
     public String getStart_time() {return start_time;}
     public String getEnd_time() {return end_time;}
+    public String getLatutude() {return latutude;}
+    public String getLongitude() {return longitude;}
+
 
 }

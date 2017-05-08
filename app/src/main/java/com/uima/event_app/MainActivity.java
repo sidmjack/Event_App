@@ -140,17 +140,18 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        /*
         //noinspection SimplifiableIfStatement
         if (id == R.id.settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
-        } else if (id == R.id.profile) {
+        } */
+        if (id == R.id.profile) {
             Intent intent = new Intent(this, ProfileActivity.class);
             startActivity(intent);
         } else if (id == R.id.action_new_event) {
             Intent intent = new Intent(this, CreateEventActivity.class);
-            setTitle("Create New Event");
             startActivity(intent);
         }
 
