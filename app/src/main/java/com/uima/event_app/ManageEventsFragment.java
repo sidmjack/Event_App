@@ -52,29 +52,7 @@ public class ManageEventsFragment extends ListFragment {
         myRef = database.getReference().child("events");
 
         initializeUser();
-
-        final List<Event> myEvents = new ArrayList<Event>();
-
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                for (DataSnapshot child : children) {
-                    Event value = child.getValue(Event.class);
-                    if (value.getHostOrg().equals(user.getOrganizer())) {
-                        myEvents.add(value);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        adapter = new ManageEventsAdapter(getActivity(), R.layout.event_select_row, myEvents);
-        setListAdapter(adapter);
+        this.populateList();
     }
 
     @Override
@@ -103,6 +81,12 @@ public class ManageEventsFragment extends ListFragment {
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.populateList();
     }
 
     @Override
@@ -136,4 +120,28 @@ public class ManageEventsFragment extends ListFragment {
         currentUserRef.addValueEventListener(userListener);
 
     }
+
+    private void populateList() {
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Event> myEvents = new ArrayList<Event>();
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot child : children) {
+                    Event value = child.getValue(Event.class);
+                    if (value.getHostOrg().equals(user.getOrganizer())) {
+                        myEvents.add(value);
+                    }
+                }
+                adapter = new ManageEventsAdapter(getActivity(), R.layout.event_select_row, myEvents);
+                setListAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 }
