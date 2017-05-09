@@ -3,6 +3,7 @@ package com.uima.event_app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.ContextMenu;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -66,28 +68,47 @@ public class ManageEventsFragment extends ListFragment {
         rootView = inflater.inflate(R.layout.fragment_manage_events, container, false);
 
         myEventsView = (ListView) rootView.findViewById(R.id.list);
-
+/*
         myEventsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Event selectedEvent = (Event) myEventsView.getItemAtPosition(position);
 
                 //EventPageFragment eventPageFragment = new EventPageFragment();
-                ManageEventsFragment manageEventFragment = new ManageEventsFragment();
+                EventPageFragment eventPageFragment = new EventPageFragment();
+
+                String eventName = selectedEvent.getName();
+                getActivity().setTitle(eventName);
 
                 getActivity().getSupportFragmentManager().beginTransaction()
                         //.replace(R.id.content_frame, eventPageFragment)
-                        .replace(R.id.content_frame, manageEventFragment)
+                        .replace(R.id.content_frame, eventPageFragment)
                         .addToBackStack(null)
                         .commit();
-                String eventName = selectedEvent.getName();
-                getActivity().setTitle(eventName);
             }
-        });
+        });*/
 
         registerForContextMenu(myEventsView);
 
         return rootView;
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        Toast.makeText(getActivity().getBaseContext(), "Event Created", Toast.LENGTH_SHORT).show();
+        Event selectedEvent = (Event) myEventsView.getItemAtPosition(position);
+
+        //EventPageFragment eventPageFragment = new EventPageFragment();
+        EventPageFragment eventPageFragment = new EventPageFragment();
+
+        String eventName = selectedEvent.getName();
+        getActivity().setTitle(eventName);
+
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, eventPageFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
@@ -130,7 +151,7 @@ public class ManageEventsFragment extends ListFragment {
                 myEvents.clear();
                 for (DataSnapshot child : children) {
                     Event value = child.getValue(Event.class);
-                    if (value.getHostOrg().equals(user.getOrganizer())) {
+                    if (value.getHostOrg().equalsIgnoreCase(user.getOrganizer())) {
                         myEvents.add(value);
                     }
                 }
