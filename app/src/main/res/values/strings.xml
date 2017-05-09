@@ -192,6 +192,7 @@
 
     <!-- Other Stuff -->
     <string name="select_type">Select Event Type</string>
+    <string name="menu_edit">edit</string>
 
     <!-- Event Attributes -->
     <string-array name="event_attributes">
