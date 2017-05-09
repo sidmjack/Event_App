@@ -44,29 +44,29 @@ import static android.R.id.message;
 
 public class CreateEventActivity extends AppCompatActivity {
 
-    private FirebaseDatabase database;
-    private DatabaseReference myRef;
+    protected FirebaseDatabase database;
+    protected DatabaseReference myRef;
 
-    private EditText eventName;
-    private EditText eventLocation;
-    private EditText eventDetails;
-    private CheckBox needVolunteers;
-    private DatePicker eventDate;
-    private TimePicker eventStartTime;
-    private TimePicker eventEndTime;
-    private Spinner eventType;
-    private ImageView eventImage;
-    private EditText eventLat;
-    private EditText eventLog;
+    protected EditText eventName;
+    protected EditText eventLocation;
+    protected EditText eventDetails;
+    protected CheckBox needVolunteers;
+    protected DatePicker eventDate;
+    protected TimePicker eventStartTime;
+    protected TimePicker eventEndTime;
+    protected Spinner eventType;
+    protected ImageView eventImage;
+    protected Button orangeButton;
+    protected Button purpleButton;
 
-    private String hostOrg;
+    protected String hostOrg;
 
-    private ListView attributeListView;
+    protected ListView attributeListView;
     protected static ArrayList<String> attributeItems;
     protected static ListAttributeAdapter laAdapter;
 
-    private Spinner categorySpinner;
-    private UserProfile user;
+    protected Spinner categorySpinner;
+    protected UserProfile user;
 
     protected String key = "fake key";
     protected String clickType;
@@ -126,6 +126,19 @@ public class CreateEventActivity extends AppCompatActivity {
         Button createButton = (Button) findViewById(R.id.create_event);
         Button cancelButton = (Button) findViewById(R.id.cancel_event);
         Button addTagsButton = (Button) findViewById(R.id.add_tags);
+
+        // in case this should be a duplicate
+        Bundle extras = getIntent().getExtras();
+
+        if (extras.getBoolean("duplicate", false)) {
+            String eventNameStr = extras.getString("event name");
+            String eventLocationStr = extras.getString("event location");
+            String eventDetailsStr = extras.getString("event details");
+
+            eventName.setText(eventNameStr);
+            eventLocation.setText(eventLocationStr);
+            eventDetails.setText(eventDetailsStr);
+        }
 
         // Attribute Selection List
         attributeListView = (ListView) findViewById(R.id.event_attribute_list_view);
@@ -200,17 +213,18 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     private void writeToEventDB() {
+        myRef = database.getReference().child("events").push();
+        String myKey = myRef.getKey();
+
         String start_time = eventStartTime.getCurrentHour() + ":" + eventStartTime.getCurrentMinute();
         String end_time = eventEndTime.getCurrentHour() + ":" + eventEndTime.getCurrentMinute();
         String imgId = "22"; //eventImage.getId() + "";
         String event_date = eventDate.getMonth() + "/" + eventDate.getDayOfMonth() + "/" + eventDate.getYear();
-        Event e = new Event("1", eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, attributeItems, start_time, end_time, event_date, eventLat.getText().toString(), eventLog.getText().toString());
+        Event e = new Event(myKey, eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, attributeItems, start_time, end_time, event_date);
 
         // Write a message to the database
-        myRef = database.getReference().child("events").push();
 
         myRef.setValue(e);
-        String myKey = myRef.getKey();
     }
 
 

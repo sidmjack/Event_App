@@ -1,49 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:gravity="center_vertical"
+    android:layout_height="60dp"
+    android:background="@color/white"
+    android:layout_margin="5dp"
+    android:longClickable="true">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="2.5dp">
 
         <ImageView
-            android:layout_width="match_parent"
-            android:src="@drawable/default_header"
-            android:id="@+id/event_header"
-            android:layout_height="100dp"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true" />
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_margin="3dp"
+            android:minWidth="45dp"
+            android:minHeight="45dp"
+            android:id="@+id/selected_event_organization_logo"/>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    </LinearLayout>
 
-            <TextView
-                android:text="TextView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/event_description"
-                android:layout_weight="1"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                android:padding="10dp" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="3">
 
-            <ImageButton
-                android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_edit"
-                android:id="@+id/edit_event_btn"
-                android:layout_weight="1"
-                android:layout_marginRight="10dp"
-                android:layout_width="120dp"/>
+        <TextView
+            android:text="Event Name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="18sp"
+            android:textColor="@color/grey"
+            android:textStyle="bold"
+            android:layout_marginLeft="7dp"
+            android:gravity="left"
+            android:id="@+id/selected_event_name"
+            android:layout_weight="1" />
 
-        </LinearLayout>
+        <TextView
+            android:text="Event Information"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="14sp"
+            android:textColor="@color/grey"
+            android:layout_marginLeft="7dp"
+            android:gravity="left"
+            android:id="@+id/selected_event_description"
+            android:layout_weight="1" />
+
+    </LinearLayout>
 
 
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="right"
+        android:layout_weight="1">
+
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/attending_button"
+            android:background="@drawable/star_button_effect"/>
 
     </LinearLayout>
 
