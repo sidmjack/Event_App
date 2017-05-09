@@ -47,7 +47,7 @@ public class EventSelectAdapter  extends ArrayAdapter<Event> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LinearLayout eventSelectListView;
-        Event eventSelectedItem = getItem(position);
+        final Event eventSelectedItem = getItem(position);
 
         if (convertView == null) {
             eventSelectListView = new LinearLayout(getContext());
@@ -71,13 +71,11 @@ public class EventSelectAdapter  extends ArrayAdapter<Event> {
         eventSelect_desc.setText(event_date_time);
 
 
-        // Handles "getting" user reference.
         database = FirebaseDatabase.getInstance();
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-        currentUserRef = database.getReference().child("users").child(currentUser.getUid());
 
-        //currentUser.child("");
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        final String userID = user.getUid();
 
         final Button attendButton = (Button) eventSelectListView.findViewById(R.id.attending_button);
 
@@ -87,58 +85,35 @@ public class EventSelectAdapter  extends ArrayAdapter<Event> {
 
                 if (attendButton.isPressed()) {
                     attendButton.setPressed(false);
-
-                    return true;
+                    DatabaseReference myRef = database.getReference();
+                    final DatabaseReference favEventRef = myRef.child("users").child(userID).child("favorites");
+                    favEventRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                            for (DataSnapshot child : children) {
+                                String eventKey = child.getValue(String.class);
+                                if (eventKey.equals(eventSelectedItem.getId())) {
+                                    favEventRef.child(child.getKey()).removeValue();
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            // Do Nothing
+                        }
+                    });
                 } else {
                     attendButton.setPressed(true);
-                    return true;
+                    DatabaseReference myRef = database.getReference();
+                    DatabaseReference userRef = myRef.child("users");
+                    userRef.child(userID).child("favorites").push().setValue(eventSelectedItem.getId());
                 }
+                return true;
             }
         });
 
-        //SharedPreferences myPrefs = getSharedPreferences("favorites", Context.MODE_PRIVATE);
-        //SharedPreferences.Editor editor = myPrefs.edit();
-        //editor.putString("Event Key", xxx);
-        //editor.commit();
-
         return eventSelectListView;
     }
-
-    // "favs" is the name of the list of the users favorited events
-
-    /*public boolean saveArray(ArrayList<String> favorites, String favs, Context mContext) {
-        SharedPreferences prefs = mContext.getSharedPreferences("favorite_events", 0);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(favs+"_size", favorites.size()); // Set size of favorite event array
-        for(int i=0;i<favorites.size();i++) // Iterate through all event keys saved in favorites array
-            editor.putString(favs+ "_"+ i, favorites.get(i));
-        return editor.commit();
-    }
-
-    public ArrayList<String> loadArray(String favs, Context mContext) {
-        SharedPreferences prefs = mContext.getSharedPreferences("favorite_events", 0);
-        int size = prefs.getInt(favs+"_size", 0);
-        ArrayList<String> favorites = new ArrayList<String>();
-        for(int i=0;i<size;i++)
-            favorites.add(prefs.getString(favs+ "_"+ i, null));
-        return favorites;
-    }
-
-    public void addFavorite(String favs, Context mContext) {
-        ArrayList<String> temp = getFavorites(favs, mContext);
-        // TODO
-
-    }
-
-    public void removeFavorite(String favs, Context mContext) {
-        ArrayList<String> temp = getFavorites(favs, mContext);
-        // TODO
-    }
-
-    public ArrayList<String> getFavorites(String favs, Context mContext){
-        ArrayList<String> favorites = new ArrayList<String>();
-        favorites = loadArray(favs, mContext);
-        return favorites;
-    }*/
 
 }

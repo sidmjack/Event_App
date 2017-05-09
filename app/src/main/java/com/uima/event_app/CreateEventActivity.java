@@ -195,17 +195,18 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     private void writeToEventDB() {
+        myRef = database.getReference().child("events").push();
+        String myKey = myRef.getKey();
+
+        // Set id equal to key
         String start_time = eventStartTime.getCurrentHour() + ":" + eventStartTime.getCurrentMinute();
         String end_time = eventEndTime.getCurrentHour() + ":" + eventEndTime.getCurrentMinute();
         String imgId = "22"; //eventImage.getId() + "";
         String event_date = eventDate.getMonth() + "/" + eventDate.getDayOfMonth() + "/" + eventDate.getYear();
-        Event e = new Event("1", eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, attributeItems, start_time, end_time, event_date);
-
-        // Write a message to the database
-        myRef = database.getReference().child("events").push();
+        Event e = new Event(myKey, eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, attributeItems, start_time, end_time, event_date);
 
         myRef.setValue(e);
-        String myKey = myRef.getKey();
+        // Write a message to the database
     }
 
 

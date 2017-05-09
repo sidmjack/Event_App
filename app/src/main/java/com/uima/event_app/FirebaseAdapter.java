@@ -116,6 +116,10 @@ public class FirebaseAdapter {
         System.out.println(localEvents.size());
     }
 
+    public void updateFavorites() {
+        //TODO
+    }
+
     public void divideEvents() {
         getAllEvents();
         System.out.println("**** " + localEvents.size());
