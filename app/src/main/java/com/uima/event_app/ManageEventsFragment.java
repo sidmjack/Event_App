@@ -40,8 +40,8 @@ import static com.uima.event_app.EventSelectFragment.eventItems;
  * A simple {@link Fragment} subclass.
  */
 public class ManageEventsFragment extends Fragment {
-    private final List<Event> eventItems  = new ArrayList<>();
-    private static EventAdapter adapter;
+    private final List<Event> myEvents = new ArrayList<>();
+    private static ManageEventsAdapter adapter;
     private  ListView eventListView;
 
     public static final int MENU_ITEM_DUPLICATE = Menu.FIRST;
@@ -62,28 +62,8 @@ public class ManageEventsFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 
-        SharedPreferences myPrefs = getActivity().getSharedPreferences("pref", Context.MODE_PRIVATE);
-        final String hostOrg = myPrefs.getString("organization", "");
-        System.out.println("*****HOSTORG " + hostOrg);
-
-        myRef.child("events").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                for (DataSnapshot child : children) {
-                    Event value = child.getValue(Event.class);
-                    System.out.println(value.getHostOrg());
-                    if (value.getHostOrg().equalsIgnoreCase(hostOrg)) {
-                        eventItems.add(value);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+        initializeUser();
+        this.populateList();
     }
 
     @Override
@@ -105,17 +85,15 @@ public class ManageEventsFragment extends Fragment {
             }
         });
 
-        updateArray();
         registerForContextMenu(eventListView);
 
         return rootView;
     }
 
-    protected void updateArray() {
-        // get dummy or actual list of events
-        adapter = new EventAdapter(getActivity(), R.layout.event_item, eventItems);
-        eventListView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.populateList();
     }
 
     @Override
@@ -178,4 +156,28 @@ public class ManageEventsFragment extends Fragment {
         }
         return false;
     }
+
+    private void populateList() {
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Event> myEvents = new ArrayList<Event>();
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot child : children) {
+                    Event value = child.getValue(Event.class);
+                    if (value.getHostOrg().equals(user.getOrganizer())) {
+                        myEvents.add(value);
+                    }
+                }
+                adapter = new ManageEventsAdapter(getActivity(), R.layout.event_select_row, myEvents);
+                setListAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 }
