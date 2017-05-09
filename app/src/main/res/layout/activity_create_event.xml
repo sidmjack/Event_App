@@ -46,7 +46,7 @@
             android:id="@+id/event_latitude"
             android:hint="LAT"
             android:paddingLeft="10dp"
-            android:inputType="numberDecimal"/>
+            android:inputType="numberDecimal|numberSigned"/>
 
         <EditText
             android:layout_width="wrap_content"
@@ -54,7 +54,7 @@
             android:id="@+id/event_longitude"
             android:hint="LOG"
             android:paddingLeft="10dp"
-            android:inputType="numberDecimal"/>
+            android:inputType="numberDecimal|numberSigned"/>
     </LinearLayout>
 
     <DatePicker
