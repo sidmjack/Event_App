@@ -193,6 +193,8 @@ public class ManageEventsFragment extends ListFragment {
                 intent.putExtra("event details", event.getDetails());
                 intent.putExtra("event id", event.getId());
                 intent.putExtra("duplicate", false);
+                intent.putExtra("latitude", event.getLatutude());
+                intent.putExtra("longitude", event.getLongitude());
 
                 startActivity(intent);
 

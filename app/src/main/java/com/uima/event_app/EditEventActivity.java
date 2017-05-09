@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Toast;
 
 public class EditEventActivity extends CreateEventActivity {
-    private String eventID;
+    private String eventID, lat, log;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +19,8 @@ public class EditEventActivity extends CreateEventActivity {
         String eventLocationStr = extras.getString("event location");
         String eventDetailsStr = extras.getString("event details");
         eventID = extras.getString("event id");
+        lat = extras.getString("latitude");
+        log = extras.getString("longitude");
 
         eventName.setText(eventNameStr);
         eventLocation.setText(eventLocationStr);
@@ -50,7 +52,8 @@ public class EditEventActivity extends CreateEventActivity {
         String end_time = eventEndTime.getCurrentHour() + ":" + eventEndTime.getCurrentMinute();
         String imgId = "22"; //eventImage.getId() + "";
         String event_date = eventDate.getMonth() + "/" + eventDate.getDayOfMonth() + "/" + eventDate.getYear();
-        Event e = new Event(eventID, eventName.getText().toString(), user.getOrganizer(), eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, attributeItems, start_time, end_time, event_date);
+
+        Event e = new Event(eventID, eventName.getText().toString(), user.getOrganizer(), eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, attributeItems, start_time, end_time, event_date, lat, log);
 
         // Write a message to the database
         myRef = database.getReference().child("events").child(eventID);
