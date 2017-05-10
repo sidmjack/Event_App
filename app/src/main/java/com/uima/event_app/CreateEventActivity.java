@@ -2,7 +2,12 @@ package com.uima.event_app;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +33,8 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -35,7 +42,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -70,7 +82,10 @@ public class CreateEventActivity extends AppCompatActivity {
     protected Spinner categorySpinner;
     protected UserProfile user;
 
-    protected String key = "fake key";
+    private int PICK_IMAGE_REQUEST = 111;
+    private Uri filePath;
+
+    private static int RESULT_LOAD_IMG = 1;
     protected String clickType;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -92,7 +107,7 @@ public class CreateEventActivity extends AppCompatActivity {
         eventLocation = (EditText) findViewById(R.id.create_event_location);
         eventDetails = (EditText) findViewById(R.id.create_event_details);
         needVolunteers = (CheckBox) findViewById(R.id.need_volunteers);
-        //eventImage = (ImageView) findViewById(R.id.create_image);
+        eventImage = (ImageView) findViewById(R.id.create_image);
         eventDate = (DatePicker) findViewById(R.id.event_date);
         eventStartTime = (TimePicker) findViewById(R.id.event_start_time);
         eventEndTime = (TimePicker) findViewById(R.id.event_end_time);
@@ -128,6 +143,7 @@ public class CreateEventActivity extends AppCompatActivity {
         Button createButton = (Button) findViewById(R.id.create_event);
         Button cancelButton = (Button) findViewById(R.id.cancel_event);
         Button addTagsButton = (Button) findViewById(R.id.add_tags);
+        Button addImagesButton = (Button) findViewById(R.id.create_add_image);
 
         // in case this should be a duplicate
         Bundle extras = getIntent().getExtras();
@@ -190,12 +206,48 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
+        addImagesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, RESULT_LOAD_IMG);
+            }
+        });
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        final StorageReference storageRef = storage.getReferenceFromUrl("gs://loccurences.appspot.com/");
 
         // Create and Cancel Buttons
 
         createButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 writeToEventDB();
+
+
+                if(filePath != null) {
+
+                    StorageReference childRef = storageRef.child("image.jpg");
+
+                    //uploading the image
+                    UploadTask uploadTask = childRef.putFile(filePath);
+
+                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(CreateEventActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(CreateEventActivity.this, "Upload Failed -> " + e, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                else {
+                    Toast.makeText(CreateEventActivity.this, "Select an image", Toast.LENGTH_SHORT).show();
+                }
+
                 Toast.makeText(getBaseContext(), "Event Created", Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -208,6 +260,8 @@ public class CreateEventActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -229,6 +283,24 @@ public class CreateEventActivity extends AppCompatActivity {
         myRef.setValue(e);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            filePath = data.getData();
+
+            try {
+                //getting image from gallery
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+
+                //Setting image to ImageView
+                eventImage.setImageBitmap(bitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     private void readFromDB(String message) {
         // Read from the database
@@ -250,23 +322,6 @@ public class CreateEventActivity extends AppCompatActivity {
         });
     }
 
-    /*
-    public ArrayList<String> populateAttributeList() {
-
-        String[] attribute_name = getResources().getStringArray(R.array.event_attributes);
-        ArrayList<String> attributes = new ArrayList<String>();
-
-        for (String atr_name : attribute_name) {
-            attributes.add(atr_name);
-        }
-
-        return attributes;
-    } */
-
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
     public Action getIndexApiAction() {
         Thing object = new Thing.Builder()
                 .setName("CreateEvent Page") // TODO: Define a title for the content shown.
