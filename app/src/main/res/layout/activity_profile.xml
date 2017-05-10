@@ -10,68 +10,86 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.uima.event_app.ProfileActivity">
 
-    <ImageView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:src="@drawable/profile"
-        android:id="@+id/profile_image"
-        />
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/profile_name"
-        android:layout_below="@id/profile_image"
-        android:text="@string/name"
-        android:gravity="center"
-        android:padding="10dp" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:src="@drawable/profile"
+                android:id="@+id/profile_image"
+                />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/profile_email"
-        android:layout_below="@id/profile_name"
-        android:text="@string/email"
-        android:gravity="center"
-        android:padding="10dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_name"
+                android:text="@string/name"
+                android:gravity="center"
+                android:padding="10dp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/profile_fb"
-        android:text="@string/facebook"
-        android:layout_below="@+id/profile_email"
-        android:gravity="center"
-        android:padding="10dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_email"
+                android:text="@string/email"
+                android:gravity="center"
+                android:padding="10dp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/profile_website"
-        android:layout_below="@+id/profile_fb"
-        android:text="@string/website"
-        android:gravity="center"
-        android:padding="10dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_fb"
+                android:text="@string/facebook"
+                android:gravity="center"
+                android:padding="10dp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/profile_zip"
-        android:text="@string/zip"
-        android:layout_below="@+id/profile_website"
-        android:gravity="center"
-        android:padding="10dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_website"
+                android:text="@string/website"
+                android:gravity="center"
+                android:padding="10dp" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/profile_logout"
-        android:layout_below="@+id/profile_zip"
-        android:background="@color/colorPrimary"
-        android:text="Log out"
-        android:textColor="@color/white"
-        android:layout_centerInParent="true"
-        android:padding="10dp"
-        android:onClick="logOutTapped" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_zip"
+                android:text="@string/zip"
+                android:gravity="center"
+                android:padding="10dp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_logout"
+                android:background="@color/colorPrimary"
+                android:text="Log out"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:padding="10dp"
+                android:onClick="logOutTapped" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/profile_change_pic"
+                android:background="@color/colorPrimaryDark"
+                android:text="Edit Img"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/white"
+                android:padding="10dp"
+                android:onClick="logOutTapped"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+    </ScrollView>
+
 
 </RelativeLayout>
