@@ -66,40 +66,17 @@ public class ManageEventsFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_manage_events, container, false);
-
         myEventsView = (ListView) rootView.findViewById(R.id.list);
-/*
-        myEventsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Event selectedEvent = (Event) myEventsView.getItemAtPosition(position);
-
-                //EventPageFragment eventPageFragment = new EventPageFragment();
-                EventPageFragment eventPageFragment = new EventPageFragment();
-
-                String eventName = selectedEvent.getName();
-                getActivity().setTitle(eventName);
-
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        //.replace(R.id.content_frame, eventPageFragment)
-                        .replace(R.id.content_frame, eventPageFragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });*/
-
         registerForContextMenu(myEventsView);
-
         return rootView;
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+
         Toast.makeText(getActivity().getBaseContext(), "Event Created", Toast.LENGTH_SHORT).show();
         Event selectedEvent = (Event) myEventsView.getItemAtPosition(position);
-
-        //EventPageFragment eventPageFragment = new EventPageFragment();
         EventPageFragment eventPageFragment = new EventPageFragment();
 
         String eventName = selectedEvent.getName();

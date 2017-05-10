@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:gravity="center_vertical"
     android:layout_height="60dp"
     android:background="@color/white"
     android:layout_margin="5dp"
-    android:longClickable="true">
+    android:longClickable="true"
+    android:descendantFocusability="blocksDescendants">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:layout_marginLeft="2.5dp">
+        android:layout_marginLeft="2.5dp"
+        android:clickable="false">
 
         <ImageView
             android:layout_height="wrap_content"
@@ -21,7 +24,8 @@
             android:layout_margin="3dp"
             android:minWidth="45dp"
             android:minHeight="45dp"
-            android:id="@+id/selected_event_organization_logo" />
+            android:id="@+id/selected_event_organization_logo"
+            android:clickable="false"/>
 
     </LinearLayout>
 
@@ -29,7 +33,8 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="3">
+        android:layout_weight="3"
+        android:clickable="false">
 
         <TextView
             android:text="Event Name"
@@ -42,7 +47,8 @@
             android:layout_marginLeft="7dp"
             android:gravity="left"
             android:id="@+id/selected_event_name"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:clickable="false"/>
 
         <TextView
             android:text="Event Information"
@@ -54,7 +60,8 @@
             android:layout_marginLeft="7dp"
             android:gravity="left"
             android:id="@+id/selected_event_description"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:clickable="false"/>
 
     </LinearLayout>
 
