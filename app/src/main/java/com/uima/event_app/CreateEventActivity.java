@@ -96,7 +96,7 @@ public class CreateEventActivity extends AppCompatActivity {
         eventLocation = (EditText) findViewById(R.id.create_event_location);
         eventDetails = (EditText) findViewById(R.id.create_event_details);
         needVolunteers = (CheckBox) findViewById(R.id.need_volunteers);
-        //eventImage = (ImageView) findViewById(R.id.create_image);
+        eventImage = (ImageView) findViewById(R.id.create_image);
         eventDate = (DatePicker) findViewById(R.id.event_date);
         eventStartTime = (TimePicker) findViewById(R.id.event_start_time);
         eventEndTime = (TimePicker) findViewById(R.id.event_end_time);
@@ -134,6 +134,7 @@ public class CreateEventActivity extends AppCompatActivity {
         Button addTagsButton = (Button) findViewById(R.id.add_tags);
         Button addImgButton = (Button) findViewById(R.id.create_add_image);
 
+        System.out.println("Commit");
         // in case this should be a duplicate
         Bundle extras = getIntent().getExtras();
 
