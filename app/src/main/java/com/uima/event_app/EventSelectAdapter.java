@@ -18,6 +18,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -60,7 +62,7 @@ public class EventSelectAdapter  extends ArrayAdapter<Event> {
 
         imgID = Integer.valueOf(eventSelectedItem.getImgId());
         event_name = eventSelectedItem.getName();
-        event_date_time = (eventSelectedItem.getLocation()+ " @ " + "3:00 PM");
+        event_date_time = (eventSelectedItem.getLocation()+ " @ " + eventSelectedItem.getStart_time()); // Just Changed.
 
         //ImageView eventSelectOrganizationLogo = (ImageView) eventSelectListView.findViewById(R.id.selected_event_organization_logo);
         TextView eventSelect_name = (TextView) eventSelectListView.findViewById(R.id.selected_event_name);
@@ -70,7 +72,6 @@ public class EventSelectAdapter  extends ArrayAdapter<Event> {
         eventSelect_name.setText(event_name);
         eventSelect_desc.setText(event_date_time);
 
-
         database = FirebaseDatabase.getInstance();
 
         mAuth = FirebaseAuth.getInstance();
@@ -79,15 +80,18 @@ public class EventSelectAdapter  extends ArrayAdapter<Event> {
 
         final Button attendButton = (Button) eventSelectListView.findViewById(R.id.attending_button);
 
+        // Set Previously Pressed Favorites Here:
+        setPressedButtons(eventSelectedItem, attendButton);
+
         attendButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                if (attendButton.isPressed()) {
+                if (attendButton.isPressed() && event.getAction() == MotionEvent.ACTION_DOWN) {
                     attendButton.setPressed(false);
                     DatabaseReference myRef = database.getReference();
                     final DatabaseReference favEventRef = myRef.child("users").child(userID).child("favorites");
-                    favEventRef.addValueEventListener(new ValueEventListener() {
+                    favEventRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Iterable<DataSnapshot> children = dataSnapshot.getChildren();
@@ -103,17 +107,49 @@ public class EventSelectAdapter  extends ArrayAdapter<Event> {
                             // Do Nothing
                         }
                     });
-                } else {
+                    return true;
+                } else if (!(attendButton.isPressed()) && event.getAction() == MotionEvent.ACTION_DOWN){
                     attendButton.setPressed(true);
                     DatabaseReference myRef = database.getReference();
                     DatabaseReference userRef = myRef.child("users");
                     userRef.child(userID).child("favorites").push().setValue(eventSelectedItem.getId());
+                    return true;
                 }
                 return true;
             }
         });
 
         return eventSelectListView;
+    }
+
+    public static void setPressedButtons(Event selectedEvent, final Button attendButton) {
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();;
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        String userID = user.getUid();
+        final Event sEvent = selectedEvent;
+
+        DatabaseReference myRef = database.getReference();
+        final DatabaseReference favEventRef = myRef.child("users").child(userID).child("favorites");
+        favEventRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                attendButton.setPressed(false);
+                for (DataSnapshot child : children) {
+                    String eventKey = child.getValue(String.class);
+                    if (eventKey.equals(sEvent.getId())) {
+                        attendButton.setPressed(true);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Do Nothing
+            }
+        });
+
     }
 
 }

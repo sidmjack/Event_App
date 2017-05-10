@@ -116,6 +116,8 @@ public class EventSelectFragment extends ListFragment {
                     if (value.getType().equalsIgnoreCase(type)) {
                         keys.add(child.getKey());
                         localEvents.add(value);
+                        // Add is favorite check here?
+                        // Use shared preferences?
                     }
                 }
                 esAdapter = new EventSelectAdapter(getActivity(), R.layout.event_select_row, localEvents);

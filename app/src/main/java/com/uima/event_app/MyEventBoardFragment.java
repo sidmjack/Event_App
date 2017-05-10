@@ -29,7 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyEventBoardFragment extends Fragment {
+public class MyEventBoardFragment extends Fragment implements View.OnClickListener{
 
     private ListView eventBoardListView;
     protected static EventBoardAdapter ebAdapter;
@@ -120,8 +120,6 @@ public class MyEventBoardFragment extends Fragment {
                                     if (count == favoritedEvents.size()) {
                                         System.out.println("Size of Favorites List: " + favoritesList.size());
                                         ebAdapter.notifyDataSetChanged();
-                                        //ebAdapter = new EventBoardAdapter(getActivity(), R.layout.event_board_row, favoritesList);
-                                        //eventBoardListView.setAdapter(ebAdapter);
                                     }
                                 }
                                 @Override
@@ -153,6 +151,19 @@ public class MyEventBoardFragment extends Fragment {
         count++;
     }
 
+    @Override
+    public void onClick(View v) {
+
+    }
+
+
+    /* EVENT BOARD ADAPTER HERE ... */
+    /* EVENT BOARD ADAPTER HERE ... */
+    /* EVENT BOARD ADAPTER HERE ... */
+    /* EVENT BOARD ADAPTER HERE ... */
+    /* EVENT BOARD ADAPTER HERE ... */
+
+
     public class EventBoardAdapter extends ArrayAdapter<Event> {
         int res;
 
@@ -182,9 +193,8 @@ public class MyEventBoardFragment extends Fragment {
             String event_time_notification = "Event: " + "Upcoming!";
 
             TextView eventBoardName = (TextView) eventBoardView.findViewById(R.id.event_title);
+
             final Button attendButton = (Button) eventBoardView.findViewById(R.id.attend_button);
-
-
             attendButton.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -198,6 +208,7 @@ public class MyEventBoardFragment extends Fragment {
                     }
                 }
             });
+
             TextView eventTime = (TextView) eventBoardView.findViewById(R.id.event_time);
             TextView eventNotification = (TextView) eventBoardView.findViewById(R.id.event_time_notification);
 
