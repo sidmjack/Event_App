@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -97,6 +99,23 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
         CameraPosition Baltimore = CameraPosition.builder().target(baltimore).zoom(12).bearing(0).tilt(45).build();
         mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(Baltimore));
         myRef = database.getReference().child("events");
+
+        mGoogleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                String lat = latLng.latitude + "";
+                String log = latLng.longitude + "";
+                System.out.println(lat + " " + log);
+                TextView latText = (TextView) getActivity().findViewById(R.id.event_latitude);
+                TextView logText = (TextView) getActivity().findViewById(R.id.event_longitude);
+                Intent intent = new Intent(getActivity(), CreateEventActivity.class);
+                intent.putExtra("duplicate", false);
+                intent.putExtra("latitude", lat);
+                intent.putExtra("longitude", log);
+                startActivity(intent);
+            }
+        });
+
         mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {

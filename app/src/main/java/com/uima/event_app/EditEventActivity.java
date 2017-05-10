@@ -3,10 +3,29 @@ package com.uima.event_app;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class EditEventActivity extends CreateEventActivity {
     private String eventID, lat, log;
+
+    private EditText eventName;
+    private EditText eventLocation;
+    private EditText eventDetails;
+    private CheckBox needVolunteers;
+    private DatePicker eventDate;
+    private TimePicker eventStartTime;
+    private TimePicker eventEndTime;
+    private Spinner eventType;
+    private ImageView eventImage;
+    private EditText eventLat;
+    private EditText eventLog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +44,9 @@ public class EditEventActivity extends CreateEventActivity {
         eventName.setText(eventNameStr);
         eventLocation.setText(eventLocationStr);
         eventDetails.setText(eventDetailsStr);
+
+        Button orangeButton = (Button) findViewById(R.id.create_event);
+        Button purpleButton = (Button) findViewById(R.id.cancel_event);
 
         orangeButton.setText("update");
         purpleButton.setText("cancel");
