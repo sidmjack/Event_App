@@ -109,7 +109,7 @@
         android:padding="10dp">
     </Spinner>
 
-    <!--
+
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -132,7 +132,7 @@
             android:text="@string/add_picture"/>
 
     </LinearLayout>
-    -->
+
 
     <!-- Tentative List View Here! -->
 

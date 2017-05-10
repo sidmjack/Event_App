@@ -2,7 +2,10 @@ package com.uima.event_app;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,6 +39,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,6 +50,8 @@ public class CreateEventActivity extends AppCompatActivity {
 
     private FirebaseDatabase database;
     private DatabaseReference myRef;
+
+    private int PICK_IMAGE_REQUEST = 1;
 
     private EditText eventName;
     private EditText eventLocation;
@@ -126,6 +132,7 @@ public class CreateEventActivity extends AppCompatActivity {
         Button createButton = (Button) findViewById(R.id.create_event);
         Button cancelButton = (Button) findViewById(R.id.cancel_event);
         Button addTagsButton = (Button) findViewById(R.id.add_tags);
+        Button addImgButton = (Button) findViewById(R.id.create_add_image);
 
         // Attribute Selection List
         attributeListView = (ListView) findViewById(R.id.event_attribute_list_view);
@@ -175,6 +182,15 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
+        addImgButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+            }
+        });
 
         // Create and Cancel Buttons
 
@@ -213,6 +229,25 @@ public class CreateEventActivity extends AppCompatActivity {
         String myKey = myRef.getKey();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            Uri uri = data.getData();
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                // Log.d(TAG, String.valueOf(bitmap));
+
+                ImageView imageView = (ImageView) findViewById(R.id.create_image);
+                imageView.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     private void readFromDB(String message) {
         // Read from the database
