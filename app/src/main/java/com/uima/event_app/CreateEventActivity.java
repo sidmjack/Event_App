@@ -58,6 +58,8 @@ public class CreateEventActivity extends AppCompatActivity {
     protected ImageView eventImage;
     protected Button orangeButton;
     protected Button purpleButton;
+    protected EditText eventLat;
+    protected EditText eventLog;
 
     protected String hostOrg;
 
@@ -220,7 +222,7 @@ public class CreateEventActivity extends AppCompatActivity {
         String end_time = eventEndTime.getCurrentHour() + ":" + eventEndTime.getCurrentMinute();
         String imgId = "22"; //eventImage.getId() + "";
         String event_date = eventDate.getMonth() + "/" + eventDate.getDayOfMonth() + "/" + eventDate.getYear();
-        Event e = new Event(myKey, eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, attributeItems, start_time, end_time, event_date);
+        Event e = new Event(myKey, eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, attributeItems, start_time, end_time, event_date, eventLat.getText().toString(), eventLog.getText().toString());
 
         // Write a message to the database
 
