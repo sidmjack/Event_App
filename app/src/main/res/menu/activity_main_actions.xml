@@ -8,10 +8,12 @@
         android:title="@string/action_create_event"
         app:showAsAction="always" />
 
+    <!--
     <item android:id="@+id/settings"
         android:title="@string/action_settings"
         android:icon="@drawable/settings">
     </item>
+    -->
     <item android:id="@+id/profile"
         android:title="@string/profile"
         android:icon="@drawable/default_profile_picture">

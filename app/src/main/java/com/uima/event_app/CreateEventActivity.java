@@ -90,10 +90,12 @@ public class CreateEventActivity extends AppCompatActivity {
         eventLocation = (EditText) findViewById(R.id.create_event_location);
         eventDetails = (EditText) findViewById(R.id.create_event_details);
         needVolunteers = (CheckBox) findViewById(R.id.need_volunteers);
-        eventImage = (ImageView) findViewById(R.id.create_image);
+        //eventImage = (ImageView) findViewById(R.id.create_image);
         eventDate = (DatePicker) findViewById(R.id.event_date);
         eventStartTime = (TimePicker) findViewById(R.id.event_start_time);
         eventEndTime = (TimePicker) findViewById(R.id.event_end_time);
+        eventLat = (EditText) findViewById(R.id.event_latitude);
+        eventLog = (EditText) findViewById(R.id.event_longitude);
         eventType = (Spinner) findViewById(R.id.create_event_type);
         eventType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -117,11 +119,12 @@ public class CreateEventActivity extends AppCompatActivity {
         ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, types);
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         eventType.setAdapter(typeAdapter);
+        setTitle("Create New Event");
 
         attributeItems = new ArrayList<String>();
 
-        orangeButton = (Button) findViewById(R.id.create_event);
-        purpleButton = (Button) findViewById(R.id.cancel_event);
+        Button createButton = (Button) findViewById(R.id.create_event);
+        Button cancelButton = (Button) findViewById(R.id.cancel_event);
         Button addTagsButton = (Button) findViewById(R.id.add_tags);
 
         // in case this should be a duplicate
@@ -185,11 +188,10 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
-        // Create (orange) and Cancel (purple)  Buttons
-        orangeButton.setText("create");
-        purpleButton.setText("cancel");
 
-        orangeButton.setOnClickListener(new View.OnClickListener() {
+        // Create and Cancel Buttons
+
+        createButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 writeToEventDB();
                 Toast.makeText(getBaseContext(), "Event Created", Toast.LENGTH_SHORT).show();
@@ -197,7 +199,7 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
-        purpleButton.setOnClickListener(new View.OnClickListener() {
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getBaseContext(), "Event Canceled", Toast.LENGTH_SHORT).show();
@@ -221,6 +223,7 @@ public class CreateEventActivity extends AppCompatActivity {
         Event e = new Event(myKey, eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, attributeItems, start_time, end_time, event_date);
 
         // Write a message to the database
+
         myRef.setValue(e);
     }
 

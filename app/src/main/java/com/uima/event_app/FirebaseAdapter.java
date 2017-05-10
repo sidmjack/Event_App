@@ -60,6 +60,8 @@ public class FirebaseAdapter {
         String start_time = event.getStart_time();
         String end_time = event.getEnd_time();
         String location = event.getLocation(); //MAKE SURE ALL THESE AREN"T NULL
+        String latitude = event.getLatutude();
+        String longitude = event.getLongitude();
         orgID = event.getHostOrg();
         // Write a message to the database
         myRef = database.getReference().child("events").push();
@@ -100,7 +102,15 @@ public class FirebaseAdapter {
 
                 for (DataSnapshot child:children) {
                     Event value = child.getValue(Event.class);
-                    Event temp = new Event(value.getId(), value.getName(), value.getHostOrg(), value.getLocation(), value.getDetails(), value.getNeedVolunteers(), value.getImgId(), value.getType(), value.getTags(), value.getStart_time(), value.getEnd_time(), value.getDate());
+                    String lat = "39";
+                    String log = "-76";
+                    if (value.getLatutude() != null) {
+                        lat = value.getLatutude();
+                    }
+                    if (value.getLongitude() != null) {
+                        lat = value.getLongitude();
+                    }
+                    Event temp = new Event(value.getId(), value.getName(), value.getHostOrg(), value.getLocation(), value.getDetails(), value.getNeedVolunteers(), value.getImgId(), value.getType(), value.getTags(), value.getStart_time(), value.getEnd_time(), value.getDate(), lat, log);
 
                     //System.out.println(value.getName());
                     localEvents.add(temp);
@@ -113,7 +123,10 @@ public class FirebaseAdapter {
 
             }
         });
-        System.out.println(localEvents.size());
+    }
+
+    public List<Event> getLocalEvents() {
+        return localEvents;
     }
 
     public void updateFavorites() {
