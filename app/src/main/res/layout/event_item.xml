@@ -7,16 +7,14 @@
     android:layout_height="60dp"
     android:background="@color/white"
     android:layout_margin="5dp"
-    android:longClickable="true"
-    android:descendantFocusability="blocksDescendants">
+    android:longClickable="true">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:layout_marginLeft="2.5dp"
-        android:clickable="false">
+        android:layout_marginLeft="2.5dp">
 
         <ImageView
             android:layout_height="wrap_content"
@@ -24,8 +22,7 @@
             android:layout_margin="3dp"
             android:minWidth="45dp"
             android:minHeight="45dp"
-            android:id="@+id/selected_event_organization_logo"
-            android:clickable="false"/>
+            android:id="@+id/selected_event_organization_logo"/>
 
     </LinearLayout>
 
@@ -33,8 +30,7 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:clickable="false">
+        android:layout_weight="3">
 
         <TextView
             android:text="Event Name"
@@ -47,8 +43,7 @@
             android:layout_marginLeft="7dp"
             android:gravity="left"
             android:id="@+id/selected_event_name"
-            android:layout_weight="1"
-            android:clickable="false"/>
+            android:layout_weight="1"/>
 
         <TextView
             android:text="Event Information"
@@ -60,8 +55,7 @@
             android:layout_marginLeft="7dp"
             android:gravity="left"
             android:id="@+id/selected_event_description"
-            android:layout_weight="1"
-            android:clickable="false"/>
+            android:layout_weight="1"/>
 
     </LinearLayout>
 

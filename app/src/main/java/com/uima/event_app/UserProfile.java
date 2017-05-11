@@ -27,7 +27,7 @@ public class UserProfile {
     private String twitter;
     private Boolean isOrganizer;
     private String organizer;
-    private List<String> favorites;
+    private HashMap<String, String> favorites;
     //HashMap<String, Boolean> userEventPreferences; //<Event_Attributes, Event Preferences from Settings>
 
     /** Empty constructor for Firebase snapshot initialization */
@@ -48,8 +48,8 @@ public class UserProfile {
         this.twitter = "";
         this.isOrganizer = isOrganizer;
         this.organizer = organizer;
-        this.favorites = new ArrayList<String>();
-        this.favorites.add("");
+        this.favorites = new HashMap<>();
+        this.favorites.put("fake event", "fake event");
     }
 
     /** Get methods */
@@ -65,7 +65,7 @@ public class UserProfile {
     public String getTwitter() { return twitter; }
     public Boolean getIsOrganizer() { return isOrganizer; }
     public String getOrganizer() { return organizer; }
-    public List<String> getFavorites() {return favorites; }
+    public HashMap<String, String> getFavorites() {return favorites; }
 
 
     public Map<String, Object> toMap() {

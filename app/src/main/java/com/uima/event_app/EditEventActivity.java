@@ -3,10 +3,29 @@ package com.uima.event_app;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class EditEventActivity extends CreateEventActivity {
-    private String eventID;
+    private String eventID, lat, log;
+
+    private EditText eventName;
+    private EditText eventLocation;
+    private EditText eventDetails;
+    private CheckBox needVolunteers;
+    private DatePicker eventDate;
+    private TimePicker eventStartTime;
+    private TimePicker eventEndTime;
+    private Spinner eventType;
+    private ImageView eventImage;
+    private EditText eventLat;
+    private EditText eventLog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,10 +38,15 @@ public class EditEventActivity extends CreateEventActivity {
         String eventLocationStr = extras.getString("event location");
         String eventDetailsStr = extras.getString("event details");
         eventID = extras.getString("event id");
+        lat = extras.getString("latitude");
+        log = extras.getString("longitude");
 
         eventName.setText(eventNameStr);
         eventLocation.setText(eventLocationStr);
         eventDetails.setText(eventDetailsStr);
+
+        Button orangeButton = (Button) findViewById(R.id.create_event);
+        Button purpleButton = (Button) findViewById(R.id.cancel_event);
 
         orangeButton.setText("update");
         purpleButton.setText("cancel");
@@ -50,7 +74,7 @@ public class EditEventActivity extends CreateEventActivity {
         String end_time = eventEndTime.getCurrentHour() + ":" + eventEndTime.getCurrentMinute();
         String imgId = "22"; //eventImage.getId() + "";
         String event_date = eventDate.getMonth() + "/" + eventDate.getDayOfMonth() + "/" + eventDate.getYear();
-        Event e = new Event(eventID, eventName.getText().toString(), user.getOrganizer(), eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, attributeItems, start_time, end_time, event_date);
+        Event e = new Event(eventID, eventName.getText().toString(), user.getOrganizer(), eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, attributeItems, start_time, end_time, event_date, lat, log);
 
         // Write a message to the database
         myRef = database.getReference().child("events").child(eventID);

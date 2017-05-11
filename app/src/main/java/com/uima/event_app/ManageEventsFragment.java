@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ManageEventsFragment extends ListFragment {
+public class ManageEventsFragment extends Fragment {
     protected static ManageEventsAdapter adapter;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
@@ -41,7 +41,7 @@ public class ManageEventsFragment extends ListFragment {
     private UserProfile user;
     private ListView myEventsView;
 
-    private final List<Event> myEvents = new ArrayList<Event>();
+    private final List<Event> myEvents = new ArrayList<>();
 
     public static final int MENU_ITEM_DUPLICATE = Menu.FIRST;
     public static final int MENU_ITEM_DELETE = Menu.FIRST + 1;
@@ -67,36 +67,33 @@ public class ManageEventsFragment extends ListFragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_manage_events, container, false);
         myEventsView = (ListView) rootView.findViewById(R.id.list);
+
+        myEventsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Toast.makeText(getActivity().getBaseContext(), "Event Created", Toast.LENGTH_SHORT).show();
+                Event selectedEvent = (Event) myEventsView.getItemAtPosition(position);
+                EventPageFragment eventPageFragment = new EventPageFragment();
+
+                String eventName = selectedEvent.getName();
+                getActivity().setTitle(eventName);
+
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, eventPageFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
         registerForContextMenu(myEventsView);
         return rootView;
-    }
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-
-        Toast.makeText(getActivity().getBaseContext(), "Event Created", Toast.LENGTH_SHORT).show();
-        Event selectedEvent = (Event) myEventsView.getItemAtPosition(position);
-        EventPageFragment eventPageFragment = new EventPageFragment();
-
-        String eventName = selectedEvent.getName();
-        getActivity().setTitle(eventName);
-
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, eventPageFragment)
-                .addToBackStack(null)
-                .commit();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         this.populateList();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 
     /**
@@ -133,7 +130,7 @@ public class ManageEventsFragment extends ListFragment {
                     }
                 }
                 adapter = new ManageEventsAdapter(getActivity(), R.layout.event_item, myEvents);
-                setListAdapter(adapter);
+                myEventsView.setAdapter(adapter);
             }
 
             @Override

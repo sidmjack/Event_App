@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * Created by sidneyjackson on 4/18/17.
  */
@@ -41,6 +42,7 @@ public class EventSelectFragment extends ListFragment {
     private DatabaseReference myRef;
     private ArrayList<String> keys = new ArrayList<String>();
 
+    private FirebaseAuth mAuth;
 
     public EventSelectFragment() {
         // Required empty public constructor
@@ -55,6 +57,16 @@ public class EventSelectFragment extends ListFragment {
         type = myPrefs.getString("TYPE", "Miscellaneous");
 
         this.populateList();
+
+        /*mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        String userID = user.getUid();*/
+
+        // Uncertain...
+        DatabaseReference userRef = myRef.child("users");
+        //ArrayList<String> favoritedEvents = new ArrayList<String>();
+        //userRef.child(userID).child("favorites").setValue(favoritedEvents);
+
 
     }
 
@@ -104,6 +116,8 @@ public class EventSelectFragment extends ListFragment {
                     if (value.getType().equalsIgnoreCase(type)) {
                         keys.add(child.getKey());
                         localEvents.add(value);
+                        // Add is favorite check here?
+                        // Use shared preferences?
                     }
                 }
                 esAdapter = new EventSelectAdapter(getActivity(), R.layout.event_select_row, localEvents);

@@ -49,8 +49,6 @@ public class MainActivity extends AppCompatActivity
     TextView navEmailTextView;
     MenuItem manageEventsItem;
 
-    private UserProfile user;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +88,7 @@ public class MainActivity extends AppCompatActivity
         ValueEventListener userListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                user = dataSnapshot.getValue(UserProfile.class);
+                UserProfile user = dataSnapshot.getValue(UserProfile.class);
                 navNameTextView.setText(user.getFirstname());
                 navEmailTextView.setText(user.getEmail());
 
@@ -140,18 +138,15 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        /*
         //noinspection SimplifiableIfStatement
         if (id == R.id.settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
-        } else if (id == R.id.profile) {
+        } */
+        if (id == R.id.profile) {
             Intent intent = new Intent(this, ProfileActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.action_new_event) {
-            Intent intent = new Intent(this, CreateEventActivity.class);
-            setTitle("Create New Event");
-            intent.putExtra("duplicate", false);
             startActivity(intent);
         }
 

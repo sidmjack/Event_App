@@ -2,7 +2,10 @@ package com.uima.event_app;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,6 +39,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,17 +51,19 @@ public class CreateEventActivity extends AppCompatActivity {
     protected FirebaseDatabase database;
     protected DatabaseReference myRef;
 
-    protected EditText eventName;
-    protected EditText eventLocation;
-    protected EditText eventDetails;
-    protected CheckBox needVolunteers;
-    protected DatePicker eventDate;
-    protected TimePicker eventStartTime;
-    protected TimePicker eventEndTime;
-    protected Spinner eventType;
-    protected ImageView eventImage;
-    protected Button orangeButton;
-    protected Button purpleButton;
+    private int PICK_IMAGE_REQUEST = 1;
+
+    private EditText eventName;
+    private EditText eventLocation;
+    private EditText eventDetails;
+    private CheckBox needVolunteers;
+    private DatePicker eventDate;
+    private TimePicker eventStartTime;
+    private TimePicker eventEndTime;
+    private Spinner eventType;
+    private ImageView eventImage;
+    private TextView eventLat;
+    private TextView eventLog;
 
     protected String hostOrg;
 
@@ -80,6 +86,7 @@ public class CreateEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
+        Intent intent = getIntent();
 
         database = FirebaseDatabase.getInstance();
         user = new UserProfile();
@@ -94,6 +101,11 @@ public class CreateEventActivity extends AppCompatActivity {
         eventDate = (DatePicker) findViewById(R.id.event_date);
         eventStartTime = (TimePicker) findViewById(R.id.event_start_time);
         eventEndTime = (TimePicker) findViewById(R.id.event_end_time);
+        eventLat = (TextView) findViewById(R.id.event_latitude);
+        eventLog = (TextView) findViewById(R.id.event_longitude);
+        eventLat.setText(intent.getStringExtra("latitude"));
+        eventLog.setText(intent.getStringExtra("longitude"));
+
         eventType = (Spinner) findViewById(R.id.create_event_type);
         eventType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -117,13 +129,16 @@ public class CreateEventActivity extends AppCompatActivity {
         ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, types);
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         eventType.setAdapter(typeAdapter);
+        setTitle("Create New Event");
 
         attributeItems = new ArrayList<String>();
 
-        orangeButton = (Button) findViewById(R.id.create_event);
-        purpleButton = (Button) findViewById(R.id.cancel_event);
+        Button createButton = (Button) findViewById(R.id.create_event);
+        Button cancelButton = (Button) findViewById(R.id.cancel_event);
         Button addTagsButton = (Button) findViewById(R.id.add_tags);
+        Button addImgButton = (Button) findViewById(R.id.create_add_image);
 
+        System.out.println("Commit");
         // in case this should be a duplicate
         Bundle extras = getIntent().getExtras();
 
@@ -185,11 +200,19 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
-        // Create (orange) and Cancel (purple)  Buttons
-        orangeButton.setText("create");
-        purpleButton.setText("cancel");
+        addImgButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+            }
+        });
 
-        orangeButton.setOnClickListener(new View.OnClickListener() {
+        // Create and Cancel Buttons
+
+        createButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 writeToEventDB();
                 Toast.makeText(getBaseContext(), "Event Created", Toast.LENGTH_SHORT).show();
@@ -197,7 +220,7 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
-        purpleButton.setOnClickListener(new View.OnClickListener() {
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getBaseContext(), "Event Canceled", Toast.LENGTH_SHORT).show();
@@ -218,12 +241,31 @@ public class CreateEventActivity extends AppCompatActivity {
         String end_time = eventEndTime.getCurrentHour() + ":" + eventEndTime.getCurrentMinute();
         String imgId = "22"; //eventImage.getId() + "";
         String event_date = eventDate.getMonth() + "/" + eventDate.getDayOfMonth() + "/" + eventDate.getYear();
-        Event e = new Event(myKey, eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, attributeItems, start_time, end_time, event_date);
+        Event e = new Event(myKey, eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, attributeItems, start_time, end_time, event_date, eventLat.getText().toString(), eventLog.getText().toString());
 
         // Write a message to the database
         myRef.setValue(e);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            Uri uri = data.getData();
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                // Log.d(TAG, String.valueOf(bitmap));
+
+                ImageView imageView = (ImageView) findViewById(R.id.create_image);
+                imageView.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     private void readFromDB(String message) {
         // Read from the database
