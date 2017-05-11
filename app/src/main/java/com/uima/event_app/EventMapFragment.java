@@ -19,6 +19,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,9 +32,15 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by sidneyjackson on 4/17/17.
+ * EventMapFragment
+ * Displays markers using Google Maps.  Each marker is linked to an event taken from
+ * Firebase which it references with a HashMap that stores a markerID as a key and
+ * its corresponding event.
+ *
+ * If marker is clicked, see event page details.
+ * If a marker is not clicked, then don't see event page, but create an event (if part of
+ * organization).
  */
-
 public class EventMapFragment extends Fragment implements OnMapReadyCallback {
 
     private MapView mMapView;
@@ -43,6 +51,11 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
     final List<LatLng> map_pins = new ArrayList<LatLng>();
     final List<String> pin_names = new ArrayList<String >();
     private HashMap<String, Event> markerEventMap = new HashMap<>();
+
+    UserProfile user;
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
+    private DatabaseReference currentUserRef;
 
     public EventMapFragment() {
         // Required empty public constructor
@@ -58,16 +71,22 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
         */
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference().child("events");
+        myRef = database.getReference().child("events");
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        currentUserRef = database.getReference().child("users").child(currentUser.getUid());
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        getUser();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        getUser();
 
     }
 
@@ -99,23 +118,39 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         CameraPosition Baltimore = CameraPosition.builder().target(baltimore).zoom(12).bearing(0).tilt(45).build();
         mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(Baltimore));
-        myRef = database.getReference().child("events");
 
-        mGoogleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+        ValueEventListener userListener = new ValueEventListener() {
             @Override
-            public void onMapLongClick(LatLng latLng) {
-                String lat = latLng.latitude + "";
-                String log = latLng.longitude + "";
-                System.out.println(lat + " " + log);
-                TextView latText = (TextView) getActivity().findViewById(R.id.event_latitude);
-                TextView logText = (TextView) getActivity().findViewById(R.id.event_longitude);
-                Intent intent = new Intent(getActivity(), CreateEventActivity.class);
-                intent.putExtra("duplicate", false);
-                intent.putExtra("latitude", lat);
-                intent.putExtra("longitude", log);
-                startActivity(intent);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(UserProfile.class);
+                if (user.getIsOrganizer()) {
+                    mGoogleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+                        @Override
+                        public void onMapLongClick(LatLng latLng) {
+                            String lat = latLng.latitude + "";
+                            String log = latLng.longitude + "";
+                            System.out.println(lat + " " + log);
+                            TextView latText = (TextView) getActivity().findViewById(R.id.event_latitude);
+                            TextView logText = (TextView) getActivity().findViewById(R.id.event_longitude);
+                            Intent intent = new Intent(getActivity(), CreateEventActivity.class);
+                            intent.putExtra("duplicate", false);
+                            intent.putExtra("latitude", lat);
+                            intent.putExtra("longitude", log);
+                            startActivity(intent);
+                        }
+                    });
+                }
+
             }
-        });
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        currentUserRef.addValueEventListener(userListener);
+
+
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -170,5 +205,22 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
     }
+
+    private void getUser() {
+        ValueEventListener userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(UserProfile.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        currentUserRef.addValueEventListener(userListener);
+    }
+
+
 
 }
