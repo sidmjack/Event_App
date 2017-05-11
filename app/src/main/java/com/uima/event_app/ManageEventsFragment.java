@@ -43,10 +43,10 @@ public class ManageEventsFragment extends Fragment {
     private final List<Event> myEvents = new ArrayList<Event>();
     private ArrayList<String> keys = new ArrayList<String>();
 
-    public static final int MENU_ITEM_DUPLICATE = Menu.FIRST;
+    public static final int MENU_ITEM_OPEN = Menu.FIRST;
     public static final int MENU_ITEM_DELETE = Menu.FIRST + 1;
     public static final int MENU_ITEM_EDIT = Menu.FIRST + 2;
-    public static final int MENU_ITEM_OPEN = Menu.FIRST + 3;
+    public static final int MENU_ITEM_DUPLICATE = Menu.FIRST + 3;
 
     public ManageEventsFragment() {
         // Required empty public constructor
@@ -146,10 +146,10 @@ public class ManageEventsFragment extends Fragment {
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         // Add menu items
-        menu.add(0, MENU_ITEM_DUPLICATE, 0, R.string.menu_duplicate);
+        menu.add(0, MENU_ITEM_OPEN, 0, R.string.menu_open);
         menu.add(0, MENU_ITEM_DELETE, 0, R.string.menu_delete);
         menu.add(0, MENU_ITEM_EDIT, 0, R.string.menu_edit);
-        menu.add(0, MENU_ITEM_OPEN, 0, "open");
+        //menu.add(0, MENU_ITEM_DUPLICATE, 0, R.string.menu_duplicate);
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.context_menu, menu);
