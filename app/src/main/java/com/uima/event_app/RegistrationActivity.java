@@ -22,14 +22,21 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+/**
+ * RegistrationActivity
+ * This is where the user enters information.
+ */
 public class RegistrationActivity extends AppCompatActivity {
 
+    /** My preferences. */
     SharedPreferences myPrefs;
 
+    /** Firebase References */
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
     private DatabaseReference usersReference;
 
+    /** UI Componenets. */
     EditText nameField;
     EditText emailField;
     EditText usernameField;
@@ -60,6 +67,11 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Check firstname fields.
+     *
+     * @return True if fields filled in properly.
+     */
     private boolean isNameEntered() {
 
         if (!nameField.getText().toString().equals("")) {
@@ -69,6 +81,11 @@ public class RegistrationActivity extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * Check email fields.
+     *
+     * @return True if fields filled in properly.
+     */
     private boolean isEmailEntered() {
 
         if (!emailField.getText().toString().equals("")) {
@@ -78,6 +95,11 @@ public class RegistrationActivity extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * Check username fields.
+     *
+     * @return True if fields filled in properly.
+     */
     private boolean isUsernameEntered() {
 
         if (!usernameField.getText().toString().equals("")) {
@@ -87,6 +109,11 @@ public class RegistrationActivity extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * Check password fields.
+     *
+     * @return True if fields filled in properly.
+     */
     private boolean isPasswordEntered() {
 
         if (!passwordField.getText().toString().equals("")) {
@@ -96,6 +123,11 @@ public class RegistrationActivity extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * Check zipcode fields.
+     *
+     * @return True if fields filled in properly.
+     */
     private boolean isZipcodeEntered() {
 
         if (!zipcodeField.getText().toString().equals("")) {
@@ -105,8 +137,12 @@ public class RegistrationActivity extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * Check organization fields.
+     *
+     * @return True if fields filled in properly.
+     */
     private boolean isOrganizationEntered() {
-
         if (organizerCheckbox.isChecked()) {
             if (!organizerField.getText().toString().equals("")) {
                 return true;
@@ -118,6 +154,11 @@ public class RegistrationActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Check to make sure proper fields are entered.  If entered correctly, sign up the user.
+     *
+     * @param view The view.
+     */
     public void createAccountTapped(View view) {
 
         if (!isNameEntered()) {
@@ -139,7 +180,12 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * The sign up method that creates a user through Firebase.
+     *
+     * @param email The email of the new user.
+     * @param password The password of the new user.
+     */
     private void signUp(String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -161,6 +207,18 @@ public class RegistrationActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * After creating a user via authentication, actually create a new node in the database in Firebase for the user.
+     *
+     * @param uid The ID of the user.
+     * @param firstname The firstname of the user.
+     * @param email The email of the user.
+     * @param username The username of the user.
+     * @param password The password of the user.
+     * @param zipcode The zipcode of the user.
+     * @param isOrganization If the user is an organization.
+     * @param organization Name of organization if any.
+     */
     private void createUser(String uid, String firstname, String email, String username, String password,
                             String zipcode, Boolean isOrganization, String organization) {
         UserProfile user = new UserProfile(uid, firstname, email, username, zipcode, isOrganization, organization);
@@ -170,6 +228,12 @@ public class RegistrationActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * After signing up and creating user, sign in the user.
+     *
+     * @param email The user email.
+     * @param password The user password.
+     */
     private void signIn(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

@@ -68,8 +68,8 @@ public class CreateEventActivity extends AppCompatActivity {
     private TimePicker eventEndTime;
     private Spinner eventType;
     private ImageView eventImage;
-    private EditText eventLat;
-    private EditText eventLog;
+    private TextView eventLat;
+    private TextView eventLog;
 
     protected String hostOrg;
 
@@ -94,6 +94,7 @@ public class CreateEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
+        Intent intent = getIntent();
 
         // Retrieves Fire base Storage Reference
         mStorage = FirebaseStorage.getInstance().getReference();
@@ -110,8 +111,11 @@ public class CreateEventActivity extends AppCompatActivity {
         eventDate = (DatePicker) findViewById(R.id.event_date);
         eventStartTime = (TimePicker) findViewById(R.id.event_start_time);
         eventEndTime = (TimePicker) findViewById(R.id.event_end_time);
-        eventLat = (EditText) findViewById(R.id.event_latitude);
-        eventLog = (EditText) findViewById(R.id.event_longitude);
+        eventLat = (TextView) findViewById(R.id.event_latitude);
+        eventLog = (TextView) findViewById(R.id.event_longitude);
+        eventLat.setText(intent.getStringExtra("latitude"));
+        eventLog.setText(intent.getStringExtra("longitude"));
+
         eventType = (Spinner) findViewById(R.id.create_event_type);
 
         eventType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -143,6 +147,7 @@ public class CreateEventActivity extends AppCompatActivity {
         Button addTagsButton = (Button) findViewById(R.id.add_tags);
         Button addImgButton = (Button) findViewById(R.id.create_add_image);
 
+        System.out.println("Commit");
         // in case this should be a duplicate
         Bundle extras = getIntent().getExtras();
 

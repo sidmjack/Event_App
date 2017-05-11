@@ -83,14 +83,4 @@ public class UserProfile {
         result.put("favorites", favorites);
         return result;
     }
-
-    /*
-    public void validate(String[] organizationInformation) {
-        if (organizationInformation.length == 8) {
-            return;
-        } else {
-            throw new IllegalArgumentException
-                    ("Array Size of UserInformation is incorrect.");
-        }
-    } */
 }

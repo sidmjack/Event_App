@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -39,6 +42,7 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
     private DatabaseReference myRef;
     final List<LatLng> map_pins = new ArrayList<LatLng>();
     final List<String> pin_names = new ArrayList<String >();
+    private HashMap<String, Event> markerEventMap = new HashMap<>();
 
     public EventMapFragment() {
         // Required empty public constructor
@@ -93,36 +97,23 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
         MapsInitializer.initialize(getContext());
         final GoogleMap mGoogleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        googleMap.addMarker(new MarkerOptions().position(baltimore).title("@string/baltimore"));
         CameraPosition Baltimore = CameraPosition.builder().target(baltimore).zoom(12).bearing(0).tilt(45).build();
         mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(Baltimore));
         myRef = database.getReference().child("events");
-        mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
+        mGoogleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
-            public boolean onMarkerClick(Marker marker) {
-                final String title = marker.getTitle();
-                myRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                        for (DataSnapshot child : children) {
-                            Event value = child.getValue(Event.class);
-                            if (value.getName().equalsIgnoreCase(title)) {
-                                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                                Fragment currentFragment = new EventPageFragment();
-                                fragmentManager.beginTransaction()
-                                        .replace(R.id.content_frame, currentFragment)
-                                        .commit();
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-                return false;
+            public void onMapLongClick(LatLng latLng) {
+                String lat = latLng.latitude + "";
+                String log = latLng.longitude + "";
+                System.out.println(lat + " " + log);
+                TextView latText = (TextView) getActivity().findViewById(R.id.event_latitude);
+                TextView logText = (TextView) getActivity().findViewById(R.id.event_longitude);
+                Intent intent = new Intent(getActivity(), CreateEventActivity.class);
+                intent.putExtra("duplicate", false);
+                intent.putExtra("latitude", lat);
+                intent.putExtra("longitude", log);
+                startActivity(intent);
             }
         });
 
@@ -148,7 +139,11 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
                         dlog = Double.valueOf(ilog);
                     }
                     LatLng itemp = new LatLng(dlat, dlog);
-                    mGoogleMap.addMarker(new MarkerOptions().position(itemp).title(value.getName()));
+                    MarkerOptions newMarkerOptions = new MarkerOptions();
+                    newMarkerOptions.position(itemp);
+                    newMarkerOptions.title(value.getName());
+                    Marker marker = mGoogleMap.addMarker(newMarkerOptions);
+                    markerEventMap.put(marker.getId(), value);
 
                 }
             }
@@ -159,5 +154,21 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
+        mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Event event = markerEventMap.get(marker.getId());
+                Bundle data = new Bundle();
+                data.putString("eventID", event.getId());
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                Fragment currentFragment = new EventPageFragment();
+                currentFragment.setArguments(data);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, currentFragment)
+                        .commit();
+                return true;
+            }
+        });
     }
+
 }

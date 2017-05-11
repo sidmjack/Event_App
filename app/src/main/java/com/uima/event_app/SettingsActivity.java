@@ -6,11 +6,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 /**
- * Created by edmundConnor on 4/18/17.
+ * SettingsActivity
+ * Area where user can enter settings and what not.
+ *
  */
-
 public class SettingsActivity extends AppCompatActivity {
 
+    /** UI Components */
     Spinner notificationTimes;
     Spinner appThemes;
 

@@ -26,6 +26,8 @@ public class BottomEventPageFragment extends Fragment implements ViewPager.OnPag
     RadioButton rbOne;
     RadioButton rbTwo;
 
+    private String eventID;
+
     public BottomEventPageFragment() {
         // Required empty public constructor
     }
@@ -42,11 +44,13 @@ public class BottomEventPageFragment extends Fragment implements ViewPager.OnPag
     @Override
     public void onResume() {
         super.onResume();
+        this.eventID = getArguments().getString("eventID");
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.eventID = getArguments().getString("eventID");
     }
 
     @Override
@@ -109,6 +113,11 @@ public class BottomEventPageFragment extends Fragment implements ViewPager.OnPag
             super(supportFragmentManager);
             EventInfo1Fragment e1 = new EventInfo1Fragment();
             EventInfo2Fragment e2 = new EventInfo2Fragment();
+            Bundle data = new Bundle();
+            data.putString("eventID", eventID);
+            e1.setArguments(data);
+            e2.setArguments(data);
+
             fragments.add(e1);
             fragments.add(e2);
         }
