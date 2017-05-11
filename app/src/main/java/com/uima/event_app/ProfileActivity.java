@@ -83,6 +83,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     /**
      * Get snapshot of user from Firebase and populate data.
+     *
      */
     private void populateProfileData() {
 

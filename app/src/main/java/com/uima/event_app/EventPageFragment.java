@@ -15,8 +15,10 @@ public class EventPageFragment extends Fragment {
 
     protected View rootView;
 
+    private String eventID;
+
     TopEventPageFragment upperPageFragment = new TopEventPageFragment();
-    BottomEventPageFragment lowerPagerFragment = new BottomEventPageFragment();
+    BottomEventPageFragment lowerPageFragment = new BottomEventPageFragment();
 
     public EventPageFragment() {
         // Required empty public constructor
@@ -25,6 +27,8 @@ public class EventPageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.eventID = getArguments().getString("eventID");
+
     }
 
     @Override
@@ -35,6 +39,7 @@ public class EventPageFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        this.eventID = getArguments().getString("eventID");
     }
 
     @Override
@@ -44,12 +49,16 @@ public class EventPageFragment extends Fragment {
         //rootView = inflater.inflate(R.layout.event_board_row, container, false);
         rootView = inflater.inflate(R.layout.fragment_event_page, container, false);
 
+
+        Bundle data = new Bundle();
+        data.putString("eventID", eventID);
+        upperPageFragment.setArguments(data);
+        lowerPageFragment.setArguments(data);
+
         FragmentTransaction transaction =
                getActivity().getSupportFragmentManager().beginTransaction();
-
         transaction.add(R.id.event_page_top_half, upperPageFragment);
-        transaction.add(R.id.event_page_bottom_half, lowerPagerFragment);
-
+        transaction.add(R.id.event_page_bottom_half, lowerPageFragment);
         transaction.commit();
 
 

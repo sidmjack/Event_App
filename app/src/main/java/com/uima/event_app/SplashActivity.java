@@ -4,6 +4,11 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+/**
+ * SplashActivity
+ * We see this activity right when the app loads.
+ *
+ */
 public class SplashActivity extends AppCompatActivity {
 
     @Override

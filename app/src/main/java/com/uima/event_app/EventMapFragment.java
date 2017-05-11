@@ -108,8 +108,11 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
                         for (DataSnapshot child : children) {
                             Event value = child.getValue(Event.class);
                             if (value.getName().equalsIgnoreCase(title)) {
+                                Bundle data = new Bundle();
+                                data.putString("eventID", value.getId());
                                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                                 Fragment currentFragment = new EventPageFragment();
+                                currentFragment.setArguments(data);
                                 fragmentManager.beginTransaction()
                                         .replace(R.id.content_frame, currentFragment)
                                         .commit();

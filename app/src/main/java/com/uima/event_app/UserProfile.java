@@ -10,8 +10,8 @@ import java.util.Map;
 /**
  * UserProfile Class
  * Defines a user and serves a model when retrieving input from Firebase.
+ *
  */
-
 public class UserProfile {
 
     /** Variables */
@@ -68,6 +68,11 @@ public class UserProfile {
     public HashMap<String, String> getFavorites() {return favorites; }
 
 
+    /**
+     * Function that returns a map with all the values for the user.
+     *
+     * @return Map of values for Firebase.
+     */
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("uid", uid);
@@ -84,14 +89,4 @@ public class UserProfile {
         result.put("favorites", favorites);
         return result;
     }
-
-    /*
-    public void validate(String[] organizationInformation) {
-        if (organizationInformation.length == 8) {
-            return;
-        } else {
-            throw new IllegalArgumentException
-                    ("Array Size of UserInformation is incorrect.");
-        }
-    } */
 }
