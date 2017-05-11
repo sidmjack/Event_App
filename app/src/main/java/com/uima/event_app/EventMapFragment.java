@@ -134,7 +134,7 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
                 for (DataSnapshot child : children) {
                     Event value = child.getValue(Event.class);
                     System.out.println(value.getName());
-                    String ilat = value.getLatutude();
+                    String ilat = value.getLatitude();
                     String ilog = value.getLongitude();
                     Double dlat, dlog;
                     if (ilat.equals("")) {

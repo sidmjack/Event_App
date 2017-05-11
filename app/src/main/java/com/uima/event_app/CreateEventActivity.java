@@ -31,6 +31,7 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,10 +39,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static android.R.id.message;
@@ -67,8 +73,13 @@ public class CreateEventActivity extends AppCompatActivity {
 
     protected String hostOrg;
 
+    // Needed for Image Storage in Firebase Storage
+    public StorageReference mStorage;
+    public Uri uri;
+    String imgReference;
+
     protected ListView attributeListView;
-    protected static ArrayList<String> attributeItems;
+    protected static ArrayList<String> attributeItems = new ArrayList<>();
     protected static ListAttributeAdapter laAdapter;
 
     protected Spinner categorySpinner;
@@ -76,10 +87,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
     protected String key = "fake key";
     protected String clickType;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+
     private GoogleApiClient client;
 
     @Override
@@ -87,6 +95,8 @@ public class CreateEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_event);
 
+        // Retrieves Fire base Storage Reference
+        mStorage = FirebaseStorage.getInstance().getReference();
         database = FirebaseDatabase.getInstance();
         user = new UserProfile();
 
@@ -96,17 +106,17 @@ public class CreateEventActivity extends AppCompatActivity {
         eventLocation = (EditText) findViewById(R.id.create_event_location);
         eventDetails = (EditText) findViewById(R.id.create_event_details);
         needVolunteers = (CheckBox) findViewById(R.id.need_volunteers);
-        //eventImage = (ImageView) findViewById(R.id.create_image);
+        eventImage = (ImageView) findViewById(R.id.create_image);
         eventDate = (DatePicker) findViewById(R.id.event_date);
         eventStartTime = (TimePicker) findViewById(R.id.event_start_time);
         eventEndTime = (TimePicker) findViewById(R.id.event_end_time);
         eventLat = (EditText) findViewById(R.id.event_latitude);
         eventLog = (EditText) findViewById(R.id.event_longitude);
         eventType = (Spinner) findViewById(R.id.create_event_type);
+
         eventType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // On selecting a spinner item
                 clickType = parent.getItemAtPosition(position).toString();
             }
             @Override
@@ -114,7 +124,8 @@ public class CreateEventActivity extends AppCompatActivity {
 
             }
         });
-        List<String> types = new ArrayList<String>();
+
+        List<String> types = new ArrayList<>();
         types.add("Local Culture");
         types.add("Social Activism");
         types.add("Popular Culture");
@@ -122,12 +133,10 @@ public class CreateEventActivity extends AppCompatActivity {
         types.add("Education & Learning");
         types.add("Shopping & Market Events");
         types.add("Miscellaneous");
-        ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, types);
+        ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, types);
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         eventType.setAdapter(typeAdapter);
         setTitle("Create New Event");
-
-        attributeItems = new ArrayList<String>();
 
         Button createButton = (Button) findViewById(R.id.create_event);
         Button cancelButton = (Button) findViewById(R.id.cancel_event);
@@ -153,27 +162,32 @@ public class CreateEventActivity extends AppCompatActivity {
         laAdapter = new ListAttributeAdapter(this, R.layout.check_list_item, attributeItems);
         attributeListView.setAdapter(laAdapter); // Layout File
 
-        // Dialog for Attribute Selection List
-
         // setup the alert builder
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Select Event Attributes");
 
         // Add a Checkbox List
-        String[] event_attributes = getResources().getStringArray(R.array.event_attributes);
-        //boolean[] checkedItems = {true, false, false, true, false};
-        boolean[] checkedItems = initializeCheck(event_attributes.length);
+        final String[] event_attributes = getResources().getStringArray(R.array.event_attributes);
+        final boolean[] checkedItems = new boolean[event_attributes.length];
 
-        for(int i = 0; i < event_attributes.length; i++) {
+        /*for(int i = 0; i < event_attributes.length; i++) {
             if(checkedItems[i]) {
                 attributeItems.add(event_attributes[i]);
+                System.out.println("Event Attributes" + event_attributes[i] + "\n");
             }
-        }
+        }*/
 
         builder.setMultiChoiceItems(event_attributes, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                // user checked or unchecked a box
+                if (isChecked) {
+                    // Add Attribute Item!
+                    attributeItems.add(event_attributes[which]);
+                    //System.out.println("Number Attribute:" + event_attributes[which]);
+                } else {
+                    // Remove Attribute Item!
+                    attributeItems.remove(event_attributes[which]);
+                }
             }
         });
 
@@ -194,6 +208,7 @@ public class CreateEventActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+
 
         addImgButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -234,12 +249,34 @@ public class CreateEventActivity extends AppCompatActivity {
 
         String start_time = eventStartTime.getCurrentHour() + ":" + eventStartTime.getCurrentMinute();
         String end_time = eventEndTime.getCurrentHour() + ":" + eventEndTime.getCurrentMinute();
-        String imgId = "22"; //eventImage.getId() + "";
+        String imgId = imgReference;
         String event_date = eventDate.getMonth() + "/" + eventDate.getDayOfMonth() + "/" + eventDate.getYear();
-        Event e = new Event(myKey, eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, attributeItems, start_time, end_time, event_date, eventLat.getText().toString(), eventLog.getText().toString());
-
+        HashMap<String, String> tags = new HashMap<>();
+        Event e = new Event(myKey, eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, tags, start_time, end_time, event_date, eventLat.getText().toString(), eventLog.getText().toString());
         // Write a message to the database
         myRef.setValue(e);
+        populateAttributeList(myKey);
+    }
+
+    // Working Here!
+    public void populateAttributeList(String key) {
+
+       /*String[] attribute_name = getResources().getStringArray(R.array.event_attributes);
+       ArrayList<String> attributes = new ArrayList<>();
+
+       for (String atr_name : attribute_name) {
+           attributes.add(atr_name);
+       }*/
+
+        final DatabaseReference myAtrRef = database.getReference().child("events").child(key).child("tags");
+
+        final ArrayList<String> eAttributes = attributeItems;
+
+        for(String tags: eAttributes) {
+            myAtrRef.push().setValue(tags);
+            System.out.println("Tags: " + tags);
+        }
+
     }
 
     @Override
@@ -248,17 +285,19 @@ public class CreateEventActivity extends AppCompatActivity {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
-            Uri uri = data.getData();
+            uri = data.getData();
+            // Stores image in firebase.
+            StorageReference filepath = mStorage.child("EventPhotos").child(uri.getLastPathSegment());
+            imgReference = filepath.getPath();
 
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                // Log.d(TAG, String.valueOf(bitmap));
-
-                ImageView imageView = (ImageView) findViewById(R.id.create_image);
-                imageView.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Uri downloadUri = taskSnapshot.getDownloadUrl();
+                    Picasso.with(CreateEventActivity.this).load(downloadUri).fit().centerCrop().into(eventImage);
+                    Toast.makeText(CreateEventActivity.this, "Upload Complete", Toast.LENGTH_LONG).show();
+                }
+            });
         }
     }
 
@@ -281,19 +320,6 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
     }
-
-    /*
-    public ArrayList<String> populateAttributeList() {
-
-        String[] attribute_name = getResources().getStringArray(R.array.event_attributes);
-        ArrayList<String> attributes = new ArrayList<String>();
-
-        for (String atr_name : attribute_name) {
-            attributes.add(atr_name);
-        }
-
-        return attributes;
-    } */
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -354,29 +380,12 @@ public class CreateEventActivity extends AppCompatActivity {
             }
 
             TextView attribute_name = (TextView) attributeView.findViewById(R.id.event_attribute);
-            CheckBox attributeCheck = (CheckBox) attributeView.findViewById(R.id.attribute_check);
+            //CheckBox attributeCheck = (CheckBox) attributeView.findViewById(R.id.attribute_check);
 
             attribute_name.setText(attribute);
 
             return attributeView;
         }
-    }
-
-    public boolean[] initializeCheck(int length) {
-        ArrayList<Boolean> boolArrayList = new ArrayList<Boolean>();
-        boolean temp = false;
-
-        for (int i = 0; i < length; i++) {
-            boolArrayList.add(temp);
-        }
-
-        boolean boolArray[] = new boolean[length];
-
-        for (int i = 0; i < length; i++) {
-            boolArray[i] = temp;
-        }
-
-        return boolArray;
     }
 
     private void initializeUser() {
@@ -386,7 +395,7 @@ public class CreateEventActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(UserProfile.class);
-                hostOrg = user.getOrganizer();
+                hostOrg = user.getUid();
             }
 
             @Override
@@ -395,7 +404,6 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         };
         currentUserRef.addValueEventListener(userListener);
-
     }
 
 }

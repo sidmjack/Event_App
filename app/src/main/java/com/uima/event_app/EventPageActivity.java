@@ -17,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -79,10 +80,19 @@ public class EventPageActivity extends Activity {
         eventStartTime.setText(currEvents.get(0).getStart_time());
         eventEndTime.setText(currEvents.get(0).getEnd_time());
         //eventTypes.setText(currEvents.get(0).getDetails());
-        List<String> tags = currEvents.get(0).getTags();
-        ArrayAdapter<String> tagAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tags);
-        tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        eventTypes.setAdapter(tagAdapter);
-
+        HashMap<String, String> tags = currEvents.get(0).getTags();
+        //ArrayList<String> eventTags = currEvents.get(0).getEventTags();
+        //ArrayList<String> eventTags = getEventTags(tags);
+       // ArrayAdapter<String> tagAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, eventTags);
+        // tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //eventTypes.setAdapter(tagAdapter);
     }
+
+    /*public ArrayList<String> getEventTags(HashMap<String, String> tags) {
+        ArrayList<String> eventTags = new ArrayList<>();
+        for (String key : tags.keySet()) {
+            eventTags.add(tags.get(key));
+        }
+        return eventTags;
+    }*/
 }

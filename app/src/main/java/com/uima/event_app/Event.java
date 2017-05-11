@@ -1,5 +1,7 @@
 package com.uima.event_app;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -13,12 +15,12 @@ public class Event {
     private String details;
     private boolean needVolunteers;
     private String imgId;
-    private List<String> tags;
+    private HashMap<String, String> tags; // Firebase Key, Attribute Name
     private String start_time;
     private String end_time;
     private String date;
     private String type;
-    private String latutude;
+    private String latitude;
     private String longitude;
 
     public Event() {
@@ -30,11 +32,11 @@ public class Event {
         this.imgId = "";
         this.type = null;
         this.tags = null;
-        this.latutude = "0";
+        this.latitude = "0";
         this.longitude = "0";
     }
 
-    public Event(String id, String name, String hostOrg, String location, String details, boolean needVolunteers, String imgId, String type, List<String> tags, String start_time, String end_time, String date, String lat, String log) {
+    public Event(String id, String name, String hostOrg, String location, String details, boolean needVolunteers, String imgId, String type, HashMap<String, String> tags, String start_time, String end_time, String date, String lat, String log) {
         this.id = id;
         this.name = name;
         this.hostOrg = hostOrg;
@@ -48,7 +50,7 @@ public class Event {
         this.start_time = start_time;
         this.imgId = imgId;
         this.date = date;
-        this.latutude = lat;
+        this.latitude = lat;
         this.longitude = log;
 
     }
@@ -62,11 +64,18 @@ public class Event {
     public boolean getNeedVolunteers() { return needVolunteers; }
     public String getImgId() { return imgId; }
     public String getType() { return type; }
-    public List<String> getTags() { return tags; }
+    public HashMap<String, String> getTags() { return tags; }
+    /*public ArrayList<String> getEventTags() {
+        ArrayList<String> eventTags = new ArrayList<>();
+        for (String key : this.tags.keySet()) {
+            eventTags.add(this.tags.get(key));
+        }
+        return eventTags;
+    }*/
     public String getDate() {return date; }
     public String getStart_time() {return start_time;}
     public String getEnd_time() {return end_time;}
-    public String getLatutude() {return latutude;}
+    public String getLatitude() {return latitude;}
     public String getLongitude() {return longitude;}
 
 

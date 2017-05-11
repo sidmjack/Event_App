@@ -49,7 +49,6 @@ public class UserProfile {
         this.isOrganizer = isOrganizer;
         this.organizer = organizer;
         this.favorites = new HashMap<>();
-        //this.favorites.put("0","key");
     }
 
     /** Get methods */
