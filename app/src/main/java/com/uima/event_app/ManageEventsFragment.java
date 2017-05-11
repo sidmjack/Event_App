@@ -4,6 +4,7 @@ package com.uima.event_app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -196,9 +197,14 @@ public class ManageEventsFragment extends Fragment {
                 return true;
             }
             case MENU_ITEM_OPEN: {
-                Intent intent = new Intent(getActivity(), EventPageActivity.class);
-                intent.putExtra("key", event.getId());
-                startActivity(intent);
+                Bundle data = new Bundle();
+                data.putString("eventID", event.getId());
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                Fragment currentFragment = new EventPageFragment();
+                currentFragment.setArguments(data);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, currentFragment)
+                        .commit();
             }
         }
         return false;
