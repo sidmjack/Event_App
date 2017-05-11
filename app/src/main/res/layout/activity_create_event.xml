@@ -30,6 +30,12 @@
         android:inputType="text"
         android:hint="@string/event_location"/>
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/create_event_details"
+        android:hint="@string/event_details"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -37,24 +43,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Enter Latitude and Logitude of Event: "
-            android:textSize="15dp"/>
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/event_latitude"
             android:hint="LAT"
             android:paddingLeft="10dp"
-            android:inputType="numberDecimal|numberSigned"/>
+            android:inputType="numberDecimal|numberSigned"
+            android:visibility="invisible"/>
 
-        <EditText
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/event_longitude"
             android:hint="LOG"
             android:paddingLeft="10dp"
-            android:inputType="numberDecimal|numberSigned"/>
+            android:inputType="numberDecimal|numberSigned"
+            android:visibility="invisible"/>
     </LinearLayout>
 
     <DatePicker
@@ -62,12 +64,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/event_date">
     </DatePicker>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/create_event_details"
-        android:hint="@string/event_details"/>
 
     <TextView
         android:layout_width="wrap_content"

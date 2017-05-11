@@ -49,7 +49,7 @@ public class UserProfile {
         this.isOrganizer = isOrganizer;
         this.organizer = organizer;
         this.favorites = new HashMap<>();
-        //this.favorites.put("0","key");
+        this.favorites.put("fake event", "fake event");
     }
 
     /** Get methods */
