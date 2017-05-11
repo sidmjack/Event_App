@@ -1,6 +1,7 @@
 package com.uima.event_app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,6 +41,7 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
     private DatabaseReference myRef;
     private FirebaseAuth mAuth;
     int count = 0;
+    private ArrayList<String> keys = new ArrayList<String>();
 
     public MyEventBoardFragment() {
         // Required empty public constructor
@@ -66,6 +70,19 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
         rootView = inflater.inflate(R.layout.fragment_my_event_board, container, false);
         eventBoardListView = (ListView) rootView.findViewById(R.id.event_board_list_view);
         populateEventBoardList();
+
+        eventBoardListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println("in onClickListener");
+                Intent intent = new Intent(getActivity(), EventPageActivity.class);
+                Event selectEvent = (Event) eventBoardListView.getItemAtPosition(position);
+                String currKey = selectEvent.getId();
+                intent.putExtra("key", currKey);
+                startActivity(intent);
+            }
+        });
+
         return rootView;
     }
 
@@ -131,6 +148,8 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
                         }
                     }
                 }
+                ebAdapter = new EventBoardAdapter(getActivity(), R.layout.event_board_row, favoritesList);
+                eventBoardListView.setAdapter(ebAdapter);
             }
 
             @Override
@@ -138,9 +157,6 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
 
             }
         });
-
-        ebAdapter = new EventBoardAdapter(getActivity(), R.layout.event_board_row, favoritesList);
-        eventBoardListView.setAdapter(ebAdapter);
     }
 
     public void favEventCounterReset() {

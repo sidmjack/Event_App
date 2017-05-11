@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,7 +31,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ManageEventsFragment extends ListFragment {
+public class ManageEventsFragment extends Fragment {
     protected static ManageEventsAdapter adapter;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
@@ -40,10 +41,12 @@ public class ManageEventsFragment extends ListFragment {
     private ListView myEventsView;
 
     private final List<Event> myEvents = new ArrayList<Event>();
+    private ArrayList<String> keys = new ArrayList<String>();
 
     public static final int MENU_ITEM_DUPLICATE = Menu.FIRST;
     public static final int MENU_ITEM_DELETE = Menu.FIRST + 1;
     public static final int MENU_ITEM_EDIT = Menu.FIRST + 2;
+    public static final int MENU_ITEM_OPEN = Menu.FIRST + 3;
 
     public ManageEventsFragment() {
         // Required empty public constructor
@@ -65,23 +68,16 @@ public class ManageEventsFragment extends ListFragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_manage_events, container, false);
 
-        myEventsView = (ListView) rootView.findViewById(R.id.list);
+        myEventsView = (ListView) rootView.findViewById(R.id.listManageEvents);
 
         myEventsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println("I was clicked");
                 Event selectedEvent = (Event) myEventsView.getItemAtPosition(position);
-
-                //EventPageFragment eventPageFragment = new EventPageFragment();
-                ManageEventsFragment manageEventFragment = new ManageEventsFragment();
-
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        //.replace(R.id.content_frame, eventPageFragment)
-                        .replace(R.id.content_frame, manageEventFragment)
-                        .addToBackStack(null)
-                        .commit();
-                String eventName = selectedEvent.getName();
-                getActivity().setTitle(eventName);
+                Intent intent = new Intent(getActivity(), EventPageActivity.class);
+                intent.putExtra("key", selectedEvent.getId());
+                startActivity(intent);
             }
         });
 
@@ -130,12 +126,12 @@ public class ManageEventsFragment extends ListFragment {
                 myEvents.clear();
                 for (DataSnapshot child : children) {
                     Event value = child.getValue(Event.class);
-                    if (value.getHostOrg().equals(user.getOrganizer())) {
+                    if (value.getHostOrg().equals(user.getUid())) {
                         myEvents.add(value);
                     }
                 }
                 adapter = new ManageEventsAdapter(getActivity(), R.layout.event_item, myEvents);
-                setListAdapter(adapter);
+                myEventsView.setAdapter(adapter);
             }
 
             @Override
@@ -153,6 +149,7 @@ public class ManageEventsFragment extends ListFragment {
         menu.add(0, MENU_ITEM_DUPLICATE, 0, R.string.menu_duplicate);
         menu.add(0, MENU_ITEM_DELETE, 0, R.string.menu_delete);
         menu.add(0, MENU_ITEM_EDIT, 0, R.string.menu_edit);
+        menu.add(0, MENU_ITEM_OPEN, 0, "open");
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.context_menu, menu);
@@ -197,6 +194,11 @@ public class ManageEventsFragment extends ListFragment {
                 startActivity(intent);
 
                 return true;
+            }
+            case MENU_ITEM_OPEN: {
+                Intent intent = new Intent(getActivity(), EventPageActivity.class);
+                intent.putExtra("key", event.getId());
+                startActivity(intent);
             }
         }
         return false;
