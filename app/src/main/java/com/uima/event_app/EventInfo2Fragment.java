@@ -62,13 +62,28 @@ public class EventInfo2Fragment extends Fragment {
         return f;
     }
 
+    /**
+     *  Populate data for this fragment.
+     *
+     */
     private void populateData() {
         myRef.child("events").child(eventID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Event thisEvent = dataSnapshot.getValue(Event.class);
-                hostOrg.setText(thisEvent.getHostOrg());
                 details.setText(thisEvent.getDetails());
+                myRef.child("users").child(thisEvent.getHostOrg()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        UserProfile thisUser = dataSnapshot.getValue(UserProfile.class);
+                        hostOrg.setText(thisUser.getOrganizer());
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
 
             @Override
