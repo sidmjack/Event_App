@@ -55,7 +55,27 @@ public class EventPageActivity extends Activity {
                     if (child.getKey().equals(eventkey)) {
                         Event temp = child.getValue(Event.class);
                         currEvents.add(temp);
+                        eventName = (TextView) findViewById(R.id.event_name);
+                        eventDesc = (TextView) findViewById(R.id.event_desc);
+                        eventLoc = (TextView) findViewById(R.id.event_location);
+                        eventDate = (TextView) findViewById(R.id.event_date);
+                        eventStartTime = (TextView) findViewById(R.id.event_start_time);
+                        eventEndTime = (TextView) findViewById(R.id.event_end_time);
+                        eventTypes = (Spinner) findViewById(R.id.event_attributes);
+
+                        eventName.setText(temp.getName());
+                        eventDesc.setText(temp.getDetails());
+                        eventLoc.setText(temp.getLocation());
+                        eventDate.setText(temp.getDate());
+                        eventStartTime.setText(temp.getStart_time());
+                        eventEndTime.setText(temp.getEnd_time());
+                        //eventTypes.setText(currEvents.get(0).getDetails());
+                        List<String> tags = temp.getTags();
+                        //ArrayAdapter<String> tagAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tags);
+                        //tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        //eventTypes.setAdapter(tagAdapter);
                     }
+
                 }
             }
 
@@ -65,34 +85,6 @@ public class EventPageActivity extends Activity {
             }
         });
 
-        eventName = (TextView) findViewById(R.id.event_name);
-        eventDesc = (TextView) findViewById(R.id.event_desc);
-        eventLoc = (TextView) findViewById(R.id.event_location);
-        eventDate = (TextView) findViewById(R.id.event_date);
-        eventStartTime = (TextView) findViewById(R.id.event_start_time);
-        eventEndTime = (TextView) findViewById(R.id.event_end_time);
-        eventTypes = (Spinner) findViewById(R.id.event_attributes);
 
-        eventName.setText(currEvents.get(0).getName());
-        eventDesc.setText(currEvents.get(0).getDetails());
-        eventLoc.setText(currEvents.get(0).getLocation());
-        eventDate.setText(currEvents.get(0).getDate());
-        eventStartTime.setText(currEvents.get(0).getStart_time());
-        eventEndTime.setText(currEvents.get(0).getEnd_time());
-        //eventTypes.setText(currEvents.get(0).getDetails());
-        HashMap<String, String> tags = currEvents.get(0).getTags();
-        //ArrayList<String> eventTags = currEvents.get(0).getEventTags();
-        //ArrayList<String> eventTags = getEventTags(tags);
-       // ArrayAdapter<String> tagAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, eventTags);
-        // tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //eventTypes.setAdapter(tagAdapter);
     }
-
-    /*public ArrayList<String> getEventTags(HashMap<String, String> tags) {
-        ArrayList<String> eventTags = new ArrayList<>();
-        for (String key : tags.keySet()) {
-            eventTags.add(tags.get(key));
-        }
-        return eventTags;
-    }*/
 }
