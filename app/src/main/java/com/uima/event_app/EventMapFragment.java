@@ -119,21 +119,38 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
         CameraPosition Baltimore = CameraPosition.builder().target(baltimore).zoom(12).bearing(0).tilt(45).build();
         mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(Baltimore));
 
-        mGoogleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+        ValueEventListener userListener = new ValueEventListener() {
             @Override
-            public void onMapLongClick(LatLng latLng) {
-                String lat = latLng.latitude + "";
-                String log = latLng.longitude + "";
-                System.out.println(lat + " " + log);
-                TextView latText = (TextView) getActivity().findViewById(R.id.event_latitude);
-                TextView logText = (TextView) getActivity().findViewById(R.id.event_longitude);
-                Intent intent = new Intent(getActivity(), CreateEventActivity.class);
-                intent.putExtra("duplicate", false);
-                intent.putExtra("latitude", lat);
-                intent.putExtra("longitude", log);
-                startActivity(intent);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(UserProfile.class);
+                if (user.getIsOrganizer()) {
+                    mGoogleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+                        @Override
+                        public void onMapLongClick(LatLng latLng) {
+                            String lat = latLng.latitude + "";
+                            String log = latLng.longitude + "";
+                            System.out.println(lat + " " + log);
+                            TextView latText = (TextView) getActivity().findViewById(R.id.event_latitude);
+                            TextView logText = (TextView) getActivity().findViewById(R.id.event_longitude);
+                            Intent intent = new Intent(getActivity(), CreateEventActivity.class);
+                            intent.putExtra("duplicate", false);
+                            intent.putExtra("latitude", lat);
+                            intent.putExtra("longitude", log);
+                            startActivity(intent);
+                        }
+                    });
+                }
+
             }
-        });
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        currentUserRef.addValueEventListener(userListener);
+
+
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
