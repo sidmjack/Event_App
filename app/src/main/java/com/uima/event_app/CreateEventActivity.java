@@ -214,9 +214,15 @@ public class CreateEventActivity extends AppCompatActivity {
 
         createButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                writeToEventDB();
-                Toast.makeText(getBaseContext(), "Event Created", Toast.LENGTH_SHORT).show();
-                finish();
+
+                if (allInfoFilled()) {
+                    writeToEventDB();
+                    Toast.makeText(getBaseContext(), "Event Created", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(getBaseContext(), "Fill out all event information", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -231,6 +237,14 @@ public class CreateEventActivity extends AppCompatActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    private boolean allInfoFilled() {
+        if (eventName.getText().toString().equals("") || eventLocation.getText().toString().equals("") || eventDetails.getText().toString().equals("")) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private void writeToEventDB() {

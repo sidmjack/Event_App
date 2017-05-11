@@ -70,7 +70,9 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:id="@+id/attending_button"
-            android:background="@drawable/star_button_effect"/>
+            android:background="@drawable/star_button_effect"
+            android:clickable="false"
+            android:focusable="false"/>
 
     </LinearLayout>
 
