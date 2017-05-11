@@ -32,7 +32,7 @@ import java.util.List;
  * Created by sidneyjackson on 4/18/17.
  */
 
-public class EventSelectFragment extends ListFragment {
+public class EventSelectFragment extends Fragment {
     private ListView eventSelectListView;
     protected static List<Event> eventItems;
     protected static EventSelectAdapter esAdapter;
@@ -87,11 +87,12 @@ public class EventSelectFragment extends ListFragment {
 
         rootView = inflater.inflate(R.layout.fragment_event_select, container, false);
 
-        eventSelectListView = (ListView) rootView.findViewById(R.id.list);
+        eventSelectListView = (ListView) rootView.findViewById(R.id.listEventSelect);
 
         eventSelectListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println("in onClickListener");
                 Intent intent = new Intent(getActivity(), EventPageActivity.class);
                 Event selectEvent = (Event) eventSelectListView.getItemAtPosition(position);
                 String currKey = keys.get(position);
@@ -121,7 +122,7 @@ public class EventSelectFragment extends ListFragment {
                     }
                 }
                 esAdapter = new EventSelectAdapter(getActivity(), R.layout.event_select_row, localEvents);
-                setListAdapter(esAdapter);
+                eventSelectListView.setAdapter(esAdapter);
             }
 
             @Override

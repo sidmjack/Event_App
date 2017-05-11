@@ -10,8 +10,8 @@ import java.util.Map;
 /**
  * UserProfile Class
  * Defines a user and serves a model when retrieving input from Firebase.
- *
  */
+
 public class UserProfile {
 
     /** Variables */
@@ -49,7 +49,6 @@ public class UserProfile {
         this.isOrganizer = isOrganizer;
         this.organizer = organizer;
         this.favorites = new HashMap<>();
-        this.favorites.put("fake event", "fake event");
     }
 
     /** Get methods */
@@ -68,11 +67,6 @@ public class UserProfile {
     public HashMap<String, String> getFavorites() {return favorites; }
 
 
-    /**
-     * Function that returns a map with all the values for the user.
-     *
-     * @return Map of values for Firebase.
-     */
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("uid", uid);

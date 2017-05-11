@@ -60,7 +60,7 @@ public class FirebaseAdapter {
         String start_time = event.getStart_time();
         String end_time = event.getEnd_time();
         String location = event.getLocation(); //MAKE SURE ALL THESE AREN"T NULL
-        String latitude = event.getLatutude();
+        String latitude = event.getLatitude();
         String longitude = event.getLongitude();
         orgID = event.getHostOrg();
         // Write a message to the database
@@ -104,8 +104,8 @@ public class FirebaseAdapter {
                     Event value = child.getValue(Event.class);
                     String lat = "39";
                     String log = "-76";
-                    if (value.getLatutude() != null) {
-                        lat = value.getLatutude();
+                    if (value.getLatitude() != null) {
+                        lat = value.getLatitude();
                     }
                     if (value.getLongitude() != null) {
                         lat = value.getLongitude();
