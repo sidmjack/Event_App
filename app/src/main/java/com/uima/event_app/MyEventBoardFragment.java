@@ -246,10 +246,12 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
 
     public class EventBoardAdapter extends ArrayAdapter<Event> {
         int res;
+        Context context;
 
         public EventBoardAdapter(Context ctx, int res, List<Event> items)  {
             super(ctx, res, items);
             this.res = res;
+            this.context = ctx;
         }
 
         @Override
@@ -258,15 +260,13 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
             Event ebEvent = getItem(position);
 
             if (convertView == null) {
-                eventBoardView = new LinearLayout(getContext());
+                eventBoardView = new LinearLayout(context);
                 String inflater = Context.LAYOUT_INFLATER_SERVICE;
-                LayoutInflater vi = (LayoutInflater) getContext().getSystemService(inflater);
+                LayoutInflater vi = (LayoutInflater) context.getSystemService(inflater);
                 vi.inflate(res, eventBoardView, true);
             } else {
                 eventBoardView = (LinearLayout) convertView;
             }
-
-            if (ebEvent == null) { return eventBoardView; };
 
             String eventName = ebEvent.getName();
 
