@@ -1,14 +1,20 @@
 package com.uima.event_app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.LruCache;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,6 +35,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.uima.event_app.LoginActivity.userID;
+
 public class MyEventBoardFragment extends Fragment implements View.OnClickListener{
 
     private ListView eventBoardListView;
@@ -38,6 +46,10 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
     private DatabaseReference myRef;
     private FirebaseAuth mAuth;
     int count = 0;
+
+    private FirebaseUser currentUser;
+
+    private static final int MENU_ITEM_DELETE = Menu.FIRST;
 
     public MyEventBoardFragment() {
         // Required empty public constructor
@@ -66,6 +78,7 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
         rootView = inflater.inflate(R.layout.fragment_my_event_board, container, false);
         eventBoardListView = (ListView) rootView.findViewById(R.id.event_board_list_view);
         populateEventBoardList();
+        registerForContextMenu(eventBoardListView);
         return rootView;
     }
 
@@ -77,7 +90,7 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
         myRef = database.getReference();
 
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        currentUser = mAuth.getCurrentUser();
         DatabaseReference currentUserRef = database.getReference().child("users").child(currentUser.getUid());
 
         /*Start of Event Listener for Users Favorited Events*/
@@ -156,6 +169,53 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
 
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        // Add menu items
+        menu.add(0, MENU_ITEM_DELETE, 0, R.string.menu_delete);
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        super.onContextItemSelected(item);
+
+        AdapterView.AdapterContextMenuInfo menuInfo;
+        menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int index = menuInfo.position; // position in array adapter
+        final Event event = (Event) eventBoardListView.getItemAtPosition(index);
+
+        switch (item.getItemId()) {
+            case MENU_ITEM_DELETE: {
+                final DatabaseReference favEventRef = database.getReference().child("users").child(currentUser.getUid()).child("favorites");
+                favEventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                        for (DataSnapshot child : children) {
+                            System.out.println("*************");
+                            String eventKey = child.getValue(String.class);
+                            if (eventKey.equals(event.getId())) {
+                                favEventRef.child(child.getKey()).removeValue();
+                                break;
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Do Nothing
+                    }
+                });
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     /* EVENT BOARD ADAPTER HERE ... */
     /* EVENT BOARD ADAPTER HERE ... */
@@ -219,5 +279,4 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
             return eventBoardView;
         }
     }
-
 }

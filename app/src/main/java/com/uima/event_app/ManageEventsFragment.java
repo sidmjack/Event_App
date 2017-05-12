@@ -41,9 +41,9 @@ public class ManageEventsFragment extends ListFragment {
 
     private final List<Event> myEvents = new ArrayList<Event>();
 
-    public static final int MENU_ITEM_DUPLICATE = Menu.FIRST;
-    public static final int MENU_ITEM_DELETE = Menu.FIRST + 1;
-    public static final int MENU_ITEM_EDIT = Menu.FIRST + 2;
+    private static final int MENU_ITEM_DUPLICATE = Menu.FIRST;
+    private static final int MENU_ITEM_DELETE = Menu.FIRST + 1;
+    private static final int MENU_ITEM_EDIT = Menu.FIRST + 2;
 
     public ManageEventsFragment() {
         // Required empty public constructor
@@ -130,7 +130,7 @@ public class ManageEventsFragment extends ListFragment {
                 myEvents.clear();
                 for (DataSnapshot child : children) {
                     Event value = child.getValue(Event.class);
-                    if (value.getHostOrg().equals(user.getOrganizer())) {
+                    if (value.getHostOrg().equals(user.getUid())) {
                         myEvents.add(value);
                     }
                 }
@@ -201,6 +201,4 @@ public class ManageEventsFragment extends ListFragment {
         }
         return false;
     }
-
-
 }
