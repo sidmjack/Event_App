@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity
                 } else {
                     manageEventsItem.setVisible(true);
                 }
-
+            /*
                 try {
                     String imgId = user.getImagePath();
                     if (!imgId.equals(null)) {
@@ -120,6 +120,7 @@ public class MainActivity extends AppCompatActivity
                 } catch (IllegalArgumentException ex) {
                     System.out.println("Please select and Image in from a profile");
                 }
+              */
             }
 
             @Override
