@@ -178,6 +178,7 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
                     newMarkerOptions.position(itemp);
                     newMarkerOptions.title(value.getName());
                     Marker marker = mGoogleMap.addMarker(newMarkerOptions);
+                    //marker.showInfoWindow();
                     markerEventMap.put(marker.getId(), value);
 
                 }
