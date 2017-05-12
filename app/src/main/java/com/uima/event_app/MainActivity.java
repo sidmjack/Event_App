@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity
 
                 try {
                     String imgId = user.getImagePath();
-                    if (!imgId.equals(null)) {
+                    if (imgId != null) {
                         final ImageView navHeader = (ImageView) headerView.findViewById(R.id.header_imageView);
                         FirebaseStorage storage = FirebaseStorage.getInstance();
                         StorageReference sRef = storage.getReference();

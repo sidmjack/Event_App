@@ -116,14 +116,16 @@ public class ProfileActivity extends AppCompatActivity {
                 nameTextView.setText(user.getFirstname());
                 emailTextView.setText(user.getEmail());
                 zipcodeTextView.setText(user.getZipcode());
-                FirebaseStorage storage = FirebaseStorage.getInstance();
-                StorageReference sRef = storage.getReference();
-                sRef.child(user.getImagePath()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Picasso.with(ProfileActivity.this).load(uri).fit().centerCrop().into(profileImage);
-                    }
-                });
+                if (user.getImagePath() != null) {
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    StorageReference sRef = storage.getReference();
+                    sRef.child(user.getImagePath()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Picasso.with(ProfileActivity.this).load(uri).fit().centerCrop().into(profileImage);
+                        }
+                    });
+                }
 
             }
 
