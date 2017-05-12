@@ -8,14 +8,14 @@
     <RelativeLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/transparent_white">
 
         <ImageView
             android:layout_width="match_parent"
             android:src="@drawable/event_board2"
             android:id="@+id/top_event_board_header"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"/>
 

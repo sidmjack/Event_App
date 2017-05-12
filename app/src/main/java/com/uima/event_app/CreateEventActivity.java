@@ -76,7 +76,7 @@ public class CreateEventActivity extends AppCompatActivity {
     // Needed for Image Storage in Firebase Storage
     public StorageReference mStorage;
     public Uri uri;
-    String imgReference;
+    String imgReference = "";
 
     protected ListView attributeListView;
     protected static ArrayList<String> attributeItems = new ArrayList<>();
@@ -89,6 +89,10 @@ public class CreateEventActivity extends AppCompatActivity {
     protected String clickType;
 
     private GoogleApiClient client;
+
+    // Integrity Error Type
+    int ERROR_TYPE = -1;
+    String[] ErrorMessage = {"Enter Event Name", "Enter Event Location", "Enter Event Details", "Double Check Event Times", "Include an Event Image"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +115,8 @@ public class CreateEventActivity extends AppCompatActivity {
         eventDate = (DatePicker) findViewById(R.id.event_date);
         eventStartTime = (TimePicker) findViewById(R.id.event_start_time);
         eventEndTime = (TimePicker) findViewById(R.id.event_end_time);
+        int temp = eventEndTime.getCurrentHour()+1;
+        eventEndTime.setCurrentHour(temp);
         eventLat = (TextView) findViewById(R.id.event_latitude);
         eventLog = (TextView) findViewById(R.id.event_longitude);
         eventLat.setText(intent.getStringExtra("latitude"));
@@ -175,20 +181,12 @@ public class CreateEventActivity extends AppCompatActivity {
         final String[] event_attributes = getResources().getStringArray(R.array.event_attributes);
         final boolean[] checkedItems = new boolean[event_attributes.length];
 
-        /*for(int i = 0; i < event_attributes.length; i++) {
-            if(checkedItems[i]) {
-                attributeItems.add(event_attributes[i]);
-                System.out.println("Event Attributes" + event_attributes[i] + "\n");
-            }
-        }*/
-
         builder.setMultiChoiceItems(event_attributes, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                 if (isChecked) {
                     // Add Attribute Item!
                     attributeItems.add(event_attributes[which]);
-                    //System.out.println("Number Attribute:" + event_attributes[which]);
                 } else {
                     // Remove Attribute Item!
                     attributeItems.remove(event_attributes[which]);
@@ -230,12 +228,13 @@ public class CreateEventActivity extends AppCompatActivity {
         createButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
+                // Integrity Check Here!
                 if (allInfoFilled()) {
                     writeToEventDB();
                     Toast.makeText(getBaseContext(), "Event Created", Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
-                    Toast.makeText(getBaseContext(), "Fill out all event information", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getBaseContext(), "Fill out all event information", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -248,14 +247,29 @@ public class CreateEventActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     private boolean allInfoFilled() {
-        if (eventName.getText().toString().equals("") || eventLocation.getText().toString().equals("") || eventDetails.getText().toString().equals("")) {
+        if (eventName.getText().toString().equals("")) {
+            ERROR_TYPE = 0; // Check if name is entered.
+            Toast.makeText(getBaseContext(), ErrorMessage[ERROR_TYPE], Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (eventLocation.getText().toString().equals("")) {
+            ERROR_TYPE = 1; // Check if event location is not typed.
+            Toast.makeText(getBaseContext(), ErrorMessage[ERROR_TYPE], Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (eventDetails.getText().toString().equals("")) {
+            ERROR_TYPE = 2; // Check if event details are entered.
+            Toast.makeText(getBaseContext(), ErrorMessage[ERROR_TYPE], Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (compareEventTimes() == false) {
+            ERROR_TYPE = 3; // Double check your event times.
+            Toast.makeText(getBaseContext(), ErrorMessage[ERROR_TYPE], Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (imgReference.equals("")) {
+            ERROR_TYPE = 4; // Image not included.
+            Toast.makeText(getBaseContext(), ErrorMessage[ERROR_TYPE], Toast.LENGTH_SHORT).show();
             return false;
         } else {
             return true;
@@ -272,20 +286,12 @@ public class CreateEventActivity extends AppCompatActivity {
         String event_date = eventDate.getMonth() + "/" + eventDate.getDayOfMonth() + "/" + eventDate.getYear();
         HashMap<String, String> tags = new HashMap<>();
         Event e = new Event(myKey, eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, tags, start_time, end_time, event_date, eventLat.getText().toString(), eventLog.getText().toString());
-        // Write a message to the database
         myRef.setValue(e);
         populateAttributeList(myKey);
     }
 
     // Working Here!
     public void populateAttributeList(String key) {
-
-       /*String[] attribute_name = getResources().getStringArray(R.array.event_attributes);
-       ArrayList<String> attributes = new ArrayList<>();
-
-       for (String atr_name : attribute_name) {
-           attributes.add(atr_name);
-       }*/
 
         final DatabaseReference myAtrRef = database.getReference().child("events").child(key).child("tags");
 
@@ -399,7 +405,6 @@ public class CreateEventActivity extends AppCompatActivity {
             }
 
             TextView attribute_name = (TextView) attributeView.findViewById(R.id.event_attribute);
-            //CheckBox attributeCheck = (CheckBox) attributeView.findViewById(R.id.attribute_check);
 
             attribute_name.setText(attribute);
 
@@ -424,5 +429,20 @@ public class CreateEventActivity extends AppCompatActivity {
         };
         currentUserRef.addValueEventListener(userListener);
     }
+
+    // Returns number of hours and minutes (as decimals).
+    public boolean compareEventTimes() {
+        double start = eventStartTime.getCurrentHour() + ((eventStartTime.getCurrentMinute())/60.0);
+        double end = eventEndTime.getCurrentHour() + ((eventEndTime.getCurrentMinute())/60.0);
+        double duration = end-start;
+        if (duration <= 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+
 
 }

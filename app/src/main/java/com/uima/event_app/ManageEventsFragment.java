@@ -130,7 +130,7 @@ public class ManageEventsFragment extends ListFragment {
                 myEvents.clear();
                 for (DataSnapshot child : children) {
                     Event value = child.getValue(Event.class);
-                    if (value.getHostOrg().equals(user.getOrganizer())) {
+                    if (value.getHostOrg().equals(user.getUid())) {
                         myEvents.add(value);
                     }
                 }

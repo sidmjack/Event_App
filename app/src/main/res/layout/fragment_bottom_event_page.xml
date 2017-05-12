@@ -19,7 +19,7 @@
         android:gravity="center"
         android:id="@+id/mRadioGroup"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="15dp"
         android:padding="10dp">
 
         <RadioButton
