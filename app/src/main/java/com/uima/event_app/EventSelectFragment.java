@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -92,13 +93,15 @@ public class EventSelectFragment extends Fragment {
         eventSelectListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("in onClickListener");
-                Intent intent = new Intent(getActivity(), EventPageActivity.class);
                 Event selectEvent = (Event) eventSelectListView.getItemAtPosition(position);
-                String currKey = keys.get(position);
-                intent.putExtra("key", currKey);
-                Toast.makeText(getActivity(), "I'm Clickable!", Toast.LENGTH_SHORT).show();
-                startActivity(intent);
+                Bundle data = new Bundle();
+                data.putString("eventID", selectEvent.getId());
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                Fragment currentFragment = new EventPageFragment();
+                currentFragment.setArguments(data);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, currentFragment)
+                        .commit();
             }
         });
 

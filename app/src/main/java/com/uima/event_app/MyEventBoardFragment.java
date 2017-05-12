@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -74,12 +75,15 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
         eventBoardListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("in onClickListener");
-                Intent intent = new Intent(getActivity(), EventPageActivity.class);
                 Event selectEvent = (Event) eventBoardListView.getItemAtPosition(position);
-                String currKey = selectEvent.getId();
-                intent.putExtra("key", currKey);
-                startActivity(intent);
+                Bundle data = new Bundle();
+                data.putString("eventID", selectEvent.getId());
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                Fragment currentFragment = new EventPageFragment();
+                currentFragment.setArguments(data);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, currentFragment)
+                        .commit();
             }
         });
 
