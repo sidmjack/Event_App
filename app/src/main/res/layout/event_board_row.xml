@@ -108,14 +108,15 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="250dp"
             android:id="@+id/event_board_image"/>
 
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/white">
 
         <TextView
             android:layout_width="match_parent"
