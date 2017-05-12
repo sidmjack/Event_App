@@ -41,7 +41,6 @@ public class ManageEventsFragment extends Fragment {
     private ListView myEventsView;
 
     private final List<Event> myEvents = new ArrayList<Event>();
-    private ArrayList<String> keys = new ArrayList<String>();
 
     public static final int MENU_ITEM_OPEN = Menu.FIRST;
     public static final int MENU_ITEM_DELETE = Menu.FIRST + 1;
@@ -61,6 +60,7 @@ public class ManageEventsFragment extends Fragment {
 
         initializeUser();
         this.populateList();
+
     }
 
     @Override
@@ -132,6 +132,10 @@ public class ManageEventsFragment extends Fragment {
                 }
                 adapter = new ManageEventsAdapter(getActivity(), R.layout.event_item, myEvents);
                 myEventsView.setAdapter(adapter);
+
+                if (myEvents.size() == 0) {
+                    Toast.makeText(getContext(), "Create Events by long clicking the Map in the location of the event", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
