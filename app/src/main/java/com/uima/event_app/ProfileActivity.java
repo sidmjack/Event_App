@@ -106,9 +106,3 @@ public class ProfileActivity extends AppCompatActivity {
         currentUserRef.addValueEventListener(userListener);
     }
 }
-
-/*  Intent intent = new Intent(this, HomeActivity.class);
-    intent.putExtra("finish", true);
-    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
-    startActivity(intent);
-    finish();*/

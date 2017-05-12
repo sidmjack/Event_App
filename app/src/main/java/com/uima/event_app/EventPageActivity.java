@@ -71,6 +71,7 @@ public class EventPageActivity extends Activity {
                         eventEndTime.setText(temp.getEnd_time());
                         //eventTypes.setText(currEvents.get(0).getDetails());
                         //List<String> tags = temp.getTags();
+                        HashMap<String, String> tags = temp.getTags();
                         //ArrayAdapter<String> tagAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tags);
                         //tagAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         //eventTypes.setAdapter(tagAdapter);

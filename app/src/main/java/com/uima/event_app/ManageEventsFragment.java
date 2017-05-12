@@ -4,6 +4,7 @@ package com.uima.event_app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,7 +32,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ManageEventsFragment extends ListFragment {
+public class ManageEventsFragment extends Fragment {
     protected static ManageEventsAdapter adapter;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
@@ -41,9 +43,10 @@ public class ManageEventsFragment extends ListFragment {
 
     private final List<Event> myEvents = new ArrayList<Event>();
 
-    public static final int MENU_ITEM_DUPLICATE = Menu.FIRST;
+    public static final int MENU_ITEM_OPEN = Menu.FIRST;
     public static final int MENU_ITEM_DELETE = Menu.FIRST + 1;
     public static final int MENU_ITEM_EDIT = Menu.FIRST + 2;
+    public static final int MENU_ITEM_DUPLICATE = Menu.FIRST + 3;
 
     public ManageEventsFragment() {
         // Required empty public constructor
@@ -58,6 +61,7 @@ public class ManageEventsFragment extends ListFragment {
 
         initializeUser();
         this.populateList();
+
     }
 
     @Override
@@ -65,23 +69,16 @@ public class ManageEventsFragment extends ListFragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_manage_events, container, false);
 
-        myEventsView = (ListView) rootView.findViewById(R.id.list);
+        myEventsView = (ListView) rootView.findViewById(R.id.listManageEvents);
 
         myEventsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println("I was clicked");
                 Event selectedEvent = (Event) myEventsView.getItemAtPosition(position);
-
-                //EventPageFragment eventPageFragment = new EventPageFragment();
-                ManageEventsFragment manageEventFragment = new ManageEventsFragment();
-
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        //.replace(R.id.content_frame, eventPageFragment)
-                        .replace(R.id.content_frame, manageEventFragment)
-                        .addToBackStack(null)
-                        .commit();
-                String eventName = selectedEvent.getName();
-                getActivity().setTitle(eventName);
+                Intent intent = new Intent(getActivity(), EventPageActivity.class);
+                intent.putExtra("key", selectedEvent.getId());
+                startActivity(intent);
             }
         });
 
@@ -135,7 +132,11 @@ public class ManageEventsFragment extends ListFragment {
                     }
                 }
                 adapter = new ManageEventsAdapter(getActivity(), R.layout.event_item, myEvents);
-                setListAdapter(adapter);
+                myEventsView.setAdapter(adapter);
+
+                if (myEvents.size() == 0) {
+                    Toast.makeText(getContext(), "Create Events by long clicking the Map in the location of the event", Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
@@ -150,9 +151,10 @@ public class ManageEventsFragment extends ListFragment {
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         // Add menu items
-        menu.add(0, MENU_ITEM_DUPLICATE, 0, R.string.menu_duplicate);
+        menu.add(0, MENU_ITEM_OPEN, 0, R.string.menu_open);
         menu.add(0, MENU_ITEM_DELETE, 0, R.string.menu_delete);
         menu.add(0, MENU_ITEM_EDIT, 0, R.string.menu_edit);
+        //menu.add(0, MENU_ITEM_DUPLICATE, 0, R.string.menu_duplicate);
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.context_menu, menu);
@@ -197,6 +199,16 @@ public class ManageEventsFragment extends ListFragment {
                 startActivity(intent);
 
                 return true;
+            }
+            case MENU_ITEM_OPEN: {
+                Bundle data = new Bundle();
+                data.putString("eventID", event.getId());
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                Fragment currentFragment = new EventPageFragment();
+                currentFragment.setArguments(data);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, currentFragment)
+                        .commit();
             }
         }
         return false;
