@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        View headerView = navigationView.getHeaderView(0);
+        final View headerView = navigationView.getHeaderView(0);
         navNameTextView = (TextView) headerView.findViewById(R.id.nav_head_name);
         navEmailTextView = (TextView) headerView.findViewById(R.id.nav_head_email);
 
@@ -103,11 +103,11 @@ public class MainActivity extends AppCompatActivity
                 } else {
                     manageEventsItem.setVisible(true);
                 }
-            /*
+
                 try {
                     String imgId = user.getImagePath();
                     if (!imgId.equals(null)) {
-                        final ImageView navHeader = (ImageView) findViewById(R.id.header_imageView);
+                        final ImageView navHeader = (ImageView) headerView.findViewById(R.id.header_imageView);
                         FirebaseStorage storage = FirebaseStorage.getInstance();
                         StorageReference sRef = storage.getReference();
                         sRef.child(user.getImagePath()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity
                 } catch (IllegalArgumentException ex) {
                     System.out.println("Please select and Image in from a profile");
                 }
-              */
+
             }
 
             @Override
