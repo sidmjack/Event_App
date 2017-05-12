@@ -126,7 +126,6 @@ public class ProfileActivity extends AppCompatActivity {
                         }
                     });
                 }
-
             }
 
             @Override
