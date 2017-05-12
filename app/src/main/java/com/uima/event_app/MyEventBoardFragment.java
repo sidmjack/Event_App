@@ -1,12 +1,9 @@
 package com.uima.event_app;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.util.LruCache;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,17 +19,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +42,16 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
     private ListView eventBoardListView;
     protected static EventBoardAdapter ebAdapter;
     protected View rootView;
+    private FirebaseStorage storage;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private FirebaseAuth mAuth;
     int count = 0;
-    private ArrayList<String> keys = new ArrayList<String>();
+    private ArrayList<String> keys = new ArrayList<>();
 
     private FirebaseUser currentUser;
+
+    private StorageReference storageRef;  //mStorageRef was previously used to transfer data.
 
     private static final int MENU_ITEM_DELETE = Menu.FIRST;
 
@@ -102,6 +105,9 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
     public void populateEventBoardList() {
         final ArrayList<Event> favoritesList = new ArrayList<>(); // List of favorited events.
         final ArrayList<String> favoritedEvents = new ArrayList<>(); // List of eventIds
+
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
 
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
@@ -213,11 +219,10 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Iterable<DataSnapshot> children = dataSnapshot.getChildren();
                         for (DataSnapshot child : children) {
-                            System.out.println("*************");
                             String eventKey = child.getValue(String.class);
                             if (eventKey.equals(event.getId())) {
                                 favEventRef.child(child.getKey()).removeValue();
-                                break;
+                                return;
                             }
                         }
                     }
@@ -231,7 +236,6 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
         }
         return false;
     }
-
 
     /* EVENT BOARD ADAPTER HERE ... */
     /* EVENT BOARD ADAPTER HERE ... */
@@ -262,6 +266,8 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
                 eventBoardView = (LinearLayout) convertView;
             }
 
+            if (ebEvent == null) { return eventBoardView; };
+
             String eventName = ebEvent.getName();
 
             // Simplified Event Board Row Filling:
@@ -270,7 +276,7 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
 
             TextView eventBoardName = (TextView) eventBoardView.findViewById(R.id.event_title);
 
-            final Button attendButton = (Button) eventBoardView.findViewById(R.id.attend_button);
+            /*final Button attendButton = (Button) eventBoardView.findViewById(R.id.attend_button);
             attendButton.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -283,14 +289,39 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
                         return true;
                     }
                 }
-            });
+            });*/
 
             TextView eventTime = (TextView) eventBoardView.findViewById(R.id.event_time);
             TextView eventNotification = (TextView) eventBoardView.findViewById(R.id.event_time_notification);
+            ImageView eventBoardImageView = (ImageView) eventBoardView.findViewById(R.id.event_board_image);
 
             eventBoardName.setText(eventName);
             eventTime.setText(event_time);
             eventNotification.setText(event_time_notification);
+
+            // Reference to an image file in Firebase Storage
+            StorageReference storageReference = storageRef.child(ebEvent.getImgId());
+            //myRef.child("users").child(currentUser.getUid());
+            /*final String orgImgUrl;
+
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    UserProfile user = dataSnapshot.getValue(UserProfile.class);
+                    orgImgUrl = user.getI
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // ...
+                }
+            });*/
+
+            // Load the image using Glide
+            Glide.with(getContext() /* context */)
+                    .using(new FirebaseImageLoader())
+                    .load(storageReference)
+                    .into(eventBoardImageView);
 
             return eventBoardView;
         }
