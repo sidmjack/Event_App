@@ -37,7 +37,8 @@ dependencies {
     compile 'com.google.firebase:firebase-storage:10.2.1'
     compile 'com.firebaseui:firebase-ui-storage:0.6.0'
     testCompile 'junit:junit:4.12'
-
+    // FirebaseUI Storage only
+    compile 'com.firebaseui:firebase-ui-storage:1.2.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

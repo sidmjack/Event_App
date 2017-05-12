@@ -114,6 +114,7 @@ public class EventSelectAdapter  extends ArrayAdapter<Event> {
                     DatabaseReference myRef = database.getReference();
                     DatabaseReference userRef = myRef.child("users");
                     userRef.child(userID).child("favorites").push().setValue(eventSelectedItem.getId());
+                    System.out.println("why she always so mad");
                     return true;
                 }
                 return true;

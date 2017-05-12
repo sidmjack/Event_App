@@ -1,34 +1,35 @@
 package com.uima.event_app;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.util.LruCache;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,11 +39,20 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
     private ListView eventBoardListView;
     protected static EventBoardAdapter ebAdapter;
     protected View rootView;
+    private FirebaseStorage storage;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private FirebaseAuth mAuth;
     int count = 0;
-    private ArrayList<String> keys = new ArrayList<String>();
+    private ArrayList<String> keys = new ArrayList<>();
+    private ValueEventListener valueEventListener;
+
+    private FirebaseUser currentUser;
+    private DatabaseReference currentUserRef;
+
+    private StorageReference storageRef;  //mStorageRef was previously used to transfer data.
+
+    private static final int MENU_ITEM_DELETE = Menu.FIRST;
 
     public MyEventBoardFragment() {
         // Required empty public constructor
@@ -56,12 +66,26 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
     @Override
     public void onStart() {
         super.onStart();
+        //populateEventBoardList();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         getActivity().setTitle("My Event Board");
+        //populateEventBoardList();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        currentUserRef.child("favorites").removeEventListener(valueEventListener);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        currentUserRef.child("favorites").removeEventListener(valueEventListener);
     }
 
     @Override
@@ -87,6 +111,7 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
             }
         });
 
+        registerForContextMenu(eventBoardListView);
         return rootView;
     }
 
@@ -94,16 +119,19 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
         final ArrayList<Event> favoritesList = new ArrayList<>(); // List of favorited events.
         final ArrayList<String> favoritedEvents = new ArrayList<>(); // List of eventIds
 
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
+
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
 
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        DatabaseReference currentUserRef = database.getReference().child("users").child(currentUser.getUid());
+        currentUser = mAuth.getCurrentUser();
+        currentUserRef = database.getReference().child("users").child(currentUser.getUid());
 
         /*Start of Event Listener for Users Favorited Events*/
 
-        currentUserRef.child("favorites").addValueEventListener(new ValueEventListener() {
+        valueEventListener = new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -160,7 +188,9 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
+
+        currentUserRef.child("favorites").addValueEventListener(valueEventListener);
     }
 
     public void favEventCounterReset() {
@@ -176,6 +206,51 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
 
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        // Add menu items
+        menu.add(0, MENU_ITEM_DELETE, 0, R.string.menu_delete);
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        super.onContextItemSelected(item);
+
+        AdapterView.AdapterContextMenuInfo menuInfo;
+        menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int index = menuInfo.position; // position in array adapter
+        final Event event = (Event) eventBoardListView.getItemAtPosition(index);
+
+        switch (item.getItemId()) {
+            case MENU_ITEM_DELETE: {
+                final DatabaseReference favEventRef = database.getReference().child("users").child(currentUser.getUid()).child("favorites");
+                favEventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                        for (DataSnapshot child : children) {
+                            String eventKey = child.getValue(String.class);
+                            if (eventKey.equals(event.getId())) {
+                                favEventRef.child(child.getKey()).removeValue();
+                                return;
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Do Nothing
+                    }
+                });
+                return true;
+            }
+        }
+        return false;
+    }
 
     /* EVENT BOARD ADAPTER HERE ... */
     /* EVENT BOARD ADAPTER HERE ... */
@@ -198,9 +273,9 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
             Event ebEvent = getItem(position);
 
             if (convertView == null) {
-                eventBoardView = new LinearLayout(getContext());
+                eventBoardView = new LinearLayout(getActivity());
                 String inflater = Context.LAYOUT_INFLATER_SERVICE;
-                LayoutInflater vi = (LayoutInflater) getContext().getSystemService(inflater);
+                LayoutInflater vi = (LayoutInflater) getActivity().getSystemService(inflater);
                 vi.inflate(res, eventBoardView, true);
             } else {
                 eventBoardView = (LinearLayout) convertView;
@@ -211,33 +286,47 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
             // Simplified Event Board Row Filling:
             String event_time = ebEvent.getDate() + " @ " + ebEvent.getStart_time();
             String event_time_notification = "Event: " + "Upcoming!";
+            String event_description = ebEvent.getDetails();
 
             TextView eventBoardName = (TextView) eventBoardView.findViewById(R.id.event_title);
-
-            final Button attendButton = (Button) eventBoardView.findViewById(R.id.attend_button);
-            attendButton.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-
-                    if (attendButton.isPressed()) {
-                        attendButton.setPressed(false);
-                        return true;
-                    } else {
-                        attendButton.setPressed(true);
-                        return true;
-                    }
-                }
-            });
-
             TextView eventTime = (TextView) eventBoardView.findViewById(R.id.event_time);
             TextView eventNotification = (TextView) eventBoardView.findViewById(R.id.event_time_notification);
+            TextView eventDescription = (TextView) eventBoardView.findViewById(R.id.event_board_description);
+            final ImageView eventBoardImageView = (ImageView) eventBoardView.findViewById(R.id.event_board_image);
 
             eventBoardName.setText(eventName);
             eventTime.setText(event_time);
             eventNotification.setText(event_time_notification);
+            eventDescription.setText(event_description);
+
+            // Reference to an image file in Firebase Storage
+            if (ebEvent.getImgId() != null && !ebEvent.getImgId().equals("")) {
+                storageRef.child(ebEvent.getImgId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.with(getContext()).load(uri).fit().centerCrop().into(eventBoardImageView);
+                    }
+                });
+            }
+
+
+            //myRef.child("users").child(currentUser.getUid());
+            /*final String orgImgUrl;
+
+            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    UserProfile user = dataSnapshot.getValue(UserProfile.class);
+                    orgImgUrl = user.getI
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // ...
+                }
+            });*/
 
             return eventBoardView;
         }
     }
-
 }

@@ -74,7 +74,6 @@ public class ManageEventsFragment extends Fragment {
         myEventsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("I was clicked");
                 Event selectedEvent = (Event) myEventsView.getItemAtPosition(position);
                 Intent intent = new Intent(getActivity(), EventPageActivity.class);
                 intent.putExtra("key", selectedEvent.getId());
@@ -213,6 +212,4 @@ public class ManageEventsFragment extends Fragment {
         }
         return false;
     }
-
-
 }
