@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.util.LruCache;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,8 +37,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.uima.event_app.LoginActivity.userID;
-
 public class MyEventBoardFragment extends Fragment implements View.OnClickListener{
 
     private ListView eventBoardListView;
@@ -46,6 +46,7 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
     private DatabaseReference myRef;
     private FirebaseAuth mAuth;
     int count = 0;
+    private ArrayList<String> keys = new ArrayList<String>();
 
     private FirebaseUser currentUser;
 
@@ -78,6 +79,22 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
         rootView = inflater.inflate(R.layout.fragment_my_event_board, container, false);
         eventBoardListView = (ListView) rootView.findViewById(R.id.event_board_list_view);
         populateEventBoardList();
+
+        eventBoardListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Event selectEvent = (Event) eventBoardListView.getItemAtPosition(position);
+                Bundle data = new Bundle();
+                data.putString("eventID", selectEvent.getId());
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                Fragment currentFragment = new EventPageFragment();
+                currentFragment.setArguments(data);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, currentFragment)
+                        .commit();
+            }
+        });
+
         registerForContextMenu(eventBoardListView);
         return rootView;
     }
@@ -144,6 +161,8 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
                         }
                     }
                 }
+                ebAdapter = new EventBoardAdapter(getActivity(), R.layout.event_board_row, favoritesList);
+                eventBoardListView.setAdapter(ebAdapter);
             }
 
             @Override
@@ -151,9 +170,6 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
 
             }
         });
-
-        ebAdapter = new EventBoardAdapter(getActivity(), R.layout.event_board_row, favoritesList);
-        eventBoardListView.setAdapter(ebAdapter);
     }
 
     public void favEventCounterReset() {

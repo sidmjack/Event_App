@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ManageEventsAdapter  extends ArrayAdapter<Event> {
     int res;
-    int imgID;
+    String imgID;
     String event_name;
     String event_date_time;
 
@@ -41,7 +41,7 @@ public class ManageEventsAdapter  extends ArrayAdapter<Event> {
             eventSelectListView = (LinearLayout) convertView;
         }
 
-        imgID = Integer.valueOf(eventSelectedItem.getImgId());
+        imgID = eventSelectedItem.getImgId();
         event_name = eventSelectedItem.getName();
         event_date_time = (eventSelectedItem.getLocation() + " at " + eventSelectedItem.getStart_time());
 
