@@ -45,10 +45,9 @@ public class ManageEventsFragment extends Fragment {
 
     private final List<Event> myEvents = new ArrayList<Event>();
 
-    public static final int MENU_ITEM_OPEN = Menu.FIRST;
-    public static final int MENU_ITEM_DELETE = Menu.FIRST + 1;
-    public static final int MENU_ITEM_EDIT = Menu.FIRST + 2;
-    public static final int MENU_ITEM_DUPLICATE = Menu.FIRST + 3;
+    public static final int MENU_ITEM_DELETE = Menu.FIRST + 1 ;
+    public static final int MENU_ITEM_EDIT = Menu.FIRST;
+    //public static final int MENU_ITEM_DUPLICATE = Menu.FIRST + 3;
 
     public ManageEventsFragment() {
         // Required empty public constructor
@@ -161,7 +160,7 @@ public class ManageEventsFragment extends Fragment {
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         // Add menu items
-        menu.add(0, MENU_ITEM_OPEN, 0, R.string.menu_open);
+        //menu.add(0, MENU_ITEM_OPEN, 0, R.string.menu_open);
         menu.add(0, MENU_ITEM_DELETE, 0, R.string.menu_delete);
         menu.add(0, MENU_ITEM_EDIT, 0, R.string.menu_edit);
         //menu.add(0, MENU_ITEM_DUPLICATE, 0, R.string.menu_duplicate);
@@ -180,7 +179,7 @@ public class ManageEventsFragment extends Fragment {
         Event event = myEvents.get(index);
 
         switch (item.getItemId()) {
-            case MENU_ITEM_DUPLICATE: {
+            /*case MENU_ITEM_DUPLICATE: {
                 Intent intent = new Intent(getActivity(), CreateEventActivity.class);
 
                 intent.putExtra("event name", event.getName());
@@ -192,7 +191,7 @@ public class ManageEventsFragment extends Fragment {
                 startActivity(intent);
 
                 return true;
-            }
+            }*/
             case MENU_ITEM_DELETE: {
                 myRef.child(event.getId()).removeValue();
                 return true;
@@ -210,16 +209,6 @@ public class ManageEventsFragment extends Fragment {
                 startActivity(intent);
 
                 return true;
-            }
-            case MENU_ITEM_OPEN: {
-                Bundle data = new Bundle();
-                data.putString("eventID", event.getId());
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                Fragment currentFragment = new EventPageFragment();
-                currentFragment.setArguments(data);
-                fragmentManager.beginTransaction()
-                        .replace(R.id.content_frame, currentFragment)
-                        .commit();
             }
         }
         return false;
