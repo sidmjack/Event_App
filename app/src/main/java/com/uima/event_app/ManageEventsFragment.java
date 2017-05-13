@@ -73,6 +73,21 @@ public class ManageEventsFragment extends Fragment {
 
         myEventsView = (ListView) rootView.findViewById(R.id.listManageEvents);
 
+        myEventsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Event selectEvent = (Event) myEventsView.getItemAtPosition(position);
+                Bundle data = new Bundle();
+                data.putString("eventID", selectEvent.getId());
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                Fragment currentFragment = new EventPageFragment();
+                currentFragment.setArguments(data);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, currentFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
         registerForContextMenu(myEventsView);
 
         return rootView;
