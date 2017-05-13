@@ -251,6 +251,7 @@ public class MyEventBoardFragment extends Fragment{
                 public void onClick(View view) {
                     Bundle data = new Bundle();
                     data.putString("eventID", ebEvent.getId());
+                    data.putString("eventTitle", ebEvent.getName());
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     Fragment currentFragment = new EventPageFragment();
                     currentFragment.setArguments(data);
