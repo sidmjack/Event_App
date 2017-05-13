@@ -38,7 +38,8 @@ public class EventSelectAdapter  extends ArrayAdapter<Event> {
     int res;
     String imgUrl;
     String event_name;
-    String event_date_time;
+    String event_info_1;
+    String event_info_2;
 
     private FirebaseDatabase database;
     private FirebaseAuth mAuth;
@@ -68,15 +69,18 @@ public class EventSelectAdapter  extends ArrayAdapter<Event> {
         imgUrl = eventSelectedItem.getImgId();
 
         event_name = eventSelectedItem.getName();
-        event_date_time = (eventSelectedItem.getLocation()+ " @ " + eventSelectedItem.getStartTimeString()); // Just Changed.
+        event_info_1 = (eventSelectedItem.getDateString2()); // Just Changed.
+        event_info_2 = (eventSelectedItem.getLocation()+ " @ " + eventSelectedItem.getStartTimeString());
 
         //ImageView eventSelectOrganizationLogo = (ImageView) eventSelectListView.findViewById(R.id.selected_event_organization_logo);
         TextView eventSelect_name = (TextView) eventSelectListView.findViewById(R.id.selected_event_name);
         TextView eventSelect_desc = (TextView) eventSelectListView.findViewById(R.id.selected_event_description);
+        TextView eventSelect_desc_2 = (TextView) eventSelectListView.findViewById(R.id.selected_event_description_2);
 
         //eventSelectOrganizationLogo.setImageResource(imgID);
         eventSelect_name.setText(event_name);
-        eventSelect_desc.setText(event_date_time);
+        eventSelect_desc.setText(event_info_1);
+        eventSelect_desc_2.setText(event_info_2);
 
         database = FirebaseDatabase.getInstance();
 

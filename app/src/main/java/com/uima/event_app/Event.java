@@ -2,6 +2,7 @@ package com.uima.event_app;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -112,6 +113,12 @@ public class Event {
         c.setTimeInMillis(start_time);
 
         return String.format("%d/%d/%d", c.get(Calendar.MONTH)+1, c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.YEAR));
+    }
+
+    public String getDateString2() {
+
+        Date d = new Date(this.start_time);
+        return String.format("(%tA) %tB %te, %tY", d, d, d, d);
     }
 
 }
