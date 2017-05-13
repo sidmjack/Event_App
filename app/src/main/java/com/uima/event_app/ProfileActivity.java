@@ -128,7 +128,7 @@ public class ProfileActivity extends AppCompatActivity {
                 nameTextView.setText(name);
                 emailTextView.setText(email);
                 zipcodeTextView.setText(zip);
-                if (user.getImagePath() != null) {
+                if (user.getImagePath() != null && !user.getImagePath().equals("")) {
                     FirebaseStorage storage = FirebaseStorage.getInstance();
                     StorageReference sRef = storage.getReference();
                     sRef.child(user.getImagePath()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {

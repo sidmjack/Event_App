@@ -20,7 +20,7 @@ When map is launched, Firebase retrieves the events and creates markers based on
 used a hashmap to store each marker ID to correspond to the event each marker represents.  When you tap a marker, you
 get sent to the event page for that event.  If you are an organizer and click anywhere else on the map, you get sent to
 create event.  If you are not an organizer, you cannot do that.
-4. The only way to create event is by clicking on the map, it is not an issue, just our design choice.
+4. The only way to create event is by long clicking on the map, it is not an issue, just our design choice.
 3. Discover Baltimore populates events in real time without delay.  Tapping an event will also send user to the event page.
 The user can favorite events, which creates a reference in Firebase for the user where the event's ID is stored in a "favorites"
 node under the user.  We reference this node to retrieve events when populating the user's event board.
@@ -34,3 +34,7 @@ top fragment will update through Firebase to have the image stored for that even
 
 Things that are still an issue to keep note of:
 1. On manage events, if you delete an event, any user that has that event favorited will crash when they look at their event board.
+
+If you would like to use an existing user (non-organizer account) you can log as Jane Doe with the email jdoe@jhu.edu and the 
+password "password". If you want to register as an existing organizer you can use the account Test Org with email test@org.com
+and the password "password". You can also create your own accounts and do whatever you want.
