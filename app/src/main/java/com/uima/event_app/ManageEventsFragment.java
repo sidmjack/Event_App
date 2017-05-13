@@ -26,6 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -74,7 +76,6 @@ public class ManageEventsFragment extends Fragment {
         myEventsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("I was clicked");
                 Event selectedEvent = (Event) myEventsView.getItemAtPosition(position);
                 Intent intent = new Intent(getActivity(), EventPageActivity.class);
                 intent.putExtra("key", selectedEvent.getId());
@@ -131,6 +132,7 @@ public class ManageEventsFragment extends Fragment {
                         myEvents.add(value);
                     }
                 }
+
                 adapter = new ManageEventsAdapter(getActivity(), R.layout.event_item, myEvents);
                 myEventsView.setAdapter(adapter);
 
@@ -213,6 +215,4 @@ public class ManageEventsFragment extends Fragment {
         }
         return false;
     }
-
-
 }

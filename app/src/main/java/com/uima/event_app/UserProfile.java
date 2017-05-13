@@ -20,13 +20,9 @@ public class UserProfile {
     private String username;
     private String zipcode;
     private String email;
-    private String website;
-    private String phoneNumber;
-    private String facebook;
-    private String instagram;
-    private String twitter;
     private Boolean isOrganizer;
     private String organizer;
+    private String imagePath;
     private HashMap<String, String> favorites;
     //HashMap<String, Boolean> userEventPreferences; //<Event_Attributes, Event Preferences from Settings>
 
@@ -41,14 +37,10 @@ public class UserProfile {
         this.username = username;
         this.zipcode = zipcode;
         this.email = email;
-        this.website = "";
-        this.phoneNumber = "";
-        this.facebook = "";
-        this.instagram = "";
-        this.twitter = "";
         this.isOrganizer = isOrganizer;
         this.organizer = organizer;
         this.favorites = new HashMap<>();
+        this.imagePath = "";
     }
 
     /** Get methods */
@@ -57,13 +49,9 @@ public class UserProfile {
     public String getUsername() { return username; }
     public String getZipcode() { return zipcode; }
     public String getEmail() { return email; }
-    public String getWebsite() { return website; }
-    public String getPhoneNumber() { return phoneNumber; }
-    public String getFacebook() { return facebook; }
-    public String getInstagram() { return instagram; }
-    public String getTwitter() { return twitter; }
     public Boolean getIsOrganizer() { return isOrganizer; }
     public String getOrganizer() { return organizer; }
+    public String getImagePath() { return imagePath; }
     public HashMap<String, String> getFavorites() {return favorites; }
 
 
@@ -74,13 +62,10 @@ public class UserProfile {
         result.put("username", username);
         result.put("zipcode", zipcode);
         result.put("email", email);
-        result.put("website", website);
-        result.put("facebook", facebook);
-        result.put("instagram", instagram);
-        result.put("twitter", twitter);
         result.put("isOrganizer", isOrganizer);
         result.put("organizer", organizer);
         result.put("favorites", favorites);
+        result.put("imagePath", imagePath);
         return result;
     }
 }

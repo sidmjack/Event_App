@@ -3,7 +3,7 @@ package com.uima.event_app;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,8 +16,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +27,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -55,7 +60,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        boolean finish = getIntent().getBooleanExtra("finish", false);
+        final boolean finish = getIntent().getBooleanExtra("finish", false);
         if (finish) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
@@ -80,7 +85,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        View headerView = navigationView.getHeaderView(0);
+        final View headerView = navigationView.getHeaderView(0);
         navNameTextView = (TextView) headerView.findViewById(R.id.nav_head_name);
         navEmailTextView = (TextView) headerView.findViewById(R.id.nav_head_email);
 
@@ -99,6 +104,24 @@ public class MainActivity extends AppCompatActivity
                 } else {
                     manageEventsItem.setVisible(true);
                 }
+
+                try {
+                    String imgId = user.getImagePath();
+                    if (imgId != null) {
+                        final ImageView navHeader = (ImageView) headerView.findViewById(R.id.header_imageView);
+                        FirebaseStorage storage = FirebaseStorage.getInstance();
+                        StorageReference sRef = storage.getReference();
+                        sRef.child(user.getImagePath()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Picasso.with(MainActivity.this).load(uri).fit().centerCrop().into(navHeader);
+                            }
+                        });
+                    }
+                } catch (IllegalArgumentException ex) {
+                    System.out.println("Please select and Image in from a profile");
+                }
+
             }
 
             @Override

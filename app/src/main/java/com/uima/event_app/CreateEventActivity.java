@@ -47,36 +47,38 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
 import static android.R.id.message;
+import static com.uima.event_app.R.id.event_date;
 
 public class CreateEventActivity extends AppCompatActivity {
 
     protected FirebaseDatabase database;
     protected DatabaseReference myRef;
 
-    private int PICK_IMAGE_REQUEST = 1;
+    protected int PICK_IMAGE_REQUEST = 1;
 
-    private EditText eventName;
-    private EditText eventLocation;
-    private EditText eventDetails;
-    private CheckBox needVolunteers;
-    private DatePicker eventDate;
-    private TimePicker eventStartTime;
-    private TimePicker eventEndTime;
-    private Spinner eventType;
-    private ImageView eventImage;
-    private TextView eventLat;
-    private TextView eventLog;
+    protected EditText eventName;
+    protected EditText eventLocation;
+    protected CheckBox needVolunteers;
+    protected EditText eventDetails;
+    protected DatePicker eventDate;
+    protected TimePicker eventStartTime;
+    protected TimePicker eventEndTime;
+    protected Spinner eventType;
+    protected ImageView eventImage;
+    protected TextView eventLat;
+    protected TextView eventLog;
 
     protected String hostOrg;
 
     // Needed for Image Storage in Firebase Storage
     public StorageReference mStorage;
     public Uri uri;
-    String imgReference = "";
+    protected String imgReference;
 
     protected ListView attributeListView;
     protected static ArrayList<String> attributeItems = new ArrayList<>();
@@ -112,7 +114,7 @@ public class CreateEventActivity extends AppCompatActivity {
         eventDetails = (EditText) findViewById(R.id.create_event_details);
         needVolunteers = (CheckBox) findViewById(R.id.need_volunteers);
         eventImage = (ImageView) findViewById(R.id.create_image);
-        eventDate = (DatePicker) findViewById(R.id.event_date);
+        eventDate = (DatePicker) findViewById(event_date);
         eventStartTime = (TimePicker) findViewById(R.id.event_start_time);
         eventEndTime = (TimePicker) findViewById(R.id.event_end_time);
         int temp = eventEndTime.getCurrentHour()+1;
@@ -180,6 +182,13 @@ public class CreateEventActivity extends AppCompatActivity {
         // Add a Checkbox List
         final String[] event_attributes = getResources().getStringArray(R.array.event_attributes);
         final boolean[] checkedItems = new boolean[event_attributes.length];
+
+        /*for(int i = 0; i < event_attributes.length; i++) {
+            if(checkedItems[i]) {
+                attributeItems.add(event_attributes[i]);
+                System.out.println("Event Attributes" + event_attributes[i] + "\n");
+            }
+        }*/
 
         builder.setMultiChoiceItems(event_attributes, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
@@ -280,18 +289,31 @@ public class CreateEventActivity extends AppCompatActivity {
         myRef = database.getReference().child("events").push();
         String myKey = myRef.getKey();
 
-        String start_time = eventStartTime.getCurrentHour() + ":" + eventStartTime.getCurrentMinute();
-        String end_time = eventEndTime.getCurrentHour() + ":" + eventEndTime.getCurrentMinute();
         String imgId = imgReference;
-        String event_date = eventDate.getMonth() + "/" + eventDate.getDayOfMonth() + "/" + eventDate.getYear();
+
+        // Setting the date and start/end times
+        final Calendar c = Calendar.getInstance();
+        c.set(eventDate.getYear(), eventDate.getMonth(), eventDate.getDayOfMonth(), eventStartTime.getCurrentHour(), eventStartTime.getCurrentMinute());
+        long start_time = c.getTimeInMillis();
+        c.set(eventDate.getYear(), eventDate.getMonth(), eventDate.getDayOfMonth(), eventEndTime.getCurrentHour(), eventEndTime.getCurrentMinute());
+        long end_time = c.getTimeInMillis();
+
         HashMap<String, String> tags = new HashMap<>();
-        Event e = new Event(myKey, eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, tags, start_time, end_time, event_date, eventLat.getText().toString(), eventLog.getText().toString());
+        Event e = new Event(myKey, eventName.getText().toString(), hostOrg, eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, tags, start_time, end_time, eventLat.getText().toString(), eventLog.getText().toString());
+        // Write a message to the database
         myRef.setValue(e);
         populateAttributeList(myKey);
     }
 
     // Working Here!
     public void populateAttributeList(String key) {
+
+       /*String[] attribute_name = getResources().getStringArray(R.array.event_attributes);
+       ArrayList<String> attributes = new ArrayList<>();
+
+       for (String atr_name : attribute_name) {
+           attributes.add(atr_name);
+       }*/
 
         final DatabaseReference myAtrRef = database.getReference().child("events").child(key).child("tags");
 

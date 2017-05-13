@@ -12,22 +12,11 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class EditEventActivity extends CreateEventActivity {
     private String eventID, lat, log;
-    private int PICK_IMAGE_REQUEST = 1;
-    private EditText eventName;
-    private EditText eventLocation;
-    private EditText eventDetails;
-    private CheckBox needVolunteers;
-    private DatePicker eventDate;
-    private TimePicker eventStartTime;
-    private TimePicker eventEndTime;
-    private Spinner eventType;
-    private ImageView eventImage;
-    private EditText eventLat;
-    private EditText eventLog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +39,10 @@ public class EditEventActivity extends CreateEventActivity {
         Button orangeButton = (Button) findViewById(R.id.cancel_event);
         Button purpleButton = (Button) findViewById(R.id.create_event);
 
-        orangeButton.setText("update");
-        purpleButton.setText("cancel");
+        orangeButton.setText("cancel");
+        purpleButton.setText("update");
 
-        orangeButton.setOnClickListener(new View.OnClickListener() {
+        purpleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 updateEventDB();
@@ -72,16 +61,20 @@ public class EditEventActivity extends CreateEventActivity {
     }
 
     private void updateEventDB() {
-        String start_time = eventStartTime.getCurrentHour() + ":" + eventStartTime.getCurrentMinute();
-        String end_time = eventEndTime.getCurrentHour() + ":" + eventEndTime.getCurrentMinute();
-        String imgId = "22"; //eventImage.getId() + "";
-        String event_date = eventDate.getMonth() + "/" + eventDate.getDayOfMonth() + "/" + eventDate.getYear();
+        String imgId = imgReference;
+
+        final Calendar c = Calendar.getInstance();
+        c.set(eventDate.getYear(), eventDate.getMonth(), eventDate.getDayOfMonth(), eventStartTime.getCurrentHour(), eventStartTime.getCurrentMinute());
+        long start_time = c.getTimeInMillis();
+        c.set(eventDate.getYear(), eventDate.getMonth(), eventDate.getDayOfMonth(), eventEndTime.getCurrentHour(), eventEndTime.getCurrentMinute());
+        long end_time = c.getTimeInMillis();
         HashMap<String, String> tags = new HashMap<>();
-        Event e = new Event(eventID, eventName.getText().toString(), user.getOrganizer(), eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, tags, start_time, end_time, event_date, lat, log);
+        Event e = new Event(eventID, eventName.getText().toString(), user.getOrganizer(), eventLocation.getText().toString(), eventDetails.getText().toString(), needVolunteers.isChecked(), imgId, clickType, tags, start_time, end_time, lat, log);
 
         // Write a message to the database
         myRef = database.getReference().child("events").child(eventID);
 
         myRef.setValue(e);
+        populateAttributeList(eventID);
     }
 }
