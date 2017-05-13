@@ -201,6 +201,7 @@ public class ManageEventsFragment extends Fragment {
                 intent.putExtra("event location", event.getLocation());
                 intent.putExtra("event details", event.getDetails());
                 intent.putExtra("event id", event.getId());
+                intent.putExtra("event start time", event.getStart_time());
                 intent.putExtra("duplicate", false);
 
                 startActivity(intent);

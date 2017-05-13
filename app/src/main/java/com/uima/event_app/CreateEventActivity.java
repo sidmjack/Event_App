@@ -90,6 +90,8 @@ public class CreateEventActivity extends AppCompatActivity {
     protected String key = "fake key";
     protected String clickType;
 
+    protected List<String> types;
+
     private GoogleApiClient client;
 
     // Integrity Error Type
@@ -137,7 +139,7 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
-        List<String> types = new ArrayList<>();
+        types = new ArrayList<>();
         types.add("Local Culture");
         types.add("Social Activism");
         types.add("Popular Culture");
@@ -259,7 +261,7 @@ public class CreateEventActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    private boolean allInfoFilled() {
+    protected boolean allInfoFilled() {
         if (eventName.getText().toString().equals("")) {
             ERROR_TYPE = 0; // Check if name is entered.
             Toast.makeText(getBaseContext(), ErrorMessage[ERROR_TYPE], Toast.LENGTH_SHORT).show();
@@ -276,7 +278,7 @@ public class CreateEventActivity extends AppCompatActivity {
             ERROR_TYPE = 3; // Double check your event times.
             Toast.makeText(getBaseContext(), ErrorMessage[ERROR_TYPE], Toast.LENGTH_SHORT).show();
             return false;
-        } else if (imgReference.equals("")) {
+        } else if (imgReference == null || imgReference.equals("")) {
             ERROR_TYPE = 4; // Image not included.
             Toast.makeText(getBaseContext(), ErrorMessage[ERROR_TYPE], Toast.LENGTH_SHORT).show();
             return false;
