@@ -254,7 +254,7 @@ public class CreateEventActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getBaseContext(), "Event Canceled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "No Changes Made.", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });

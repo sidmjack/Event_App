@@ -38,7 +38,11 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+
+import static com.uima.event_app.R.color.buttonRed;
+import static com.uima.event_app.R.color.grey;
 
 public class MyEventBoardFragment extends Fragment{
 
@@ -218,13 +222,6 @@ public class MyEventBoardFragment extends Fragment{
         count++;
     }
 
-    /* EVENT BOARD ADAPTER HERE ... */
-    /* EVENT BOARD ADAPTER HERE ... */
-    /* EVENT BOARD ADAPTER HERE ... */
-    /* EVENT BOARD ADAPTER HERE ... */
-    /* EVENT BOARD ADAPTER HERE ... */
-
-
     public class EventBoardAdapter extends ArrayAdapter<Event> {
         int res;
 
@@ -281,7 +278,10 @@ public class MyEventBoardFragment extends Fragment{
 
             // Simplified Event Board Row Filling:
             String event_time = ebEvent.getDateString() + " @ " + ebEvent.getStartTimeString();
-            String event_time_notification = "Event: " + "Upcoming!";
+
+
+
+
             String event_description = ebEvent.getDetails();
 
             TextView eventBoardName = (TextView) eventBoardView.findViewById(R.id.event_title);
@@ -291,10 +291,26 @@ public class MyEventBoardFragment extends Fragment{
             final ImageView eventBoardImageView = (ImageView) eventBoardView.findViewById(R.id.event_board_image);
             final ImageView eventBoardIconView = (ImageView) eventBoardView.findViewById(R.id.event_board_icon);
 
+            String event_time_notification = " ";
+            int daysUntil = getTime(ebEvent);
+            if (daysUntil <= 3 & daysUntil != 0) {
+                event_time_notification = "Event In: "+ getTime(ebEvent) + "Days";
+                eventNotification.setTextColor(getResources().getColor(buttonRed));
+            } else if(daysUntil == 0) {
+                event_time_notification = "Event is Today!";
+                eventNotification.setTextColor(getResources().getColor(buttonRed));
+            } else if(daysUntil > 3 & daysUntil < 8){
+                event_time_notification = "Event In: "+ getTime(ebEvent) + "Days";
+                eventNotification.setTextColor(getResources().getColor(grey));
+            }
+            else {
+                event_time_notification = " ";
+            }
+
             eventBoardName.setText(eventName);
             eventTime.setText(event_time);
             eventNotification.setText(event_time_notification);
-            eventDescription.setText(event_description);
+            eventDescription.setText("Description:  " + event_description);
 
             // Reference to an image file in Firebase Storage
             if (ebEvent.getImgId() != null && !ebEvent.getImgId().equals("")) {
@@ -305,8 +321,6 @@ public class MyEventBoardFragment extends Fragment{
                     }
                 });
             }
-
-            // Stuff
 
             String hostOrgId = ebEvent.getHostOrg();
             DatabaseReference myRef = database.getReference();
@@ -341,9 +355,16 @@ public class MyEventBoardFragment extends Fragment{
 
             }
 
-
-
             return eventBoardView;
+        }
+
+        public int getTime(Event event) {
+            double days = 0;
+            Date current = new Date();
+            long currTime = current.getTime();
+            long diff = event.getStart_time() - currTime;
+            days = (double) diff/(86400000);
+            return (int) Math.rint(days);
         }
     }
 }

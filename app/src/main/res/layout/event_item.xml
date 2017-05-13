@@ -3,23 +3,23 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:gravity="center_vertical"
-    android:layout_height="60dp"
+    android:layout_height="70dp"
     android:background="@color/white"
     android:layout_margin="5dp">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="45dp"
+        android:layout_height="60dp"
         android:gravity="center_vertical"
         android:layout_marginLeft="2.5dp">
 
         <ImageView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_margin="3dp"
-            android:minWidth="45dp"
-            android:minHeight="45dp"
+            android:layout_marginLeft="3dp"
+            android:minWidth="55dp"
+            android:minHeight="55dp"
             android:id="@+id/selected_event_organization_logo"/>
 
     </LinearLayout>
@@ -28,14 +28,22 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="3">
+        android:layout_weight="3"
+        android:layout_marginLeft="10dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:layout_marginLeft="10dp">
 
         <TextView
             android:text="Event Name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textColor="@color/grey"
             android:textStyle="bold"
             android:layout_marginLeft="7dp"
@@ -43,17 +51,40 @@
             android:id="@+id/selected_event_name"
             android:layout_weight="1" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:layout_marginLeft="10dp">
+
         <TextView
             android:text="Event Information"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:textColor="@color/grey"
             android:layout_marginLeft="7dp"
             android:gravity="left"
             android:id="@+id/selected_event_description"
             android:layout_weight="1" />
 
+        <TextView
+            android:text="Event In: (Time Until)"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="12sp"
+            android:layout_marginLeft="45dp"
+            android:gravity="left"
+            android:textColor="@color/buttonRed"
+            android:id="@+id/event_time_notification"
+            android:layout_weight="1" />
+
     </LinearLayout>
+    </LinearLayout>
+
 </LinearLayout>
