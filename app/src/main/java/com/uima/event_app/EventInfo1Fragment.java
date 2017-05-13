@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,10 +42,12 @@ public class EventInfo1Fragment extends Fragment {
     //Gallery gallery;
 
     private ViewPager iconViewPager;
-    CustomSwipeAdapter adapter;
+    //CustomSwipeAdapter adapter;
+    HorizontalAdapter adapter;
 
     TextView date;
     TextView time;
+    RecyclerView horizontal_recycler_view;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,10 +63,15 @@ public class EventInfo1Fragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_event_info1, container, false);
         date = (TextView) rootView.findViewById(R.id.bottom_event_board_event_date);
         time = (TextView) rootView.findViewById(R.id.bottom_event_board_event_time);
+        //populateList();
+        horizontal_recycler_view = (RecyclerView) rootView.findViewById(R.id.horizontal_recycler_view);
 
-        iconViewPager = (ViewPager) rootView.findViewById(R.id.iconViewPager);
-        adapter = new CustomSwipeAdapter(getActivity());
-        iconViewPager.setAdapter(adapter);
+
+
+
+        //iconViewPager = (ViewPager) rootView.findViewById(R.id.iconViewPager);
+        //adapter = new CustomSwipeAdapter(getActivity());
+        //iconViewPager.setAdapter(adapter);
 
         //Handles Gallery View
         //gallery = (Gallery) rootView.findViewById(R.id.icon_view);
@@ -93,15 +103,6 @@ public class EventInfo1Fragment extends Fragment {
         populateData();
     }
 
-    public EventInfo1Fragment() {
-        // Required empty public constructor
-    }
-
-    public static EventInfo1Fragment newInstance() {
-        EventInfo1Fragment f = new EventInfo1Fragment();
-        return f;
-    }
-
     private void populateData() {
         myRef.child("events").child(eventID).addValueEventListener(new ValueEventListener() {
             @Override
@@ -109,6 +110,7 @@ public class EventInfo1Fragment extends Fragment {
                 Event thisEvent = dataSnapshot.getValue(Event.class);
                 date.setText("Date: " + thisEvent.getDateString());
                 time.setText("Time: " + thisEvent.getStartTimeString() + " - " + thisEvent.getEndTimeString());
+                populateList();
             }
 
             @Override
@@ -118,6 +120,131 @@ public class EventInfo1Fragment extends Fragment {
         });
     }
 
+    private void populateList() {
+        final ArrayList<String> eventTags = new ArrayList<>();
+        myRef = database.getReference().child("events").child(eventID).child("tags");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                eventTags.clear();
+                for (DataSnapshot child : children) {
+                    String value = child.getValue(String.class);
+                    eventTags.add(value);
+                }
+
+                adapter = new HorizontalAdapter(eventTags);
+                LinearLayoutManager horizontalLayoutManagaer
+                        = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+                horizontal_recycler_view.setLayoutManager(horizontalLayoutManagaer);
+                horizontal_recycler_view.setAdapter(adapter);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public EventInfo1Fragment() {
+        // Required empty public constructor
+    }
+
+    public static EventInfo1Fragment newInstance() {
+        EventInfo1Fragment f = new EventInfo1Fragment();
+        return f;
+    }
+
+    public class HorizontalAdapter extends RecyclerView.Adapter<HorizontalAdapter.MyViewHolder> {
+
+        private List<String> horizontalList;
+        private HashMap<String, Integer> mImageIds = populateAttributes();
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            public ImageView imgView;
+            public TextView txtView;
+
+            public MyViewHolder(View view) {
+                super(view);
+                txtView = (TextView) view.findViewById(R.id.txtView);
+                imgView = (ImageView) view.findViewById(R.id.imgView);
+            }
+        }
+
+        public HorizontalAdapter(List<String> horizontalList) {
+            this.horizontalList = horizontalList;
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.recycler_item, parent, false);
+            //System.out.println("Reached this point!");
+            return new MyViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(final MyViewHolder holder, final int position) {
+            holder.txtView.setText(horizontalList.get(position));
+
+            //System.out.println("Reached this point!");
+            int imgId = mImageIds.get(horizontalList.get(position));
+            holder.imgView.setImageResource(imgId);
+        }
+
+        @Override
+        public int getItemCount() {
+            return horizontalList.size();
+        }
+    }
+
+    public HashMap<String, Integer> populateAttributes() {
+        HashMap<String, Integer> mImageIds = new HashMap<String, Integer>();
+        mImageIds.put("Free Admission", R.drawable.list_admission_icon);
+        mImageIds.put("Alcohol Available", R.drawable.list_alcohol_icon);
+        mImageIds.put("For a Good Cause", R.drawable.list_cause_icon);
+        mImageIds.put("Live Entertainment", R.drawable.list_entertainment_icon);
+        mImageIds.put("Food Available", R.drawable.list_food_icon);
+        mImageIds.put("Free Admission", R.drawable.list_free_icon);
+        mImageIds.put("Free Item Giveaways", R.drawable.list_giveaway_icon);
+        mImageIds.put("Indoor Activities", R.drawable.list_indoor_icon);
+        mImageIds.put("Key Note Speaker", R.drawable.list_keynote_icon);
+        mImageIds.put("Family Friendly", R.drawable.list_kid_icon);
+        mImageIds.put("Music Available", R.drawable.list_music_icon);
+        mImageIds.put("Networking Opportunities", R.drawable.list_network_icon);
+        mImageIds.put("Outdoor Activities", R.drawable.list_outside_icon);
+        mImageIds.put("Parking", R.drawable.list_parking_icon);
+        mImageIds.put("Pet Friendly", R.drawable.list_pet_icon);
+        mImageIds.put("Seating Available", R.drawable.list_seating_icon);
+        mImageIds.put("Public Transit", R.drawable.list_transit_icon);
+        mImageIds.put("Local Vendors Attending", R.drawable.list_vendor_icon);
+        mImageIds.put("Volunteers Needed", R.drawable.list_volunteers_icon);
+        return mImageIds;
+    }
+
+
+
+
+
+
+
+/*NOT HERE*/
+/*NOT HERE*/
+/*NOT HERE*/
+/*NOT HERE*/
+/*NOT HERE*/
+/*NOT HERE*/
+/*NOT HERE*/
+/*NOT HERE*/
+/*NOT HERE*/
+/*NOT HERE*/
+/*NOT HERE*/
+/*NOT HERE*/
+/*NOT HERE*/
+/*NOT HERE*/
+/*NOT HERE*/
+/*NOT HERE*/
+
 
     /* Swipe Stuff Here! */
     public class CustomSwipeAdapter extends PagerAdapter {
@@ -125,7 +252,7 @@ public class EventInfo1Fragment extends Fragment {
         private Context ctx;
         private int iconCount;
         private LayoutInflater layoutInflater;
-        public HashMap<String, Integer> mImageIds = new HashMap<>();
+        //public HashMap<String, Integer> mImageIds = new HashMap<>();
         public String[] icon_titles = populateAttributeTitles();
         public Integer[] icon_images = populateAttributeIcons();
 
@@ -154,28 +281,6 @@ public class EventInfo1Fragment extends Fragment {
             textView.setText(icon_titles[position]);
             container.addView(item_view);
             return item_view;
-        }
-
-        public void populateAttributes() {
-            mImageIds.put("Free Admission", R.drawable.list_admission_icon);
-            mImageIds.put("Alcohol Available", R.drawable.list_alcohol_icon);
-            mImageIds.put("For a Good Cause", R.drawable.list_cause_icon);
-            mImageIds.put("Live Entertainment", R.drawable.list_entertainment_icon);
-            mImageIds.put("Food Available", R.drawable.list_food_icon);
-            mImageIds.put("Free Admission", R.drawable.list_free_icon);
-            mImageIds.put("Free Item Giveaways", R.drawable.list_giveaway_icon);
-            mImageIds.put("Indoor Activities", R.drawable.list_indoor_icon);
-            mImageIds.put("Key Note Speaker", R.drawable.list_keynote_icon);
-            mImageIds.put("Family Friendly", R.drawable.list_kid_icon);
-            mImageIds.put("Music Available", R.drawable.list_music_icon);
-            mImageIds.put("Networking Opportunities", R.drawable.list_network_icon);
-            mImageIds.put("Outdoor Activities", R.drawable.list_outside_icon);
-            mImageIds.put("Parking", R.drawable.list_parking_icon);
-            mImageIds.put("Pet Friendly", R.drawable.list_pet_icon);
-            mImageIds.put("Seating Available", R.drawable.list_seating_icon);
-            mImageIds.put("Public Transit", R.drawable.list_transit_icon);
-            mImageIds.put("Local Vendors Attending", R.drawable.list_vendor_icon);
-            mImageIds.put("Volunteers Needed", R.drawable.list_volunteers_icon);
         }
 
         public String[] populateAttributeTitles(){
