@@ -30,6 +30,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import static com.uima.event_app.R.string.zip;
+
 public class ProfileActivity extends AppCompatActivity {
 
     SharedPreferences myPrefs;
@@ -120,9 +122,12 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 UserProfile user = dataSnapshot.getValue(UserProfile.class);
-                nameTextView.setText(user.getFirstname());
-                emailTextView.setText(user.getEmail());
-                zipcodeTextView.setText(user.getZipcode());
+                String name = "Name: " + user.getFirstname();
+                String email = "Email: " + user.getEmail();
+                String zip = "Zipcode: " + user.getZipcode();
+                nameTextView.setText(name);
+                emailTextView.setText(email);
+                zipcodeTextView.setText(zip);
                 if (user.getImagePath() != null) {
                     FirebaseStorage storage = FirebaseStorage.getInstance();
                     StorageReference sRef = storage.getReference();
