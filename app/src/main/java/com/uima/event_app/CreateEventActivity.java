@@ -287,6 +287,12 @@ public class CreateEventActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setTitle("Create New Event");
+    }
+
     private void writeToEventDB() {
         myRef = database.getReference().child("events").push();
         String myKey = myRef.getKey();

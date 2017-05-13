@@ -153,9 +153,8 @@ public class EditEventActivity extends CreateEventActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
-
         setTitle("Edit Activity");
     }
 

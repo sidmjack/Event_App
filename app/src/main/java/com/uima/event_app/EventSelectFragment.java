@@ -82,6 +82,7 @@ public class EventSelectFragment extends Fragment {
     public void onResume() {
         super.onResume();
         this.populateList();
+        getActivity().setTitle(type);
     }
 
     @Override
@@ -89,6 +90,7 @@ public class EventSelectFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_event_select, container, false);
+        getActivity().setTitle(type);
 
         eventSelectListView = (ListView) rootView.findViewById(R.id.listEventSelect);
 
@@ -98,6 +100,7 @@ public class EventSelectFragment extends Fragment {
                 Event selectEvent = (Event) eventSelectListView.getItemAtPosition(position);
                 Bundle data = new Bundle();
                 data.putString("eventID", selectEvent.getId());
+                data.putString("eventTitle", selectEvent.getName());
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 Fragment currentFragment = new EventPageFragment();
                 currentFragment.setArguments(data);

@@ -70,6 +70,7 @@ public class ManageEventsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_manage_events, container, false);
+        getActivity().setTitle("Manage My Events");
 
         myEventsView = (ListView) rootView.findViewById(R.id.listManageEvents);
 
@@ -79,6 +80,7 @@ public class ManageEventsFragment extends Fragment {
                 Event selectEvent = (Event) myEventsView.getItemAtPosition(position);
                 Bundle data = new Bundle();
                 data.putString("eventID", selectEvent.getId());
+                data.putString("eventTitle", selectEvent.getName());
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 Fragment currentFragment = new EventPageFragment();
                 currentFragment.setArguments(data);
@@ -96,6 +98,7 @@ public class ManageEventsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        getActivity().setTitle("Manage My Events");
         this.populateList();
     }
 
