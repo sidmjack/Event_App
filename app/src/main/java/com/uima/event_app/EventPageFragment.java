@@ -36,6 +36,7 @@ public class EventPageFragment extends Fragment {
     public void onResume() {
         super.onResume();
         this.eventID = getArguments().getString("eventID");
+        getActivity().setTitle(getArguments().getString("eventTitle"));
     }
 
     @Override
@@ -44,6 +45,7 @@ public class EventPageFragment extends Fragment {
 
         //rootView = inflater.inflate(R.layout.event_board_row, container, false);
         rootView = inflater.inflate(R.layout.fragment_event_page, container, false);
+        getActivity().setTitle(getArguments().getString("eventTitle"));
 
         TopEventPageFragment upperPageFragment = new TopEventPageFragment();
         BottomEventPageFragment lowerPageFragment = new BottomEventPageFragment();

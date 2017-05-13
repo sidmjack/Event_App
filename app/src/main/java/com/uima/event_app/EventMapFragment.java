@@ -87,13 +87,14 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
     public void onResume() {
         super.onResume();
         getUser();
-
+        getActivity().setTitle("Event Map");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_event_map, container, false);
+        getActivity().setTitle("Event Map");
         return mView;
     }
 
@@ -196,6 +197,7 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
                 Event event = markerEventMap.get(marker.getId());
                 Bundle data = new Bundle();
                 data.putString("eventID", event.getId());
+                data.putString("eventTitle", event.getName());
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 Fragment currentFragment = new EventPageFragment();
                 currentFragment.setArguments(data);

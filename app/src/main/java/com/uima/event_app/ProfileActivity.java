@@ -70,6 +70,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         Context context = getApplicationContext();
         myPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        setTitle("My Profile");
     }
 
     @Override
@@ -82,6 +83,12 @@ public class ProfileActivity extends AppCompatActivity {
         currentUserRef = database.getReference().child("users").child(currentUser.getUid());
 
         populateProfileData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setTitle("My Profile");
     }
 
     /**

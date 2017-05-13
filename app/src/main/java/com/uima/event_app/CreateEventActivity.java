@@ -90,11 +90,13 @@ public class CreateEventActivity extends AppCompatActivity {
     protected String key = "fake key";
     protected String clickType;
 
+    protected List<String> types;
+
     private GoogleApiClient client;
 
     // Integrity Error Type
     int ERROR_TYPE = -1;
-    String[] ErrorMessage = {"Enter Event Name", "Enter Event Location", "Enter Event Details", "Double Check Event Times", "Include an Event Image"};
+    String[] ErrorMessage = {"Enter Event Name", "Enter Event Location", "Enter Event Details", "Double Check Event Times", "Include an Event Image", "Enter Events in the Future (No Time Travelling Allowed)"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +139,7 @@ public class CreateEventActivity extends AppCompatActivity {
             }
         });
 
-        List<String> types = new ArrayList<>();
+        types = new ArrayList<>();
         types.add("Local Culture");
         types.add("Social Activism");
         types.add("Popular Culture");
@@ -259,7 +261,14 @@ public class CreateEventActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    private boolean allInfoFilled() {
+    protected boolean allInfoFilled() {
+        Calendar c = Calendar.getInstance();
+        Calendar now = Calendar.getInstance();
+        c.set(eventDate.getYear(), eventDate.getMonth(), eventDate.getDayOfMonth(), eventStartTime.getCurrentHour(), eventStartTime.getCurrentMinute());
+        long start_time = c.getTimeInMillis();
+        c.set(eventDate.getYear(), eventDate.getMonth(), eventDate.getDayOfMonth(), eventEndTime.getCurrentHour(), eventEndTime.getCurrentMinute());
+        long end_time = c.getTimeInMillis();
+
         if (eventName.getText().toString().equals("")) {
             ERROR_TYPE = 0; // Check if name is entered.
             Toast.makeText(getBaseContext(), ErrorMessage[ERROR_TYPE], Toast.LENGTH_SHORT).show();
@@ -276,13 +285,23 @@ public class CreateEventActivity extends AppCompatActivity {
             ERROR_TYPE = 3; // Double check your event times.
             Toast.makeText(getBaseContext(), ErrorMessage[ERROR_TYPE], Toast.LENGTH_SHORT).show();
             return false;
-        } else if (imgReference.equals("")) {
+        } else if (imgReference == null || imgReference.equals("")) {
             ERROR_TYPE = 4; // Image not included.
+            Toast.makeText(getBaseContext(), ErrorMessage[ERROR_TYPE], Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (start_time < now.getTimeInMillis() || end_time < now.getTimeInMillis()) {
+            ERROR_TYPE = 5; // Image not included.
             Toast.makeText(getBaseContext(), ErrorMessage[ERROR_TYPE], Toast.LENGTH_SHORT).show();
             return false;
         } else {
             return true;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setTitle("Create New Event");
     }
 
     private void writeToEventDB() {

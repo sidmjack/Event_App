@@ -84,10 +84,10 @@ public class Event {
 
         String time;
 
-        if (Calendar.AM_PM == Calendar.AM) {
-            time = String.format("%d:%02d am", c.get(Calendar.HOUR), c.get(Calendar.MINUTE));
+        if (c.get(Calendar.HOUR_OF_DAY) < 12) {
+            time = String.format("%d:%02d AM", c.get(Calendar.HOUR), c.get(Calendar.MINUTE));
         } else {
-            time = String.format("%d:%02d pm", c.get(Calendar.HOUR), c.get(Calendar.MINUTE));
+            time = String.format("%d:%02d PM", c.get(Calendar.HOUR), c.get(Calendar.MINUTE));
         }
 
         return time;
@@ -99,10 +99,10 @@ public class Event {
 
         String time;
 
-        if (Calendar.AM_PM == Calendar.AM) {
-            time = String.format("%d:%02d am", c.get(Calendar.HOUR), c.get(Calendar.MINUTE));
+        if (c.get(Calendar.HOUR_OF_DAY) < 12) {
+            time = String.format("%d:%02d AM", c.get(Calendar.HOUR), c.get(Calendar.MINUTE));
         } else {
-            time = String.format("%d:%02d pm", c.get(Calendar.HOUR), c.get(Calendar.MINUTE));
+            time = String.format("%d:%02d PM", c.get(Calendar.HOUR), c.get(Calendar.MINUTE));
         }
 
         return time;
