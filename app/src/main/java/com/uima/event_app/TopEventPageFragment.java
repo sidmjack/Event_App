@@ -65,7 +65,7 @@ public class TopEventPageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_top_event_page, container, false);
-        this.title = (TextView) rootView.findViewById(R.id.top_event_title);
+        //this.title = (TextView) rootView.findViewById(R.id.top_event_title);
         this.date = (TextView) rootView.findViewById(R.id.top_event_date);
         this.time = (TextView) rootView.findViewById(R.id.top_event_time);
         this.headerImage = (ImageView) rootView.findViewById(R.id.top_event_board_header);
@@ -78,9 +78,9 @@ public class TopEventPageFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Event thisEvent = dataSnapshot.getValue(Event.class);
-                title.setText(thisEvent.getName());
-                date.setText("Date: " + thisEvent.getDateString());
-                time.setText("Time: " + thisEvent.getStartTimeString() + " - " + thisEvent.getEndTimeString());
+                //title.setText(thisEvent.getName());
+                date.setText("Date: " + thisEvent.grabDateString());
+                time.setText("Time: " + thisEvent.grabStartTimeString() + " - " + thisEvent.grabEndTimeString());
                 FirebaseStorage storage = FirebaseStorage.getInstance();
                 StorageReference sRef = storage.getReference();
                 sRef.child(thisEvent.getImgId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {

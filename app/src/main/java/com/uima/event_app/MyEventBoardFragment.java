@@ -277,7 +277,7 @@ public class MyEventBoardFragment extends Fragment{
             String eventName = ebEvent.getName();
 
             // Simplified Event Board Row Filling:
-            String event_time = ebEvent.getDateString() + " @ " + ebEvent.getStartTimeString();
+            String event_time = ebEvent.grabDateString() + " @ " + ebEvent.grabStartTimeString();
 
 
 
@@ -294,13 +294,13 @@ public class MyEventBoardFragment extends Fragment{
             String event_time_notification = " ";
             int daysUntil = getTime(ebEvent);
             if (daysUntil <= 3 & daysUntil != 0) {
-                event_time_notification = "Event In: "+ getTime(ebEvent) + "Days";
+                event_time_notification = "Event In: "+ getTime(ebEvent) + " Day(s)";
                 eventNotification.setTextColor(getResources().getColor(buttonRed));
             } else if(daysUntil == 0) {
                 event_time_notification = "Event is Today!";
                 eventNotification.setTextColor(getResources().getColor(buttonRed));
             } else if(daysUntil > 3 & daysUntil < 8){
-                event_time_notification = "Event In: "+ getTime(ebEvent) + "Days";
+                event_time_notification = "Event In: "+ getTime(ebEvent) + " Day(s)";
                 eventNotification.setTextColor(getResources().getColor(grey));
             }
             else {

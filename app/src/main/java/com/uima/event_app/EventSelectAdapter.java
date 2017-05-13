@@ -69,8 +69,8 @@ public class EventSelectAdapter  extends ArrayAdapter<Event> {
         imgUrl = eventSelectedItem.getImgId();
 
         event_name = eventSelectedItem.getName();
-        event_info_1 = (eventSelectedItem.getDateString2()); // Just Changed.
-        event_info_2 = (eventSelectedItem.getLocation()+ " @ " + eventSelectedItem.getStartTimeString());
+        event_info_1 = (eventSelectedItem.grabDateString2()); // Just Changed.
+        event_info_2 = (eventSelectedItem.getLocation()+ " @ " + eventSelectedItem.grabStartTimeString());
 
         //ImageView eventSelectOrganizationLogo = (ImageView) eventSelectListView.findViewById(R.id.selected_event_organization_logo);
         TextView eventSelect_name = (TextView) eventSelectListView.findViewById(R.id.selected_event_name);
@@ -138,11 +138,15 @@ public class EventSelectAdapter  extends ArrayAdapter<Event> {
         final FirebaseStorage storage = FirebaseStorage.getInstance();
         final StorageReference sRef = storage.getReference();
 
-        if (hostOrg.child("imagePath")!= null) {
+        if (hostOrg.child("imagePath")!= null || hostOrg.child("imagePath").equals("")) {
             hostOrg.child("imagePath").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
                     String fp = snapshot.getValue(String.class);
+                    if (fp == null) {
+                        fp = "EventPhotos/default.png";
+                    }
+
                     sRef.child(fp).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {

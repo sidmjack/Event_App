@@ -41,12 +41,10 @@ public class EventInfo1Fragment extends Fragment {
 
     //Gallery gallery;
 
-    private ViewPager iconViewPager;
-    //CustomSwipeAdapter adapter;
     HorizontalAdapter adapter;
 
-    TextView date;
-    TextView time;
+    //TextView date;
+    //TextView time;
     RecyclerView horizontal_recycler_view;
 
     @Override
@@ -61,8 +59,8 @@ public class EventInfo1Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_event_info1, container, false);
-        date = (TextView) rootView.findViewById(R.id.bottom_event_board_event_date);
-        time = (TextView) rootView.findViewById(R.id.bottom_event_board_event_time);
+        //date = (TextView) rootView.findViewById(R.id.bottom_event_board_event_date);
+        //time = (TextView) rootView.findViewById(R.id.bottom_event_board_event_time);
         //populateList();
         horizontal_recycler_view = (RecyclerView) rootView.findViewById(R.id.horizontal_recycler_view);
 
@@ -108,8 +106,8 @@ public class EventInfo1Fragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Event thisEvent = dataSnapshot.getValue(Event.class);
-                date.setText("Date: " + thisEvent.getDateString());
-                time.setText("Time: " + thisEvent.getStartTimeString() + " - " + thisEvent.getEndTimeString());
+                //date.setText("Date: " + thisEvent.getDateString());
+                //time.setText("Time: " + thisEvent.getStartTimeString() + " - " + thisEvent.getEndTimeString());
                 populateList();
             }
 

@@ -24,6 +24,9 @@ public class EventInfo2Fragment extends Fragment {
 
     TextView hostOrg;
     TextView details;
+    TextView details_1;
+    TextView details_2;
+    TextView details_3;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +41,9 @@ public class EventInfo2Fragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_event_info2, container, false);
         hostOrg = (TextView) rootView.findViewById(R.id.bottom_event_host_org);
         details = (TextView) rootView.findViewById(R.id.bottom_event_details);
+        details_1 = (TextView) rootView.findViewById(R.id.bottom_d1);
+        details_2 = (TextView) rootView.findViewById(R.id.bottom_d2);
+        details_3 = (TextView) rootView.findViewById(R.id.bottom_d3);
         return rootView;
     }
 
@@ -71,12 +77,15 @@ public class EventInfo2Fragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Event thisEvent = dataSnapshot.getValue(Event.class);
-                details.setText(thisEvent.getDetails());
+                details.setText("Location: " + thisEvent.getLocation());
+                details_1.setText("Start Time: " + thisEvent.grabStartTimeString());
+                details_2.setText("End Time: " + thisEvent.grabEndTimeString());
+                details_3.setText("Volunteers Needed: " + volunteerString(thisEvent.getNeedVolunteers()));
                 myRef.child("users").child(thisEvent.getHostOrg()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         UserProfile thisUser = dataSnapshot.getValue(UserProfile.class);
-                        hostOrg.setText(thisUser.getOrganizer());
+                        hostOrg.setText("Host Organization:   " + thisUser.getOrganizer());
                     }
 
                     @Override
@@ -91,6 +100,16 @@ public class EventInfo2Fragment extends Fragment {
 
             }
         });
+    }
+
+    public String volunteerString(boolean volunteer) {
+        String string = "";
+        if (volunteer == true) {
+            string = "Absolutely!";
+        } else {
+            string = "Not for this event!";
+        }
+        return string;
     }
 
 }

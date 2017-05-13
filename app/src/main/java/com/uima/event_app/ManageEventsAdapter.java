@@ -56,7 +56,7 @@ public class ManageEventsAdapter  extends ArrayAdapter<Event> {
 
         imgID = eventSelectedItem.getImgId();
         event_name = eventSelectedItem.getName();
-        event_date_time = (eventSelectedItem.getLocation() + " at " + eventSelectedItem.getStartTimeString());
+        event_date_time = (eventSelectedItem.getLocation() + " at " + eventSelectedItem.grabStartTimeString());
 
         //ImageView eventSelectOrganizationLogo = (ImageView) eventSelectListView.findViewById(R.id.selected_event_organization_logo);
         TextView eventSelect_name = (TextView) eventSelectListView.findViewById(R.id.selected_event_name);
@@ -68,13 +68,13 @@ public class ManageEventsAdapter  extends ArrayAdapter<Event> {
         String event_time_notification = " ";
         int daysUntil = getTime(eventSelectedItem);
         if (daysUntil <= 3 & daysUntil != 0) {
-            event_time_notification = "Event In: "+ getTime(eventSelectedItem) + "Days";
+            event_time_notification = "Event In: "+ getTime(eventSelectedItem) + " Day(s)";
             //eventNotification.setTextColor(buttonRed);
         } else if(daysUntil == 0) {
             event_time_notification = "Event is Today!";
             //eventNotification.setTextColor(buttonRed);
         } else if(daysUntil > 3 & daysUntil < 8){
-            event_time_notification = "Event In: "+ getTime(eventSelectedItem) + "Days";
+            event_time_notification = "Event In: "+ getTime(eventSelectedItem) + " Day(s)";
             //eventNotification.setTextColor((grey);
         }
         else {

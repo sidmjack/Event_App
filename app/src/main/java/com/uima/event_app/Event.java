@@ -1,5 +1,8 @@
 package com.uima.event_app;
 
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,6 +12,7 @@ import java.util.List;
 /**
  * Created by Channing on 4/15/2017.
  */
+@IgnoreExtraProperties
 public class Event {
     private String id;
     private String hostOrg;
@@ -78,7 +82,8 @@ public class Event {
     public long getStart_time() { return start_time; }
     public long getEnd_time() { return end_time; }
 
-    public String getStartTimeString() {
+    @Exclude
+    public String grabStartTimeString() {
         final Calendar c = Calendar.getInstance();
         c.setTimeInMillis(this.start_time);
 
@@ -93,7 +98,8 @@ public class Event {
         return time;
     }
 
-    public String getEndTimeString() {
+    @Exclude
+    public String grabEndTimeString() {
         final Calendar c = Calendar.getInstance();
         c.setTimeInMillis(this.end_time);
 
@@ -108,14 +114,16 @@ public class Event {
         return time;
     }
 
-    public String getDateString() {
+    @Exclude
+    public String grabDateString() {
         final Calendar c = Calendar.getInstance();
         c.setTimeInMillis(start_time);
 
         return String.format("%d/%d/%d", c.get(Calendar.MONTH)+1, c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.YEAR));
     }
 
-    public String getDateString2() {
+    @Exclude
+    public String grabDateString2() {
 
         Date d = new Date(this.start_time);
         return String.format("(%tA) %tB %te, %tY", d, d, d, d);

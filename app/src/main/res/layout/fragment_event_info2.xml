@@ -1,16 +1,30 @@
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/info_2">
 
     <TextView
-        android:text="hostOrg"
+        android:text="Additional Event Details: "
+        android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/event_title" />
+
+    <TextView
+        android:text="hostOrg"
+        android:layout_marginTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14dp"
+        android:layout_gravity="center"
         android:layout_centerHorizontal="true"
         android:id="@+id/bottom_event_host_org" />
 
@@ -19,7 +33,35 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/bottom_event_details"
-        android:layout_below="@+id/bottom_event_host_org"
+        android:textSize="14dp"
+        android:layout_gravity="center"
         android:layout_centerHorizontal="true" />
 
-</RelativeLayout>
+    <TextView
+        android:text="Event Details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottom_d1"
+        android:textSize="14dp"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="Event Details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottom_d2"
+        android:textSize="14dp"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="Event Details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottom_d3"
+        android:textSize="14dp"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true" />
+
+</LinearLayout>
