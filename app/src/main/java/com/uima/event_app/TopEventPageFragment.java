@@ -1,18 +1,24 @@
 package com.uima.event_app;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.vision.text.Text;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by sidneyjackson on 4/21/17.
@@ -29,6 +35,7 @@ public class TopEventPageFragment extends Fragment {
     TextView title;
     TextView date;
     TextView time;
+    ImageView headerImage;
 
     public TopEventPageFragment() {
         // Required empty public constructor
@@ -61,6 +68,7 @@ public class TopEventPageFragment extends Fragment {
         this.title = (TextView) rootView.findViewById(R.id.top_event_title);
         this.date = (TextView) rootView.findViewById(R.id.top_event_date);
         this.time = (TextView) rootView.findViewById(R.id.top_event_time);
+        this.headerImage = (ImageView) rootView.findViewById(R.id.top_event_board_header);
 
         return rootView;
     }
@@ -73,6 +81,14 @@ public class TopEventPageFragment extends Fragment {
                 title.setText(thisEvent.getName());
                 date.setText("Date: " + thisEvent.getDateString());
                 time.setText("Time: " + thisEvent.getStartTimeString() + " - " + thisEvent.getEndTimeString());
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference sRef = storage.getReference();
+                sRef.child(thisEvent.getImgId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.with(getContext()).load(uri).fit().centerCrop().into(headerImage);
+                    }
+                });
             }
 
             @Override
