@@ -96,7 +96,7 @@ public class CreateEventActivity extends AppCompatActivity {
 
     // Integrity Error Type
     int ERROR_TYPE = -1;
-    String[] ErrorMessage = {"Enter Event Name", "Enter Event Location", "Enter Event Details", "Double Check Event Times", "Include an Event Image"};
+    String[] ErrorMessage = {"Enter Event Name", "Enter Event Location", "Enter Event Details", "Double Check Event Times", "Include an Event Image", "Enter Events in the Future (No Time Travelling Allowed)"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -262,6 +262,13 @@ public class CreateEventActivity extends AppCompatActivity {
     }
 
     protected boolean allInfoFilled() {
+        Calendar c = Calendar.getInstance();
+        Calendar now = Calendar.getInstance();
+        c.set(eventDate.getYear(), eventDate.getMonth(), eventDate.getDayOfMonth(), eventStartTime.getCurrentHour(), eventStartTime.getCurrentMinute());
+        long start_time = c.getTimeInMillis();
+        c.set(eventDate.getYear(), eventDate.getMonth(), eventDate.getDayOfMonth(), eventEndTime.getCurrentHour(), eventEndTime.getCurrentMinute());
+        long end_time = c.getTimeInMillis();
+
         if (eventName.getText().toString().equals("")) {
             ERROR_TYPE = 0; // Check if name is entered.
             Toast.makeText(getBaseContext(), ErrorMessage[ERROR_TYPE], Toast.LENGTH_SHORT).show();
@@ -280,6 +287,10 @@ public class CreateEventActivity extends AppCompatActivity {
             return false;
         } else if (imgReference == null || imgReference.equals("")) {
             ERROR_TYPE = 4; // Image not included.
+            Toast.makeText(getBaseContext(), ErrorMessage[ERROR_TYPE], Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (start_time < now.getTimeInMillis() || end_time < now.getTimeInMillis()) {
+            ERROR_TYPE = 5; // Image not included.
             Toast.makeText(getBaseContext(), ErrorMessage[ERROR_TYPE], Toast.LENGTH_SHORT).show();
             return false;
         } else {
