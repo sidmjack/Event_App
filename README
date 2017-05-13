@@ -1,0 +1,36 @@
+UIMA Group 6
+Channing Kimble-Brown
+Edmund Connor
+Brian Michael Cueto
+Sidney Jackson
+Loccurences
+T6A
+
+This is the director for our final submission for Loccurences, our event application and final project for this
+class.  Compared to our last submission a week ago, our new implementation is much more robust and properly
+working.  Events are populated properly, images are populated, error handling is handled, and our map can populate
+events.
+
+What to Know About Our App:
+1. Person can log in or register.  Toasts are used when text fields are not filled in properly.  The user can also
+sign up as an organizer and put their organization name.  Once registered, Firebase creates and user and also creates
+a reference to the user in the database with different fields.  You can see these fields on the "UserProfile" class.
+2. Once logged in, you see the event map, which properly populates events based on their latitutde and longitude.
+When map is launched, Firebase retrieves the events and creates markers based on each event's location.  We also
+used a hashmap to store each marker ID to correspond to the event each marker represents.  When you tap a marker, you
+get sent to the event page for that event.  If you are an organizer and click anywhere else on the map, you get sent to
+create event.  If you are not an organizer, you cannot do that.
+4. The only way to create event is by clicking on the map, it is not an issue, just our design choice.
+3. Discover Baltimore populates events in real time without delay.  Tapping an event will also send user to the event page.
+The user can favorite events, which creates a reference in Firebase for the user where the event's ID is stored in a "favorites"
+node under the user.  We reference this node to retrieve events when populating the user's event board.
+4. The event board shows the events the user favorites.  Once again, tapping an event will send the user to the event page.
+5. Manage my events is only visible if you are an organizer, and if you are not, it does not show up on the navigation drawer.
+On manage my events, the organizer can click an event and have the option to edit or delete an event.  Edit event will send user to
+an edit event activity which will update values in Firebase. Delete event will delete the event.
+6. Event page activity shows the different details of the event, with a top and bottom fragment showing different information.  The
+top fragment will update through Firebase to have the image stored for that event, if any.
+7. The profile activity will populate data from Firebase.
+
+Things that are still an issue to keep note of:
+1. On manage events, if you delete an event, any user that has that event favorited will crash when they look at their event board.
