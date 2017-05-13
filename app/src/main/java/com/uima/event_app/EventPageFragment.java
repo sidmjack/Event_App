@@ -14,11 +14,7 @@ import android.view.ViewGroup;
 public class EventPageFragment extends Fragment {
 
     protected View rootView;
-
     private String eventID;
-
-    TopEventPageFragment upperPageFragment = new TopEventPageFragment();
-    BottomEventPageFragment lowerPageFragment = new BottomEventPageFragment();
 
     public EventPageFragment() {
         // Required empty public constructor
@@ -49,6 +45,8 @@ public class EventPageFragment extends Fragment {
         //rootView = inflater.inflate(R.layout.event_board_row, container, false);
         rootView = inflater.inflate(R.layout.fragment_event_page, container, false);
 
+        TopEventPageFragment upperPageFragment = new TopEventPageFragment();
+        BottomEventPageFragment lowerPageFragment = new BottomEventPageFragment();
 
         Bundle data = new Bundle();
         data.putString("eventID", eventID);
@@ -59,6 +57,7 @@ public class EventPageFragment extends Fragment {
                getActivity().getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.event_page_top_half, upperPageFragment);
         transaction.add(R.id.event_page_bottom_half, lowerPageFragment);
+
         transaction.commit();
 
 

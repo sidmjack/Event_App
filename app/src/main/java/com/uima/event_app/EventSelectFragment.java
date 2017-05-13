@@ -103,6 +103,7 @@ public class EventSelectFragment extends Fragment {
                 currentFragment.setArguments(data);
                 fragmentManager.beginTransaction()
                         .replace(R.id.content_frame, currentFragment)
+                        .addToBackStack(null)
                         .commit();
             }
         });

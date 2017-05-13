@@ -209,6 +209,7 @@ public class MainActivity extends AppCompatActivity
 
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, currentFragment)
+                .addToBackStack(null)
                 .commit();
         setTitle(currentTitle);
 

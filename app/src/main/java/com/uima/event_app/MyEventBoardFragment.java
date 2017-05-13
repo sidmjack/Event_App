@@ -1,8 +1,12 @@
 package com.uima.event_app;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.ContextMenu;
@@ -36,7 +40,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class MyEventBoardFragment extends Fragment implements View.OnClickListener{
+public class MyEventBoardFragment extends Fragment{
 
     private ListView eventBoardListView;
     protected static EventBoardAdapter ebAdapter;
@@ -81,7 +85,7 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
     @Override
     public void onPause() {
         super.onPause();
-        currentUserRef.child("favorites").removeEventListener(valueEventListener);
+        //currentUserRef.child("favorites").removeEventListener(valueEventListener);
     }
 
     @Override
@@ -98,29 +102,12 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
         eventBoardListView = (ListView) rootView.findViewById(R.id.event_board_list_view);
         populateEventBoardList();
 
-        eventBoardListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Event selectEvent = (Event) eventBoardListView.getItemAtPosition(position);
-                Bundle data = new Bundle();
-                data.putString("eventID", selectEvent.getId());
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                Fragment currentFragment = new EventPageFragment();
-                currentFragment.setArguments(data);
-                fragmentManager.beginTransaction()
-                        .replace(R.id.content_frame, currentFragment)
-                        .commit();
-            }
-        });
-
-        registerForContextMenu(eventBoardListView);
         return rootView;
     }
 
     public void populateEventBoardList() {
         final ArrayList<Event> favoritesList = new ArrayList<>(); // List of favorited events.
         final ArrayList<String> favoritedEvents = new ArrayList<>(); // List of eventIds
-
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
 
@@ -137,7 +124,7 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                //final List<String> eventIdsToRemove = new ArrayList<>();
                 favoritesList.clear();
                 favoritedEvents.clear();
 
@@ -158,21 +145,37 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
                             System.out.println("Event: " + eventKey);
                         }
 
+                        final String eventIdKey = child.getKey();
+
                         for (String eventID : favoritedEvents) {
                             DatabaseReference eventRef= database.getReference().child("events").child(eventID);
+
                             eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     Event favedEvent = dataSnapshot.getValue(Event.class);
-                                    favoritesList.add(favedEvent);
-                                    favEventCounter();
-                                    System.out.println("Iteration Count: " + count);
-                                    System.out.println("Favorited Event Count: " + favoritedEvents.size());
-                                    if (count == favoritedEvents.size()) {
-                                        System.out.println("Size of Favorites List: " + favoritesList.size());
-                                        ebAdapter.notifyDataSetChanged();
-                                    }
+                                    //if (favedEvent == null) {
+                                        //eventIdsToRemove.add(eventIdKey);
+
+                                        /*DatabaseReference delRef = database.getReference()
+                                                .child("users")
+                                                .child(currentUser.getUid())
+                                                .child("favorites");*/
+
+                                        //System.out.println("Remove list size: " + eventIdsToRemove.size());
+                                        //delRef.child(eventIdKey).removeValue();
+                                   // } else {
+                                        favoritesList.add(favedEvent);
+                                        favEventCounter();
+                                        System.out.println("Iteration Count: " + count);
+                                        System.out.println("Favorited Event Count: " + favoritedEvents.size());
+                                        if (count == favoritedEvents.size()) {
+                                            System.out.println("Size of Favorites List: " + favoritesList.size());
+                                            ebAdapter.notifyDataSetChanged();
+                                        }
+                                   // }
                                 }
+
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
                                     // Do Nothing.
@@ -195,6 +198,7 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
                 });
                 ebAdapter = new EventBoardAdapter(getActivity(), R.layout.event_board_row, favoritesList);
                 eventBoardListView.setAdapter(ebAdapter);
+                eventBoardListView.setItemsCanFocus(true);
             }
 
             @Override
@@ -212,57 +216,6 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
 
     public void favEventCounter() {
         count++;
-    }
-
-    @Override
-    public void onClick(View v) {
-
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        // Add menu items
-        menu.add(0, MENU_ITEM_DELETE, 0, R.string.menu_delete);
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.context_menu, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        super.onContextItemSelected(item);
-
-        AdapterView.AdapterContextMenuInfo menuInfo;
-        menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        int index = menuInfo.position; // position in array adapter
-        final Event event = (Event) eventBoardListView.getItemAtPosition(index);
-
-        switch (item.getItemId()) {
-            case MENU_ITEM_DELETE: {
-                final DatabaseReference favEventRef = database.getReference().child("users").child(currentUser.getUid()).child("favorites");
-                favEventRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                        for (DataSnapshot child : children) {
-                            String eventKey = child.getValue(String.class);
-                            if (eventKey.equals(event.getId())) {
-                                favEventRef.child(child.getKey()).removeValue();
-                                return;
-                            }
-                        }
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Do Nothing
-                    }
-                });
-                return true;
-            }
-        }
-        return false;
     }
 
     /* EVENT BOARD ADAPTER HERE ... */
@@ -283,7 +236,7 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             LinearLayout eventBoardView;
-            Event ebEvent = getItem(position);
+            final Event ebEvent = getItem(position);
 
             if (convertView == null) {
                 eventBoardView = new LinearLayout(getActivity());
@@ -293,6 +246,36 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
             } else {
                 eventBoardView = (LinearLayout) convertView;
             }
+
+            eventBoardView.setClickable(true);
+            eventBoardView.setFocusable(true);
+            eventBoardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle data = new Bundle();
+                    data.putString("eventID", ebEvent.getId());
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    Fragment currentFragment = new EventPageFragment();
+                    currentFragment.setArguments(data);
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.content_frame, currentFragment)
+                            .addToBackStack(null)
+                            .commit();
+                }
+            });
+
+            eventBoardView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("eventId", ebEvent.getId());
+                    DialogFragment dialog = new ConfirmDialogFragment();
+                    dialog.setArguments(bundle);
+                    dialog.show(getFragmentManager(), "hooplah!");
+                    return true;
+                }
+            });
+
 
             String eventName = ebEvent.getName();
 

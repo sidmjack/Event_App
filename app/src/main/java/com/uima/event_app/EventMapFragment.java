@@ -201,6 +201,7 @@ public class EventMapFragment extends Fragment implements OnMapReadyCallback {
                 currentFragment.setArguments(data);
                 fragmentManager.beginTransaction()
                         .replace(R.id.content_frame, currentFragment)
+                        .addToBackStack(null)
                         .commit();
                 return true;
             }
