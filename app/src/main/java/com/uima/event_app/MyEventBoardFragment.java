@@ -289,6 +289,7 @@ public class MyEventBoardFragment extends Fragment{
             TextView eventNotification = (TextView) eventBoardView.findViewById(R.id.event_time_notification);
             TextView eventDescription = (TextView) eventBoardView.findViewById(R.id.event_board_description);
             final ImageView eventBoardImageView = (ImageView) eventBoardView.findViewById(R.id.event_board_image);
+            final ImageView eventBoardIconView = (ImageView) eventBoardView.findViewById(R.id.event_board_icon);
 
             eventBoardName.setText(eventName);
             eventTime.setText(event_time);
@@ -305,22 +306,42 @@ public class MyEventBoardFragment extends Fragment{
                 });
             }
 
+            // Stuff
 
-            //myRef.child("users").child(currentUser.getUid());
-            /*final String orgImgUrl;
+            String hostOrgId = ebEvent.getHostOrg();
+            DatabaseReference myRef = database.getReference();
+            DatabaseReference hostOrg = myRef.child("users").child(hostOrgId);
 
-            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    UserProfile user = dataSnapshot.getValue(UserProfile.class);
-                    orgImgUrl = user.getI
-                }
+            if (hostOrg.child("imagePath")!= null) {
+                hostOrg.child("imagePath").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        String fp = snapshot.getValue(String.class);
+                        storageRef.child(fp).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Picasso.with(getContext()).load(uri).fit().centerCrop().into(eventBoardIconView );
+                            }
+                        });
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // ...
-                }
-            });*/
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Do Nothing
+                    }
+                });
+            } else {
+
+                storageRef.child("/EventPhotos/default.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.with(getContext()).load(uri).fit().centerCrop().into(eventBoardIconView );
+                    }
+                });
+
+            }
+
+
 
             return eventBoardView;
         }

@@ -1,6 +1,7 @@
 package com.uima.event_app;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +54,20 @@ public class ManageEventsAdapter  extends ArrayAdapter<Event> {
         //ImageView eventSelectOrganizationLogo = (ImageView) eventSelectListView.findViewById(R.id.selected_event_organization_logo);
         TextView eventSelect_name = (TextView) eventSelectListView.findViewById(R.id.selected_event_name);
         TextView eventSelect_desc = (TextView) eventSelectListView.findViewById(R.id.selected_event_description);
+        final ImageView eventBoardIconView = (ImageView) eventSelectListView.findViewById(R.id.selected_event_organization_logo);
+
+        final FirebaseStorage storage = FirebaseStorage.getInstance();
+        final StorageReference sRef = storage.getReference();
+
+        // Reference to an image file in Firebase Storage
+        if (eventSelectedItem.getImgId() != null && !eventSelectedItem.getImgId().equals("")) {
+            sRef.child(eventSelectedItem.getImgId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Picasso.with(getContext()).load(uri).fit().centerCrop().into(eventBoardIconView);
+                }
+            });
+        }
 
         //eventSelectOrganizationLogo.setImageResource(imgID);
         eventSelect_name.setText(event_name);

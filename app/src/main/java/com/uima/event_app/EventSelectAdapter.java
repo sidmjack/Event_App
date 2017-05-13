@@ -2,6 +2,7 @@ package com.uima.event_app;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -21,6 +23,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,6 +124,44 @@ public class EventSelectAdapter  extends ArrayAdapter<Event> {
                 return true;
             }
         });
+
+        // Reference to an image file in Firebase Storage
+        final ImageView eventSelectImageView = (ImageView) eventSelectListView.findViewById(R.id.selected_event_organization_logo);
+        String hostOrgId = eventSelectedItem.getHostOrg();
+        DatabaseReference myRef = database.getReference();
+        DatabaseReference hostOrg = myRef.child("users").child(hostOrgId);
+
+        final FirebaseStorage storage = FirebaseStorage.getInstance();
+        final StorageReference sRef = storage.getReference();
+
+        if (hostOrg.child("imagePath")!= null) {
+            hostOrg.child("imagePath").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    String fp = snapshot.getValue(String.class);
+                    sRef.child(fp).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Picasso.with(getContext()).load(uri).fit().centerCrop().into(eventSelectImageView);
+                        }
+                    });
+
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Do Nothing
+                }
+            });
+        } else {
+
+            sRef.child("/EventPhotos/default.png").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.with(getContext()).load(uri).fit().centerCrop().into(eventSelectImageView);
+                    }
+                });
+
+        }
 
         return eventSelectListView;
     }
