@@ -2,6 +2,7 @@ package com.uima.event_app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +33,7 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.List;
 
 public class MyEventBoardFragment extends Fragment implements View.OnClickListener{
@@ -42,6 +45,9 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
     private DatabaseReference myRef;
     private FirebaseAuth mAuth;
     int count = 0;
+
+    Context context = getActivity();
+
     private ArrayList<String> keys = new ArrayList<String>();
 
     public MyEventBoardFragment() {
@@ -68,6 +74,11 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("Favorites_Update", 1);
+        editor.commit();
+
         rootView = inflater.inflate(R.layout.fragment_my_event_board, container, false);
         eventBoardListView = (ListView) rootView.findViewById(R.id.event_board_list_view);
         populateEventBoardList();
@@ -91,6 +102,7 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
     }
 
     public void populateEventBoardList() {
+
         final ArrayList<Event> favoritesList = new ArrayList<>(); // List of favorited events.
         final ArrayList<String> favoritedEvents = new ArrayList<>(); // List of eventIds
 
@@ -140,7 +152,11 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
                                     System.out.println("Favorited Event Count: " + favoritedEvents.size());
                                     if (count == favoritedEvents.size()) {
                                         System.out.println("Size of Favorites List: " + favoritesList.size());
-                                        ebAdapter.notifyDataSetChanged();
+                                        if (ebAdapter != null) {
+                                            ebAdapter.notifyDataSetChanged();
+                                        }
+                                    } else {
+                                        //ebAdapter.notifyDataSetChanged();
                                     }
                                 }
                                 @Override
@@ -152,8 +168,11 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
                         }
                     }
                 }
-                ebAdapter = new EventBoardAdapter(getActivity(), R.layout.event_board_row, favoritesList);
-                eventBoardListView.setAdapter(ebAdapter);
+
+                if (ebAdapter != null) {
+                    ebAdapter = new EventBoardAdapter(getActivity(), R.layout.event_board_row, favoritesList);
+                    eventBoardListView.setAdapter(ebAdapter);
+                }
             }
 
             @Override
@@ -175,14 +194,6 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
     public void onClick(View v) {
 
     }
-
-
-    /* EVENT BOARD ADAPTER HERE ... */
-    /* EVENT BOARD ADAPTER HERE ... */
-    /* EVENT BOARD ADAPTER HERE ... */
-    /* EVENT BOARD ADAPTER HERE ... */
-    /* EVENT BOARD ADAPTER HERE ... */
-
 
     public class EventBoardAdapter extends ArrayAdapter<Event> {
         int res;
@@ -213,22 +224,6 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
             String event_time_notification = "Event: " + "Upcoming!";
 
             TextView eventBoardName = (TextView) eventBoardView.findViewById(R.id.event_title);
-
-            final Button attendButton = (Button) eventBoardView.findViewById(R.id.attend_button);
-            attendButton.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-
-                    if (attendButton.isPressed()) {
-                        attendButton.setPressed(false);
-                        return true;
-                    } else {
-                        attendButton.setPressed(true);
-                        return true;
-                    }
-                }
-            });
-
             TextView eventTime = (TextView) eventBoardView.findViewById(R.id.event_time);
             TextView eventNotification = (TextView) eventBoardView.findViewById(R.id.event_time_notification);
 

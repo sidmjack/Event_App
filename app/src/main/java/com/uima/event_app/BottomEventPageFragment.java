@@ -1,5 +1,6 @@
 package com.uima.event_app;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,10 +9,20 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Gallery;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -25,8 +36,10 @@ public class BottomEventPageFragment extends Fragment implements ViewPager.OnPag
     RadioGroup mRadioGroup;
     RadioButton rbOne;
     RadioButton rbTwo;
-
     private String eventID;
+
+    //private FirebaseDatabase database;
+    //private DatabaseReference myRef;
 
     public BottomEventPageFragment() {
         // Required empty public constructor
@@ -108,7 +121,6 @@ public class BottomEventPageFragment extends Fragment implements ViewPager.OnPag
 
         List<Fragment> fragments = new ArrayList<>();
 
-
         public EventPageAdapter(FragmentManager supportFragmentManager) {
             super(supportFragmentManager);
             EventInfo1Fragment e1 = new EventInfo1Fragment();
@@ -138,4 +150,5 @@ public class BottomEventPageFragment extends Fragment implements ViewPager.OnPag
         }
 
     }
+
 }

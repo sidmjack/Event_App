@@ -67,14 +67,6 @@
         android:layout_gravity="right"
         android:layout_weight="1">
 
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:id="@+id/attend_button"
-            android:background="@drawable/star_button_effect"
-            android:clickable="false"
-            android:focusable="false"/>
-
     </LinearLayout>
 
 </LinearLayout>

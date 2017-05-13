@@ -36,6 +36,28 @@
             android:id="@+id/bottom_event_board_event_time"
             android:layout_weight="1" />
 
+       <!--Gallery
+           android:id="@+id/icon_view"
+           android:layout_width="match_parent"
+           android:layout_height="50dp">
+       </Gallery-->
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/iconViewPager"
+            android:layout_height="50dp"
+            android:layout_width="match_parent">
+        </android.support.v4.view.ViewPager>
+
+        <TextView
+            android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/darkGrey"
+            android:layout_marginLeft="15dp"
+            android:id="@+id/icon_name"
+            android:layout_weight="1" />
+
     </LinearLayout>
 
 </RelativeLayout>

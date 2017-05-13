@@ -198,18 +198,23 @@
     <!-- Event Attributes -->
     <string-array name="event_attributes">
         <item>Free Admission</item>
+        <item>Alcohol Available</item>
         <item>Live Entertainment</item>
         <item>Parking</item>
         <item>Family Friendly</item>
         <item>Networking Opportunities</item>
         <item>Food Available</item>
         <item>Indoor Activities</item>
+        <item>Music Available</item>
         <item>Outdoor Activities</item>
+        <item>Free Item Giveaways</item>
         <item>Pet Friendly</item>
+        <item>Local Vendors Attending</item>
         <item>Seating Available</item>
         <item>Public Transit</item>
         <item>Admission Required</item>
-        <item>Handicap Accessible</item>
+        <item>For a Good Cause</item>
+        <item>Volunteers Needed</item>
         <item>Key Note Speaker</item>
     </string-array>
 
