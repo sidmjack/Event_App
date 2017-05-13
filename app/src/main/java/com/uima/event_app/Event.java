@@ -1,6 +1,7 @@
 package com.uima.event_app;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,9 +17,8 @@ public class Event {
     private boolean needVolunteers;
     private String imgId;
     private HashMap<String, String> tags; // Firebase Key, Attribute Name
-    private String start_time;
-    private String end_time;
-    private String date;
+    private long start_time;
+    private long end_time;
     private String type;
     private String latitude;
     private String longitude;
@@ -36,7 +36,8 @@ public class Event {
         this.longitude = "0";
     }
 
-    public Event(String id, String name, String hostOrg, String location, String details, boolean needVolunteers, String imgId, String type, HashMap<String, String> tags, String start_time, String end_time, String date, String lat, String log) {
+    // stores date and times as integers
+    public Event(String id, String name, String hostOrg, String location, String details, boolean needVolunteers, String imgId, String type, HashMap<String, String> tags, long start_time, long end_time, String lat, String log) {
         this.id = id;
         this.name = name;
         this.hostOrg = hostOrg;
@@ -49,7 +50,6 @@ public class Event {
         this.end_time = end_time;
         this.start_time = start_time;
         this.imgId = imgId;
-        this.date = date;
         this.latitude = lat;
         this.longitude = log;
 
@@ -72,11 +72,46 @@ public class Event {
         }
         return eventTags;
     }*/
-    public String getDate() {return date; }
-    public String getStart_time() {return start_time;}
-    public String getEnd_time() {return end_time;}
     public String getLatitude() {return latitude;}
     public String getLongitude() {return longitude;}
+    public long getStart_time() { return start_time; }
+    public long getEnd_time() { return end_time; }
 
+    public String getStartTimeString() {
+        final Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(this.start_time);
+
+        String time;
+
+        if (Calendar.AM_PM == Calendar.AM) {
+            time = String.format("%d:%02d am", c.get(Calendar.HOUR), c.get(Calendar.MINUTE));
+        } else {
+            time = String.format("%d:%02d pm", c.get(Calendar.HOUR), c.get(Calendar.MINUTE));
+        }
+
+        return time;
+    }
+
+    public String getEndTimeString() {
+        final Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(this.end_time);
+
+        String time;
+
+        if (Calendar.AM_PM == Calendar.AM) {
+            time = String.format("%d:%02d am", c.get(Calendar.HOUR), c.get(Calendar.MINUTE));
+        } else {
+            time = String.format("%d:%02d pm", c.get(Calendar.HOUR), c.get(Calendar.MINUTE));
+        }
+
+        return time;
+    }
+
+    public String getDateString() {
+        final Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(start_time);
+
+        return String.format("%d/%d/%d", c.get(Calendar.MONTH)+1, c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.YEAR));
+    }
 
 }

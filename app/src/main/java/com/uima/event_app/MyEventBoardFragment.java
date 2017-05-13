@@ -32,6 +32,8 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MyEventBoardFragment extends Fragment implements View.OnClickListener{
@@ -180,6 +182,17 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
                         }
                     }
                 }
+
+                Collections.sort(favoritesList, new Comparator<Event>() {
+                    @Override
+                    public int compare(Event e1, Event e2) {
+                        if (e1.getStart_time() < e2.getStart_time())
+                            return 1;
+                        if (e1.getStart_time() > e2.getStart_time())
+                            return -1;
+                        return 0;
+                    }
+                });
                 ebAdapter = new EventBoardAdapter(getActivity(), R.layout.event_board_row, favoritesList);
                 eventBoardListView.setAdapter(ebAdapter);
             }
@@ -284,7 +297,7 @@ public class MyEventBoardFragment extends Fragment implements View.OnClickListen
             String eventName = ebEvent.getName();
 
             // Simplified Event Board Row Filling:
-            String event_time = ebEvent.getDate() + " @ " + ebEvent.getStart_time();
+            String event_time = ebEvent.getDateString() + " @ " + ebEvent.getStartTimeString();
             String event_time_notification = "Event: " + "Upcoming!";
             String event_description = ebEvent.getDetails();
 

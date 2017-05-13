@@ -56,9 +56,8 @@ public class FirebaseAdapter {
 
     public void addEventToDB(Event event) {
         String name = event.getName();
-        String date = event.getDate();
-        String start_time = event.getStart_time();
-        String end_time = event.getEnd_time();
+        long start_time = event.getStart_time();
+        long end_time = event.getEnd_time();
         String location = event.getLocation(); //MAKE SURE ALL THESE AREN"T NULL
         String latitude = event.getLatitude();
         String longitude = event.getLongitude();
@@ -110,7 +109,7 @@ public class FirebaseAdapter {
                     if (value.getLongitude() != null) {
                         lat = value.getLongitude();
                     }
-                    Event temp = new Event(value.getId(), value.getName(), value.getHostOrg(), value.getLocation(), value.getDetails(), value.getNeedVolunteers(), value.getImgId(), value.getType(), value.getTags(), value.getStart_time(), value.getEnd_time(), value.getDate(), lat, log);
+                    Event temp = new Event(value.getId(), value.getName(), value.getHostOrg(), value.getLocation(), value.getDetails(), value.getNeedVolunteers(), value.getImgId(), value.getType(), value.getTags(), value.getStart_time(), value.getEnd_time(), lat, log);
 
                     //System.out.println(value.getName());
                     localEvents.add(temp);

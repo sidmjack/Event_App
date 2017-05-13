@@ -63,7 +63,7 @@ public class EventSelectAdapter  extends ArrayAdapter<Event> {
         imgUrl = eventSelectedItem.getImgId();
 
         event_name = eventSelectedItem.getName();
-        event_date_time = (eventSelectedItem.getLocation()+ " @ " + eventSelectedItem.getStart_time()); // Just Changed.
+        event_date_time = (eventSelectedItem.getLocation()+ " @ " + eventSelectedItem.getStartTimeString()); // Just Changed.
 
         //ImageView eventSelectOrganizationLogo = (ImageView) eventSelectListView.findViewById(R.id.selected_event_organization_logo);
         TextView eventSelect_name = (TextView) eventSelectListView.findViewById(R.id.selected_event_name);

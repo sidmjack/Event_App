@@ -66,9 +66,8 @@ public class EventPageActivity extends Activity {
                         eventName.setText(temp.getName());
                         eventDesc.setText(temp.getDetails());
                         eventLoc.setText(temp.getLocation());
-                        eventDate.setText(temp.getDate());
-                        eventStartTime.setText(temp.getStart_time());
-                        eventEndTime.setText(temp.getEnd_time());
+                        eventStartTime.setText(temp.getStartTimeString());
+                        eventEndTime.setText(temp.getEndTimeString());
                         //eventTypes.setText(currEvents.get(0).getDetails());
                         //List<String> tags = temp.getTags();
                         //ArrayAdapter<String> tagAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tags);

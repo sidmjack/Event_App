@@ -70,8 +70,8 @@ public class EventInfo1Fragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Event thisEvent = dataSnapshot.getValue(Event.class);
-                date.setText("Date: " + thisEvent.getDate());
-                time.setText("Time: " + thisEvent.getStart_time() + " - " + thisEvent.getEnd_time());
+                date.setText("Date: " + thisEvent.getDateString());
+                time.setText("Time: " + thisEvent.getStartTimeString() + " - " + thisEvent.getEndTimeString());
             }
 
             @Override
